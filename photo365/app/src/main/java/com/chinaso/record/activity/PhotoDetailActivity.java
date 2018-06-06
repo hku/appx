@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chinaso.record.R;
 import com.chinaso.record.base.BaseActivity;
+import com.chinaso.record.base.GlideApp;
 import com.chinaso.record.entity.PhotoEntity;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.orhanobut.logger.Logger;
@@ -20,7 +21,7 @@ import butterknife.BindView;
  * description: 图片详情页面
  */
 
-public class PhotoDetailActivity extends BaseActivity{
+public class PhotoDetailActivity extends BaseActivity {
 
 
     @BindView(R.id.photo_detail)
@@ -57,10 +58,10 @@ public class PhotoDetailActivity extends BaseActivity{
 
     @Override
     protected void business() {
-       String message =  mPhotoInfo.getPhotoInfo();
-       String uriS =  mPhotoInfo.getPhotoPath();
+        String message = mPhotoInfo.getPhotoInfo();
+        String uriS = mPhotoInfo.getPhotoPath();
         Uri uri = Uri.parse(uriS);
-        Glide.with(this).load(uri).into(photoView);
+        GlideApp.with(this).load(uri).placeholder(R.mipmap.placeholder_common).into(photoView);
         messageTv.setText(message);
     }
 }

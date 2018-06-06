@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        style="@style/AppTheme.Toolbar"
         android:id="@+id/toolbar"
+        style="@style/AppTheme.Toolbar"
         app:navigationIcon="@drawable/ic_arrow_back_dark_24dp"
-        app:titleTextColor="@color/black"
-        app:title="保存"/>
+        app:title="保存"
+        app:titleTextColor="@color/black" />
 
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxHeight="160dp"
-        android:layout_gravity="center_horizontal"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
-
-    <EditText
-        android:id="@+id/info_et"
+    <ScrollView
         android:layout_width="match_parent"
-        android:background="@drawable/bg_camera_et"
-        android:textColor="@color/black"
-        android:layout_marginTop="40dp"
-        android:gravity="left"
-        android:textSize="16dp"
-        android:layout_height="150dp" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"
-        android:text="点击保存" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="150dp"
+                android:scaleType="centerCrop" />
 
+            <EditText
+                android:id="@+id/info_et"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/bg_camera_et"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:text="点击保存" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

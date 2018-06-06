@@ -24,11 +24,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.PhotoSaveActivity" />
+        <activity
+            android:name=".activity.PhotoSaveActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateVisible" />
 
-        <activity android:name=".activity.PhotoListActivity"/>
+        <activity
+            android:name=".activity.PhotoListActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.PhotoDetailActivity"/>
+        <activity
+            android:name=".activity.PhotoDetailActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

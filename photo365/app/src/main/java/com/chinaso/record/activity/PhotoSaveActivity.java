@@ -1,22 +1,21 @@
 package com.chinaso.record.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.chinaso.record.base.BaseActivity;
 import com.chinaso.record.R;
+import com.chinaso.record.base.GlideApp;
 import com.chinaso.record.entity.PhotoEntity;
+import com.chinaso.record.utils.ImageRotateUtil;
 import com.chinaso.record.utils.PhotoDaoManager;
 
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -67,18 +66,9 @@ public class PhotoSaveActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        if (Build.VERSION.SDK_INT >= 24) {
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(mPhotoUri));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            imageView.setImageBitmap(bitmap);
-        } else {
-            Bitmap bitmap = BitmapFactory.decodeFile(mPhotoUri.getPath());
-            imageView.setImageBitmap(bitmap);
-        }
+        ImageRotateUtil.of().correctImage(this, mPhotoUri);
+        GlideApp.with(PhotoSaveActivity.this).load(mPhotoUri).
+                placeholder(R.mipmap.placeholder_common).into(imageView);
     }
 
     @OnClick({R.id.btn_save})

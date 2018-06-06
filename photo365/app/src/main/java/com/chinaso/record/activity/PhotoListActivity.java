@@ -18,6 +18,7 @@ import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
@@ -72,7 +73,12 @@ public class PhotoListActivity extends BaseActivity {
             }
         });
         recyclerView.setAdapter(mAdpter);
-        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                refresh();
+            }
+        });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
@@ -83,12 +89,20 @@ public class PhotoListActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        refreshLayout.autoLoadMore();
+        refreshLayout.autoRefresh();
+    }
+
+    private void refresh() {
+        mPage = 0;
+        mAdpter.clear();
+        List<PhotoEntity> photoList = PhotoDaoManager.getInstance().query(mPage);
+        mAdpter.addData(photoList);
+        ++mPage;
+        refreshLayout.finishRefresh(1000);
     }
 
     private void getPhotoOffset() {
         List<PhotoEntity> photoList = PhotoDaoManager.getInstance().query(mPage);
-        Logger.e("list size = " + photoList.size());
         mAdpter.addData(photoList);
         ++mPage;
         refreshLayout.finishLoadMore(1000);
