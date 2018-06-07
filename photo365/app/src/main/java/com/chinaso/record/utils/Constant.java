@@ -9,9 +9,9 @@ import android.content.Context;
  */
 
 
-public class Constant {
+public final class Constant {
 
-    public final static String getFileProviderName(Context context){
-        return context.getPackageName()+".fileprovider";
+    public final static String getFileProviderName(Context context) {
+        return context.getPackageName() + ".fileprovider";
     }
- }
+}

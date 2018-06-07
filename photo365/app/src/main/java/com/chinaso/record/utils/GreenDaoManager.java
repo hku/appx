@@ -11,7 +11,7 @@ import com.chinaso.record.greendao.gen.DaoSession;
  * description: 数据库管理类
  */
 
-public class GreenDaoManager {
+public final class GreenDaoManager {
 
     private static final String DB_NAME = "photo-db";
 

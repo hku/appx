@@ -18,7 +18,7 @@ import java.io.IOException;
  * created on: 2018/6/4 15:57
  * description:图片旋转角度修正工具类
  */
-public class ImageRotateUtil {
+public final class ImageRotateUtil {
 
     public static ImageRotateUtil of() {
         return new ImageRotateUtil();

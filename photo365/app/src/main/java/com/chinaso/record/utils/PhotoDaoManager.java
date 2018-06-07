@@ -14,7 +14,7 @@ import java.util.List;
  * description: 图片数据库操作类
  */
 
-public class PhotoDaoManager {
+public final class PhotoDaoManager {
 
     private PhotoDaoManager() {
     }
@@ -29,21 +29,23 @@ public class PhotoDaoManager {
 
     /**
      * 插入
+     *
      * @param entity
      */
-    public void insert(PhotoEntity entity){
+    public void insert(PhotoEntity entity) {
         PhotoEntityDao dao = GreenDaoManager.getInstance().getSession().getPhotoEntityDao();
         dao.insert(entity);
     }
 
     /**
      * 分页查询
+     *
      * @param page 页数
      */
-    public List<PhotoEntity> query(int page){
+    public List<PhotoEntity> query(int page) {
         PhotoEntityDao dao = GreenDaoManager.getInstance().getSession().getPhotoEntityDao();
         QueryBuilder<PhotoEntity> queryBuilder = dao.queryBuilder();
-        List<PhotoEntity> photoList =  queryBuilder.offset(page * 20).limit(20).
+        List<PhotoEntity> photoList = queryBuilder.offset(page * 20).limit(20).
                 orderDesc(PhotoEntityDao.Properties.Id).list();
         return photoList;
     }

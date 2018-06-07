@@ -23,7 +23,7 @@ import java.util.Locale;
  * created on: 2018/6/4 15:57
  * description:Uri解析类
  */
-public class UriParse {
+public final class UriParse {
 
 
     private static final String TAG = UriParse.class.getName();

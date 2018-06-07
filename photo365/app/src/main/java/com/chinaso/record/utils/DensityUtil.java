@@ -8,7 +8,7 @@ import android.content.res.Resources;
  * description:像素密度计算工具
  */
 @SuppressWarnings("unused")
-public class DensityUtil {
+public final class DensityUtil {
 
     public float density;
 

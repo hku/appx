@@ -22,7 +22,7 @@ import java.util.UUID;
  * created on: 2018/6/4 15:57
  * description:图片文件类
  */
-public class ImageFiles {
+public final class ImageFiles {
 
 
     private static final String TAG = ImageFiles.class.getName();

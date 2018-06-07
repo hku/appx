@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-        mBinder =  ButterKnife.bind(this);
+        mBinder = ButterKnife.bind(this);
         initView();
         initData();
         business();
@@ -30,9 +30,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getLayoutResId();
 
-    protected void initView() {}
+    protected void initView() {
+    }
 
-    protected  void initData(){}
+    protected void initData() {
+    }
 
     protected abstract void business();
 
