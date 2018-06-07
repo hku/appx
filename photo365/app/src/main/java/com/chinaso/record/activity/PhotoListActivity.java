@@ -20,6 +20,7 @@ import com.chinaso.record.adapter.PhotoItemAdapter;
 import com.chinaso.record.base.BaseActivity;
 import com.chinaso.record.entity.PhotoEntity;
 import com.chinaso.record.utils.PhotoDaoManager;
+import com.chinaso.record.widget.SpacesItemDecoration;
 import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -71,6 +72,7 @@ public class PhotoListActivity extends BaseActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(40));
         mAdpter = new PhotoItemAdapter(R.layout.item_photo_list, PhotoListActivity.this);
         mAdpter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
