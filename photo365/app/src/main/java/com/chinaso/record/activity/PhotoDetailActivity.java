@@ -61,7 +61,8 @@ public class PhotoDetailActivity extends BaseActivity {
         String message = mPhotoInfo.getPhotoInfo();
         String uriS = mPhotoInfo.getPhotoPath();
         Uri uri = Uri.parse(uriS);
-        GlideApp.with(this).load(uri).placeholder(R.mipmap.placeholder_common).into(photoView);
+        GlideApp.with(this).load(uri).
+                placeholder(R.mipmap.placeholder_common).into(photoView);
         messageTv.setText(message);
     }
 }

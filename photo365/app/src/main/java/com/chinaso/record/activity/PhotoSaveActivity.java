@@ -61,7 +61,7 @@ public class PhotoSaveActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        mPhotoUri = getIntent().getParcelableExtra(MainActivity.PHOTO_URI);
+        mPhotoUri = getIntent().getParcelableExtra(PhotoListActivity.PHOTO_URI);
     }
 
     @Override
@@ -90,8 +90,7 @@ public class PhotoSaveActivity extends BaseActivity {
         photoEntity.setPhotoPath(photoPath);
         photoEntity.setPhotoInfo(photoInfo);
         PhotoDaoManager.getInstance().insert(photoEntity);
-        Intent intent = new Intent(PhotoSaveActivity.this, PhotoListActivity.class);
-        startActivity(intent);
+        setResult(RESULT_OK);
         finish();
     }
 }

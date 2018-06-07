@@ -1,8 +1,14 @@
 package com.chinaso.record.activity;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -20,9 +26,13 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * author: zhanghe
@@ -33,6 +43,9 @@ import butterknife.BindView;
 public class PhotoListActivity extends BaseActivity {
 
     public static final String PHOTO_DETAIL_INFO = "photo_detail";
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int CAMERA_SAVE_REQUEST_CODE = 101;
+    public static final String PHOTO_URI = "photo_uri";
 
     @BindView(R.id.refresh_layout)
     SmartRefreshLayout refreshLayout;
@@ -40,10 +53,12 @@ public class PhotoListActivity extends BaseActivity {
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.camera_btn)
+    FloatingActionButton cameraBtn;
 
     private PhotoItemAdapter mAdpter;
-
     private int mPage = 0;
+    private Uri mPhotoUri;
 
     @Override
     protected int getLayoutResId() {
@@ -53,12 +68,6 @@ public class PhotoListActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -106,5 +115,75 @@ public class PhotoListActivity extends BaseActivity {
         mAdpter.addData(photoList);
         ++mPage;
         refreshLayout.finishLoadMore(1000);
+    }
+
+    @OnClick({R.id.camera_btn})
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.camera_btn:
+                takePhoto();
+                break;
+        }
+    }
+
+    private void takePhoto() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            mPhotoUri = get24MediaFileUri();
+            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+            startActivityForResult(takeIntent, CAMERA_REQUEST_CODE);
+        } else {
+            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            mPhotoUri = getMediaFileUri();
+            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+            startActivityForResult(takeIntent, CAMERA_REQUEST_CODE);
+        }
+    }
+
+    public Uri getMediaFileUri() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "相册名字");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
+            }
+        }
+        //创建Media File
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+        return Uri.fromFile(mediaFile);
+    }
+
+    /**
+     * 版本24以上
+     */
+    public Uri get24MediaFileUri() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "相册名字");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
+            }
+        }
+        //创建Media File
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+        return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", mediaFile);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CAMERA_REQUEST_CODE:
+                    Intent intent = new Intent(PhotoListActivity.this, PhotoSaveActivity.class);
+                    intent.putExtra(PHOTO_URI, mPhotoUri);
+                    startActivityForResult(intent, CAMERA_SAVE_REQUEST_CODE);
+                    break;
+                case CAMERA_SAVE_REQUEST_CODE:
+                    refreshLayout.autoRefresh();
+                    break;
+            }
+        }
     }
 }
