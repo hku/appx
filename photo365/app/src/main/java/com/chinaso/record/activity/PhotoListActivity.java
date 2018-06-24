@@ -1,9 +1,6 @@
 package com.chinaso.record.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -11,30 +8,33 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chinaso.record.R;
 import com.chinaso.record.adapter.PhotoItemAdapter;
 import com.chinaso.record.base.BaseActivity;
-import com.chinaso.record.base.GlideApp;
 import com.chinaso.record.base.RecordApplication;
 import com.chinaso.record.entity.PhotoEntity;
 import com.chinaso.record.utils.PhotoDaoManager;
-import com.chinaso.record.utils.UriParse;
+import com.chinaso.record.utils.ToastUtils;
 import com.chinaso.record.widget.SpacesItemDecoration;
-import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +61,8 @@ public class PhotoListActivity extends BaseActivity {
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.menu_iv)
+    ImageView menuIv;
     @BindView(R.id.camera_btn)
     FloatingActionButton cameraBtn;
 
@@ -88,6 +90,34 @@ public class PhotoListActivity extends BaseActivity {
                 Intent intent = new Intent(PhotoListActivity.this, PhotoDetailActivity.class);
                 intent.putExtra(PHOTO_DETAIL_INFO, entity);
                 startActivity(intent);
+            }
+        });
+        mAdpter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final BaseQuickAdapter adapter, View view, final int position) {
+                new MaterialDialog.Builder(PhotoListActivity.this)
+                        .items(R.array.photoLongClicks)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int dialogPosition, CharSequence text) {
+                                switch (dialogPosition) {
+                                    case 0:
+                                        //删除操作
+                                        //删除数据库数据
+                                        PhotoEntity item = (PhotoEntity) adapter.getItem(position);
+                                        PhotoDaoManager.getInstance().remove(item);
+                                        //修改数据源数据
+                                        adapter.remove(position);
+                                        break;
+                                    case 1:
+                                        //分享
+                                        ToastUtils.show(PhotoListActivity.this, "正在开发中，客官请稍等");
+                                        break;
+                                }
+                            }
+                        })
+                        .show();
+                return true;
             }
         });
         recyclerView.setAdapter(mAdpter);
@@ -126,12 +156,15 @@ public class PhotoListActivity extends BaseActivity {
         refreshLayout.finishLoadMore(1000);
     }
 
-    @OnClick({R.id.camera_btn})
+    @OnClick({R.id.camera_btn, R.id.menu_iv})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.camera_btn:
                 takePhoto();
+                break;
+            case R.id.menu_iv:
+                showMenu();
                 break;
         }
     }
@@ -141,6 +174,26 @@ public class PhotoListActivity extends BaseActivity {
         mPhotoUri = getMediaFileUri();
         takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
         startActivityForResult(takeIntent, CAMERA_REQUEST_CODE);
+    }
+
+    private void showMenu() {
+        PopupMenu popupMenu = new PopupMenu(this, menuIv);
+        popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.option_alarm:
+                        ToastUtils.show(PhotoListActivity.this, "正在开发中，客官请稍等");
+                        break;
+                    case R.id.option_share:
+                        ToastUtils.show(PhotoListActivity.this, "正在开发中，客官请稍等");
+                        break;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 
     /**

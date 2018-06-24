@@ -21,7 +21,7 @@ public class PhotoEntity extends BaseEntity {
 
     @Generated(hash = 2030433462)
     public PhotoEntity(Long id, String photoPath, String photoDate,
-            String photoInfo) {
+                       String photoInfo) {
         this.id = id;
         this.photoPath = photoPath;
         this.photoDate = photoDate;

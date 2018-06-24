@@ -2,4 +2,10 @@
     <string name="app_name">Record</string>
 
     <string name="permission_tip">您未允许应用获取手机状态权限,我们不会收集您的信息,您可以在系统设置中开启</string>
+
+    <string-array name="photoLongClicks">
+        <item>删除</item>
+        <item>分享</item>
+    </string-array>
+
 </resources>

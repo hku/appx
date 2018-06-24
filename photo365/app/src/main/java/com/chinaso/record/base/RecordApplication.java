@@ -2,8 +2,10 @@ package com.chinaso.record.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
+import com.chinaso.record.BuildConfig;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -31,8 +33,14 @@ public class RecordApplication extends Application {
         super.onCreate();
         mContext = this;
         initRefreshLayout();
-        Stetho.initializeWithDefaults(this);
+        initDebugBridge();
         Logger.addLogAdapter(new AndroidLogAdapter());
+    }
+
+    private void initDebugBridge() {
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
     }
 
 

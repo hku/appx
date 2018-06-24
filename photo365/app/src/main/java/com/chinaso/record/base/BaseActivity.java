@@ -10,7 +10,7 @@ import butterknife.Unbinder;
 /**
  * author: zhanghe
  * created on: 2018/6/4 15:57
- * description:
+ * description:activity基类
  */
 
 public abstract class BaseActivity extends AppCompatActivity {

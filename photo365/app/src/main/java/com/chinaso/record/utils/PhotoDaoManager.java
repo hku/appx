@@ -3,6 +3,7 @@ package com.chinaso.record.utils;
 import com.chinaso.record.entity.PhotoEntity;
 import com.chinaso.record.greendao.gen.PhotoEntityDao;
 
+import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -48,5 +49,19 @@ public final class PhotoDaoManager {
         List<PhotoEntity> photoList = queryBuilder.offset(page * 20).limit(20).
                 orderDesc(PhotoEntityDao.Properties.Id).list();
         return photoList;
+    }
+
+
+    /**
+     * 删除
+     *
+     * @param entity 要删除的实体类
+     */
+    public void remove(PhotoEntity entity) {
+        PhotoEntityDao dao = GreenDaoManager.getInstance().getSession().getPhotoEntityDao();
+        List<PhotoEntity> photoList = dao.queryBuilder().where(PhotoEntityDao.Properties.Id.eq(entity.getId())).list();
+        if (photoList != null && photoList.size() > 0) {
+            dao.delete(entity);
+        }
     }
 }
