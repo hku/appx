@@ -9,7 +9,13 @@
     <style name="AppTheme.Toolbar" parent="Widget.AppCompat.ActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/white</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="single_right_imageview_style">
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">clip_horizontal</item>
+        <item name="android:src">@mipmap/arrow_icon</item>
     </style>
 </resources>

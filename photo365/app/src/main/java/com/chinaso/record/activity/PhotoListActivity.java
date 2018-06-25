@@ -12,12 +12,9 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -184,7 +181,8 @@ public class PhotoListActivity extends BaseActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.option_alarm:
-                        ToastUtils.show(PhotoListActivity.this, "正在开发中，客官请稍等");
+                        Intent intent = new Intent(PhotoListActivity.this, AlarmListActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.option_share:
                         ToastUtils.show(PhotoListActivity.this, "正在开发中，客官请稍等");

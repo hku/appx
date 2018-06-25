@@ -83,7 +83,7 @@ public class PhotoSaveActivity extends BaseActivity {
 
     private void save() {
         PhotoEntity photoEntity = new PhotoEntity();
-        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String photoInfo = infoEt.getText().toString();
         String photoPath = mPhotoUri.toString();
         photoEntity.setPhotoDate(timeStamp);
