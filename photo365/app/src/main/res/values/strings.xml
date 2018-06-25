@@ -14,4 +14,18 @@
     <string name="activity_alarm_clock_how_warn">响铃方式</string>
     <string name="activity_alarm_clock_remark">闹钟备注</string>
     <string name="activity_alarm_clock_remark_hint">无备注</string>
+    <string name="ok">确定</string>
+
+    <string-array name="cycle">
+        <item>每天一次</item>
+        <item>周一至周五</item>
+        <item>休息日</item>
+        <item>响铃一次</item>
+    </string-array>
+
+    <string-array name="bell">
+        <item>响铃</item>
+        <item>振动</item>
+        <item>响铃并振动</item>
+    </string-array>
 </resources>
