@@ -47,7 +47,8 @@ public class SplashActivity extends BaseActivity {
         RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions.requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA)
+                Manifest.permission.CAMERA,
+                Manifest.permission.VIBRATE)
                 .subscribe(new io.reactivex.functions.Consumer<Permission>() {
                     @Override
                     public void accept(Permission permission) throws Exception {

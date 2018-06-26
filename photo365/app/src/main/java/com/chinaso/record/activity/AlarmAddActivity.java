@@ -1,7 +1,9 @@
 package com.chinaso.record.activity;
 
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -9,6 +11,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chinaso.record.R;
 import com.chinaso.record.adapter.DateArrayAdapter;
 import com.chinaso.record.base.BaseActivity;
+import com.chinaso.record.entity.AlarmEntity;
+import com.chinaso.record.utils.AlarmDaoManager;
+import com.chinaso.record.utils.AlarmManagerUtil;
+import com.chinaso.record.utils.ToastUtils;
 import com.chinaso.record.widget.wheelview.WheelView;
 
 import java.util.Calendar;
@@ -37,16 +43,26 @@ public class AlarmAddActivity extends BaseActivity {
     TextView cycleTv;
     @BindView(R.id.how_warn_tv)
     TextView bellTv;
+    @BindView(R.id.title_et)
+    EditText titleEt;
+    @BindView(R.id.remark_et)
+    EditText remarkEt;
 
-    private String[] hours = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
-    private String[] mimutes = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
+    private static final String[] hours = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
+    private static final String[] mimutes = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
 
 
-    private int nowDay;
-    private int nowHour;
-    private int nowMinute;
-    private int nowMonth;
-    private int nowYear;
+    //当前小时
+    private int mHour;
+    //当前分钟
+    private int mMinute;
+
+    //响铃周期标志位 0 : 每天 ， -1：只响一次 1：周一至周五  2：周末
+    private int mCycleTag = -100;
+    //响铃周期
+    private String mCycleWeeks = "";
+    //响铃方式
+    private int mBell = -100;
 
     @Override
     protected int getLayoutResId() {
@@ -70,10 +86,10 @@ public class AlarmAddActivity extends BaseActivity {
      * 初始化小时分钟 wheelview
      */
     private void initTimeView() {
-        this.hourWheelView.setViewAdapter(new DateArrayAdapter(this, this.hours, this.nowHour));
-        this.minuteWheelView.setViewAdapter(new DateArrayAdapter(this, this.mimutes, this.nowMinute));
-        this.hourWheelView.setCurrentItem(this.nowHour);
-        this.minuteWheelView.setCurrentItem(this.nowMinute);
+        this.hourWheelView.setViewAdapter(new DateArrayAdapter(this, this.hours, this.mHour));
+        this.minuteWheelView.setViewAdapter(new DateArrayAdapter(this, this.mimutes, this.mMinute));
+        this.hourWheelView.setCurrentItem(this.mHour);
+        this.minuteWheelView.setCurrentItem(this.mMinute);
         this.hourWheelView.setCyclic(true);
         this.minuteWheelView.setCyclic(true);
     }
@@ -88,14 +104,11 @@ public class AlarmAddActivity extends BaseActivity {
      */
     public void getNowdate() {
         Calendar ca = Calendar.getInstance(Locale.CHINA);
-        this.nowYear = ca.get(Calendar.YEAR);
-        this.nowMonth = ca.get(Calendar.MONTH) + 1;
-        this.nowDay = ca.get(Calendar.DAY_OF_MONTH);
-        this.nowHour = ca.get(Calendar.HOUR_OF_DAY);
-        this.nowMinute = ca.get(Calendar.MINUTE);
+        this.mHour = ca.get(Calendar.HOUR_OF_DAY);
+        this.mMinute = ca.get(Calendar.MINUTE);
     }
 
-    @OnClick({R.id.cycle_llyt, R.id.how_warn_llyt})
+    @OnClick({R.id.cycle_llyt, R.id.how_warn_llyt, R.id.alarm_add_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             //响铃周期
@@ -105,6 +118,10 @@ public class AlarmAddActivity extends BaseActivity {
             //响铃方式
             case R.id.how_warn_llyt:
                 showRingBellDialog();
+                break;
+            //确定添加
+            case R.id.alarm_add_iv:
+                onSave();
                 break;
         }
     }
@@ -117,10 +134,27 @@ public class AlarmAddActivity extends BaseActivity {
                 .title(R.string.activity_alarm_clock_cycle)
                 .items(R.array.cycle)
                 .itemsCallbackSingleChoice(
-                        0,
+                        3,
                         new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
-                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                            public boolean onSelection(MaterialDialog dialog, View itemView,
+                                                       int which, CharSequence text) {
+                                switch (which) {
+                                    case 0:
+                                        mCycleTag = 0;//每天
+                                        break;
+                                    case 1:
+                                        mCycleTag = 1;//周一至周五
+                                        mCycleWeeks = "1,2,3,4,5";
+                                        break;
+                                    case 2:
+                                        mCycleTag = 2;//周末
+                                        mCycleWeeks = "6,7";
+                                        break;
+                                    case 3:
+                                        mCycleTag = -1;//响铃一次
+                                        break;
+                                }
                                 cycleTv.setText(text.toString());
                                 return true;
                             }
@@ -142,11 +176,66 @@ public class AlarmAddActivity extends BaseActivity {
                         new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                switch (which) {
+                                    case 0:
+                                        mBell = 0;//振动
+                                        break;
+                                    case 1:
+                                        mBell = 1;//响铃
+                                        break;
+                                    case 2:
+                                        mBell = 2;//振动并响铃
+                                        break;
+                                }
                                 bellTv.setText(text.toString());
                                 return true;
                             }
                         })
                 .positiveText(R.string.ok)
                 .show();
+    }
+
+    /**
+     * 保存
+     */
+    private void onSave() {
+        //小时
+        mHour = hourWheelView.getCurrentItem();
+        //分钟
+        mMinute = minuteWheelView.getCurrentItem();
+        //闹钟标题
+        String title = titleEt.getText().toString();
+        if (TextUtils.isEmpty(title)) {
+            title = getResources().getString(R.string.activity_alarm_clock_title_hint);
+        }
+        //响铃周期
+        if (mCycleTag == -100) {
+            ToastUtils.show(this, "请选择响铃周期");
+            return;
+        }
+        //响铃方式
+        if (mBell == -100) {
+            ToastUtils.show(this, "请选择响铃方式");
+            return;
+        }
+        //闹钟备注
+        String remark = remarkEt.getText().toString();
+        //插入表
+        AlarmEntity alarmEntity = new AlarmEntity();
+        alarmEntity.setHour(mHour);
+        alarmEntity.setMinute(mMinute);
+        alarmEntity.setTitle(title);
+        alarmEntity.setIsOpen(true);
+        alarmEntity.setBellMode(mBell);
+        alarmEntity.setCycleTag(mCycleTag);
+        alarmEntity.setCycleWeeks(mCycleWeeks);
+        alarmEntity.setBellMode(mBell);
+        alarmEntity.setRemark(remark);
+        long clockId = AlarmDaoManager.getInstance().insert(alarmEntity);
+        alarmEntity.setId(clockId);
+        //设置闹钟
+        AlarmManagerUtil.setAlarm(this, alarmEntity);
+        setResult(RESULT_OK);
+        finish();
     }
 }

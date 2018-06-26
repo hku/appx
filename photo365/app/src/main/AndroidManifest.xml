@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 
     <application
@@ -52,6 +53,10 @@
             android:name=".activity.AlarmAddActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.ClockAlarmActivity"
+            android:screenOrientation="portrait" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.chinaso.record.fileprovider"
@@ -61,6 +66,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
+
+        <receiver android:name=".receiver.LoongggAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.loonggg.alarm.clock" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

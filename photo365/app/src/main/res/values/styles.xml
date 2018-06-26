@@ -18,4 +18,9 @@
         <item name="android:layout_gravity">clip_horizontal</item>
         <item name="android:src">@mipmap/arrow_icon</item>
     </style>
+
+    <style name="Theme_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

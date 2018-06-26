@@ -11,7 +11,7 @@ import com.chinaso.record.widget.wheelview.ArrayWheelAdapter;
 /**
  * author: zhanghe
  * created on: 2018/6/25 15:32
- * description:
+ * description:闹钟添加小时分钟数据源
  */
 
 public class DateArrayAdapter extends ArrayWheelAdapter<String> {

@@ -15,23 +15,35 @@ import org.greenrobot.greendao.annotation.Generated;
 public class AlarmEntity extends BaseEntity {
     @Id
     private Long id;
-    //时间
-    private String time;
-    //响铃周期
-    private String cycle;
+    //hour
+    private int hour;
+    //minute
+    private int minute;
+    //闹钟标题
+    private String title;
+    //响铃周期标志
+    private int cycleTag;
+    //响铃周期星期数
+    private String cycleWeeks;
     //响铃方式
-    private String mode;
+    private int bellMode;
     //备注
     private String remark;
+    //是否打开
+    private boolean isOpen;
 
-    @Generated(hash = 1970029728)
-    public AlarmEntity(Long id, String time, String cycle, String mode,
-                       String remark) {
+    @Generated(hash = 661605996)
+    public AlarmEntity(Long id, int hour, int minute, String title, int cycleTag,
+                       String cycleWeeks, int bellMode, String remark, boolean isOpen) {
         this.id = id;
-        this.time = time;
-        this.cycle = cycle;
-        this.mode = mode;
+        this.hour = hour;
+        this.minute = minute;
+        this.title = title;
+        this.cycleTag = cycleTag;
+        this.cycleWeeks = cycleWeeks;
+        this.bellMode = bellMode;
         this.remark = remark;
+        this.isOpen = isOpen;
     }
 
     @Generated(hash = 163591880)
@@ -46,28 +58,52 @@ public class AlarmEntity extends BaseEntity {
         this.id = id;
     }
 
-    public String getTime() {
-        return this.time;
+    public int getHour() {
+        return this.hour;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 
-    public String getCycle() {
-        return this.cycle;
+    public int getMinute() {
+        return this.minute;
     }
 
-    public void setCycle(String cycle) {
-        this.cycle = cycle;
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
-    public String getMode() {
-        return this.mode;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getCycleTag() {
+        return this.cycleTag;
+    }
+
+    public void setCycleTag(int cycleTag) {
+        this.cycleTag = cycleTag;
+    }
+
+    public String getCycleWeeks() {
+        return this.cycleWeeks;
+    }
+
+    public void setCycleWeeks(String cycleWeeks) {
+        this.cycleWeeks = cycleWeeks;
+    }
+
+    public int getBellMode() {
+        return this.bellMode;
+    }
+
+    public void setBellMode(int bellMode) {
+        this.bellMode = bellMode;
     }
 
     public String getRemark() {
@@ -77,4 +113,14 @@ public class AlarmEntity extends BaseEntity {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public boolean getIsOpen() {
+        return this.isOpen;
+    }
+
+    public void setIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+    }
+
+
 }

@@ -8,6 +8,10 @@
         <item>分享</item>
     </string-array>
 
+    <string-array name="alarmLongClicks">
+        <item>删除</item>
+    </string-array>
+
     <string name="activity_alarm_clock_title_hint">起床闹钟</string>
     <string name="activity_alarm_clock_cycle">响铃周期</string>
     <string name="activity_alarm_clock_title">闹钟标题</string>
@@ -19,7 +23,7 @@
     <string-array name="cycle">
         <item>每天一次</item>
         <item>周一至周五</item>
-        <item>休息日</item>
+        <item>周末</item>
         <item>响铃一次</item>
     </string-array>
 
