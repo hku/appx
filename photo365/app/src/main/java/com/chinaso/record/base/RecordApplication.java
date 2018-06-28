@@ -2,10 +2,12 @@ package com.chinaso.record.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.chinaso.record.BuildConfig;
+import com.chinaso.record.receiver.AlarmClockBroadcast;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -35,7 +37,14 @@ public class RecordApplication extends Application {
         initRefreshLayout();
         initDebugBridge();
         Logger.addLogAdapter(new AndroidLogAdapter());
+//        registerReceiver();
     }
+
+//    private void registerReceiver() {
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction("com.record.alarm.clock");
+//        registerReceiver(new AlarmClockBroadcast(), filter);
+//    }
 
     private void initDebugBridge() {
         if (BuildConfig.DEBUG) {

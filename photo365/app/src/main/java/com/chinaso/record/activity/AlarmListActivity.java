@@ -18,6 +18,7 @@ import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.entity.PhotoEntity;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
+import com.chinaso.record.utils.AlarmManagerUtil2;
 import com.chinaso.record.utils.PhotoDaoManager;
 import com.chinaso.record.utils.ToastUtils;
 import com.orhanobut.logger.Logger;
@@ -79,8 +80,7 @@ public class AlarmListActivity extends BaseActivity {
                                         AlarmDaoManager.getInstance().remove(item);
                                         //修改数据源数据
                                         adapter.remove(position);
-                                        AlarmManagerUtil.cancelAlarm(AlarmListActivity.this,
-                                                AlarmManagerUtil.ALARM_ACTION, item.getId().intValue());
+                                        AlarmManagerUtil2.cancelAlarmClock(AlarmListActivity.this, item.getId().intValue());
                                         break;
                                 }
                             }

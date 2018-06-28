@@ -36,6 +36,4 @@ public class LoongggAlarmReceiver extends BroadcastReceiver {
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(clockIntent);
     }
-
-
 }

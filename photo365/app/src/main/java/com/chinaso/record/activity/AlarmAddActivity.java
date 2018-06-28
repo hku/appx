@@ -13,7 +13,7 @@ import com.chinaso.record.adapter.DateArrayAdapter;
 import com.chinaso.record.base.BaseActivity;
 import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.utils.AlarmDaoManager;
-import com.chinaso.record.utils.AlarmManagerUtil;
+import com.chinaso.record.utils.AlarmManagerUtil2;
 import com.chinaso.record.utils.ToastUtils;
 import com.chinaso.record.widget.wheelview.WheelView;
 
@@ -234,7 +234,7 @@ public class AlarmAddActivity extends BaseActivity {
         long clockId = AlarmDaoManager.getInstance().insert(alarmEntity);
         alarmEntity.setId(clockId);
         //设置闹钟
-        AlarmManagerUtil.setAlarm(this, alarmEntity);
+        AlarmManagerUtil2.setAlarm(this, alarmEntity);
         setResult(RESULT_OK);
         finish();
     }

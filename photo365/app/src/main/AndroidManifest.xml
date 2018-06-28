@@ -72,6 +72,12 @@
                 <action android:name="com.loonggg.alarm.clock" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".receiver.AlarmClockBroadcast">
+            <intent-filter>
+                <action android:name="com.record.alarm.clock" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

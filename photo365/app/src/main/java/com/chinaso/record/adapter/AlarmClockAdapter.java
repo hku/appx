@@ -12,6 +12,7 @@ import com.chinaso.record.R;
 import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
+import com.chinaso.record.utils.AlarmManagerUtil2;
 
 import java.util.ArrayList;
 
@@ -73,9 +74,9 @@ public class AlarmClockAdapter extends BaseQuickAdapter<AlarmEntity, BaseViewHol
                 item.setIsOpen(isChecked);
                 AlarmDaoManager.getInstance().update(item);
                 if (isChecked) {//打开闹钟
-                    AlarmManagerUtil.setAlarm(mContext, item);
+                    AlarmManagerUtil2.setAlarm(mContext, item);
                 } else {//关闭闹钟
-                    AlarmManagerUtil.cancelAlarm(mContext, AlarmManagerUtil.ALARM_ACTION, item.getId().intValue());
+                    AlarmManagerUtil2.cancelAlarmClock(mContext, item.getId().intValue());
                 }
             }
         });

@@ -81,4 +81,21 @@ public class AlarmDaoManager {
             dao.delete(entity);
         }
     }
+
+    /**
+     * 根据小时和分钟查询当前的数据
+     *
+     * @param hour
+     * @param minute
+     */
+    public AlarmEntity queryByTime(int hour, int minute) {
+        AlarmEntityDao dao = GreenDaoManager.getInstance().getSession().getAlarmEntityDao();
+        List<AlarmEntity> alarmList = dao.queryBuilder().where(AlarmEntityDao.Properties.Hour.eq(hour),
+                AlarmEntityDao.Properties.Minute.eq(minute)).list();
+        AlarmEntity entity = null;
+        if (alarmList != null && alarmList.size() > 0) {
+            entity = alarmList.get(0);
+        }
+        return entity;
+    }
 }

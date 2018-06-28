@@ -14,4 +14,6 @@ public final class Constant {
     public final static String getFileProviderName(Context context) {
         return context.getPackageName() + ".fileprovider";
     }
+
+    public static final String ALARM_CLOCK = "alarm_clock";
 }

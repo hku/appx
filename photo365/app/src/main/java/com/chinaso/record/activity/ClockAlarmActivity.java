@@ -7,12 +7,19 @@ import android.view.View;
 
 import com.chinaso.record.R;
 import com.chinaso.record.base.BaseActivity;
+import com.chinaso.record.entity.AlarmEntity;
+import com.chinaso.record.utils.Constant;
 import com.chinaso.record.widget.SimpleDialog;
 
 
 public class ClockAlarmActivity extends BaseActivity {
+
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
+
+    private AlarmEntity mAlarmEntity;
+    private int flag = 2;
+    private String message = "闹钟响了";
 
     @Override
     protected int getLayoutResId() {
@@ -21,8 +28,11 @@ public class ClockAlarmActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        String message = this.getIntent().getStringExtra("msg");
-        int flag = this.getIntent().getIntExtra("flag", 0);
+        mAlarmEntity = (AlarmEntity) getIntent().getSerializableExtra(Constant.ALARM_CLOCK);
+        if (mAlarmEntity != null) {
+            message = mAlarmEntity.getTitle() + "\n" + mAlarmEntity.getRemark();
+            flag = mAlarmEntity.getBellMode();
+        }
         showDialogInBroadcastReceiver(message, flag);
     }
 

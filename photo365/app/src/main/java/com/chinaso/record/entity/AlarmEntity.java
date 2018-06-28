@@ -1,5 +1,8 @@
 package com.chinaso.record.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.chinaso.record.base.BaseEntity;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -12,7 +15,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * description:闹钟数据库表结构
  */
 @Entity
-public class AlarmEntity extends BaseEntity {
+public class AlarmEntity extends BaseEntity implements Parcelable {
     @Id
     private Long id;
     //hour
@@ -49,6 +52,34 @@ public class AlarmEntity extends BaseEntity {
     @Generated(hash = 163591880)
     public AlarmEntity() {
     }
+
+    protected AlarmEntity(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readLong();
+        }
+        hour = in.readInt();
+        minute = in.readInt();
+        title = in.readString();
+        cycleTag = in.readInt();
+        cycleWeeks = in.readString();
+        bellMode = in.readInt();
+        remark = in.readString();
+        isOpen = in.readByte() != 0;
+    }
+
+    public static final Creator<AlarmEntity> CREATOR = new Creator<AlarmEntity>() {
+        @Override
+        public AlarmEntity createFromParcel(Parcel in) {
+            return new AlarmEntity(in);
+        }
+
+        @Override
+        public AlarmEntity[] newArray(int size) {
+            return new AlarmEntity[size];
+        }
+    };
 
     public Long getId() {
         return this.id;
@@ -123,4 +154,27 @@ public class AlarmEntity extends BaseEntity {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
+        }
+        dest.writeInt(hour);
+        dest.writeInt(minute);
+        dest.writeString(title);
+        dest.writeInt(cycleTag);
+        dest.writeString(cycleWeeks);
+        dest.writeInt(bellMode);
+        dest.writeString(remark);
+        dest.writeByte((byte) (isOpen ? 1 : 0));
+    }
 }
