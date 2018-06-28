@@ -31,13 +31,12 @@ public class AlarmManagerUtil2 {
      * @param context    context
      * @param alarmClock 闹钟实例
      */
-    @TargetApi(19)
     public static void setAlarm(Context context, AlarmEntity alarmClock) {
         Intent intent = new Intent(context, AlarmClockBroadcast.class);
         intent.setAction(ALARM_ACTION);
         Bundle bundle = new Bundle();
-        bundle.putInt("1", 1);
-        bundle.putSerializable(Constant.ALARM_CLOCK, alarmClock);
+        String alarmClockS = GsonUtils.toJsonString(alarmClock);
+        bundle.putString(Constant.ALARM_CLOCK, alarmClockS);
         intent.putExtras(bundle);
         // FLAG_UPDATE_CURRENT：如果PendingIntent已经存在，保留它并且只替换它的extra数据。
         // FLAG_CANCEL_CURRENT：如果PendingIntent已经存在，那么当前的PendingIntent会取消掉，然后产生一个新的PendingIntent。

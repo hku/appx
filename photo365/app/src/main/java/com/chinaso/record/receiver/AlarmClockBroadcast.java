@@ -25,10 +25,12 @@ import android.os.SystemClock;
 
 import com.chinaso.record.activity.ClockAlarmActivity;
 import com.chinaso.record.entity.AlarmEntity;
+import com.chinaso.record.entity.AlarmEntity2;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
 import com.chinaso.record.utils.AlarmManagerUtil2;
 import com.chinaso.record.utils.Constant;
+import com.chinaso.record.utils.GsonUtils;
 import com.orhanobut.logger.Logger;
 
 import java.util.Calendar;
@@ -44,9 +46,11 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-        int value = bundle.getInt("1");
-        Logger.e("value = " + value);
-        AlarmEntity alarmClock = (AlarmEntity) bundle.getSerializable(Constant.ALARM_CLOCK);
+        String alarmClockS = bundle.getString(Constant.ALARM_CLOCK);
+        Logger.d("alarmClocks = " + alarmClockS);
+        //序列化AlarmEntity 出错，暂不知道原因，目前用AlarmEntity2代替
+        AlarmEntity2 alarmEntity2 = GsonUtils.fromJsonString(alarmClockS, AlarmEntity2.class);
+        AlarmEntity alarmClock = copy(alarmEntity2);
         if (alarmClock == null) {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -67,10 +71,24 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
             }
         }
         Intent clockIntent = new Intent(context, ClockAlarmActivity.class);
-        clockIntent.putExtra(Constant.ALARM_CLOCK, (Parcelable) alarmClock);
-        // 清除栈顶的Activity
-//        clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-//                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        clockIntent.putExtra(Constant.ALARM_CLOCK, alarmClock);
+//         清除栈顶的Activity
+        clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(clockIntent);
+    }
+
+    private AlarmEntity copy(AlarmEntity2 alarmEntity2) {
+        AlarmEntity alarmEntity = new AlarmEntity();
+        alarmEntity.setId(alarmEntity2.getId());
+        alarmEntity.setIsOpen(alarmEntity2.getIsOpen());
+        alarmEntity.setTitle(alarmEntity2.getTitle());
+        alarmEntity.setRemark(alarmEntity2.getRemark());
+        alarmEntity.setBellMode(alarmEntity2.getBellMode());
+        alarmEntity.setCycleWeeks(alarmEntity2.getCycleWeeks());
+        alarmEntity.setCycleTag(alarmEntity2.getCycleTag());
+        alarmEntity.setMinute(alarmEntity2.getMinute());
+        alarmEntity.setHour(alarmEntity2.getHour());
+        return alarmEntity;
     }
 }

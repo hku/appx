@@ -1,22 +1,18 @@
 package com.chinaso.record.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.chinaso.record.base.BaseEntity;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * author: zhanghe
  * created on: 2018/6/25 10:42
  * description:闹钟数据库表结构
  */
-@Entity
-public class AlarmEntity extends BaseEntity {
-    @Id
+public class AlarmEntity2 extends BaseEntity {
+
     private Long id;
     //hour
     private int hour;
@@ -35,9 +31,8 @@ public class AlarmEntity extends BaseEntity {
     //是否打开
     private boolean isOpen;
 
-    @Generated(hash = 661605996)
-    public AlarmEntity(Long id, int hour, int minute, String title, int cycleTag,
-                       String cycleWeeks, int bellMode, String remark, boolean isOpen) {
+    public AlarmEntity2(Long id, int hour, int minute, String title, int cycleTag,
+                        String cycleWeeks, int bellMode, String remark, boolean isOpen) {
         this.id = id;
         this.hour = hour;
         this.minute = minute;
@@ -49,8 +44,7 @@ public class AlarmEntity extends BaseEntity {
         this.isOpen = isOpen;
     }
 
-    @Generated(hash = 163591880)
-    public AlarmEntity() {
+    public AlarmEntity2() {
     }
 
     public Long getId() {
