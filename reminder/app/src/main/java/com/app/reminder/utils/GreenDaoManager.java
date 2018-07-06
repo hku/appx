@@ -2,8 +2,8 @@ package com.app.reminder.utils;
 
 
 import com.app.reminder.base.ReminderApplication;
-import com.chinaso.record.greendao.gen.DaoMaster;
-import com.chinaso.record.greendao.gen.DaoSession;
+import com.app.reminder.greendao.gen.DaoMaster;
+import com.app.reminder.greendao.gen.DaoSession;
 
 /**
  * author: zhanghe

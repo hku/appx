@@ -4,6 +4,7 @@ import android.media.Image;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -59,6 +60,9 @@ public class AddActivity extends BaseActivity {
         initRecycleView();
     }
 
+    /**
+     * init recyclerView
+     */
     private void initRecycleView() {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
         tagRecycleView.setLayoutManager(layoutManager);
@@ -67,6 +71,7 @@ public class AddActivity extends BaseActivity {
         mTagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mTagAdapter.refesh(position);
                 mTagS = mTagAdapter.getItem(position);
             }
         });
@@ -96,6 +101,9 @@ public class AddActivity extends BaseActivity {
 
     private void onSave() {
         String content = contentEt.getText().toString();
+        if (!TextUtils.isEmpty(content)) {
+
+        }
         ReminderEntity entity = new ReminderEntity();
         entity.setContent(content);
         entity.setTagS(mTagS);

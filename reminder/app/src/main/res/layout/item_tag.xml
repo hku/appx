@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_tag_tv"
+        android:background="@drawable/bg_tag_tv_normal"
         android:text="英语"
         android:textColor="@color/gray"
         android:textSize="14sp" />

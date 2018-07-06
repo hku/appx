@@ -68,7 +68,7 @@
                     android:layout_centerVertical="true"
                     android:textSize="14sp"
                     android:textColor="@color/gray"
-                    android:background="@drawable/bg_tag_tv"
+                    android:background="@drawable/bg_tag_tv_normal"
                     android:padding="5dp"
                     android:text="英语" />
 

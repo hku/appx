@@ -1,7 +1,7 @@
 package com.app.reminder.utils;
 
 import com.app.reminder.entity.ReminderEntity;
-import com.chinaso.record.greendao.gen.ReminderEntityDao;
+import com.app.reminder.greendao.gen.ReminderEntityDao;
 
 /**
  * author: zhanghe
