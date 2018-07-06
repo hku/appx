@@ -1,5 +1,7 @@
 package com.app.reminder.entity;
 
+import com.app.reminder.base.BaseEntity;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -10,16 +12,16 @@ import org.greenrobot.greendao.annotation.Generated;
  * description: 表结构
  */
 @Entity
-public class ReminderEntity {
+public class ReminderEntity extends BaseEntity {
 
     @Id
-    private long id;
+    private Long id;
 
     private String content;
     private String tagS;
 
-    @Generated(hash = 613567264)
-    public ReminderEntity(long id, String content, String tagS) {
+    @Generated(hash = 1825889834)
+    public ReminderEntity(Long id, String content, String tagS) {
         this.id = id;
         this.content = content;
         this.tagS = tagS;
@@ -29,11 +31,11 @@ public class ReminderEntity {
     public ReminderEntity() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -52,5 +54,6 @@ public class ReminderEntity {
     public void setTagS(String tagS) {
         this.tagS = tagS;
     }
+
 
 }

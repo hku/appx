@@ -1,5 +1,6 @@
 package com.app.reminder.activity;
 
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +16,11 @@ import com.app.reminder.base.BaseActivity;
 import com.app.reminder.entity.ReminderEntity;
 import com.app.reminder.utils.Constant;
 import com.app.reminder.utils.ReminderDaoManager;
+import com.app.reminder.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,6 +45,8 @@ public class AddActivity extends BaseActivity {
     private TagAdapter mTagAdapter;
 
     private String mTagS = "";
+
+    private ReminderEntity mReminderEntity;
 
     @Override
     protected int getLayoutResId() {
@@ -82,6 +87,30 @@ public class AddActivity extends BaseActivity {
         super.initData();
         String[] tagArray = Constant.TAG_ARRAY;
         mTagAdapter.addData(Arrays.asList(tagArray));
+        mReminderEntity = (ReminderEntity) getIntent().getSerializableExtra(Constant.DELIVER_TAG);
+        if (mReminderEntity != null) {
+            String content = mReminderEntity.getContent();
+            String tagS = mReminderEntity.getTagS();
+            contentEt.setText(content);
+            int tagPosition = getAdapterPosition(tagS);
+            if (tagPosition != -1) {
+                mTagAdapter.refesh(tagPosition);
+                mTagS = mTagAdapter.getItem(tagPosition);
+            }
+        }
+    }
+
+    private int getAdapterPosition(String tagS) {
+        List<String> tagList = mTagAdapter.getData();
+        int result = -1;
+        for (int i = 0; i < tagList.size(); i++) {
+            String tag = tagList.get(i);
+            if (tag.equals(tagS)) {
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -99,14 +128,34 @@ public class AddActivity extends BaseActivity {
         }
     }
 
+    /**
+     * save and back
+     */
     private void onSave() {
         String content = contentEt.getText().toString();
-        if (!TextUtils.isEmpty(content)) {
-
+        if (TextUtils.isEmpty(content)) {
+            ToastUtils.show(AddActivity.this, "请输入内容");
+            return;
         }
-        ReminderEntity entity = new ReminderEntity();
-        entity.setContent(content);
-        entity.setTagS(mTagS);
-        ReminderDaoManager.getInstance().insert(entity);
+        if (TextUtils.isEmpty(mTagS)) {
+            ToastUtils.show(AddActivity.this, "请点击分类标签");
+            return;
+        }
+        //修改
+        if (mReminderEntity != null) {
+            mReminderEntity.setTagS(mTagS);
+            mReminderEntity.setContent(content);
+            ReminderDaoManager.getInstance().update(mReminderEntity);
+            Intent intent = new Intent();
+            intent.putExtra("back", mReminderEntity);
+            setResult(RESULT_OK, intent);
+        } else {//添加
+            ReminderEntity entity = new ReminderEntity();
+            entity.setContent(content);
+            entity.setTagS(mTagS);
+            ReminderDaoManager.getInstance().insert(entity);
+            setResult(RESULT_OK);
+        }
+        finish();
     }
 }

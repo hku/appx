@@ -9,4 +9,6 @@ package com.app.reminder.utils;
 public class Constant {
 
     public static final String[] TAG_ARRAY = {"英语", "编程", "生活", "宝宝", "孕妈", "旅游"};
+
+    public static final String DELIVER_TAG = "edit_data";
 }
