@@ -13,8 +13,6 @@ import com.app.reminder.utils.Constant;
 import com.app.reminder.utils.ReminderDaoManager;
 import com.app.reminder.utils.ToastUtils;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -40,6 +38,8 @@ public class MainActivity extends BaseActivity {
     ImageView editIv;
 
     private ReminderEntity mReminderEntity;
+
+    private long mClickTime = -1L;
 
     @Override
     protected int getLayoutResId() {
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity {
         tagTv.setText(tagS);
     }
 
-    @OnClick({R.id.show_iv, R.id.refesh_iv, R.id.edit_iv})
+    @OnClick({R.id.show_iv, R.id.refesh_iv, R.id.edit_iv, R.id.content_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.show_iv:
@@ -75,13 +75,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.refesh_iv:
-                if (mReminderEntity != null) {
-                    mReminderEntity = ReminderDaoManager.getInstance().getRandomItem(mReminderEntity);
-                    business();
-                } else {
-                    mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
-                    business();
-                }
+                refresh();
                 break;
             case R.id.edit_iv:
                 if (mReminderEntity != null) {
@@ -92,6 +86,31 @@ public class MainActivity extends BaseActivity {
                     ToastUtils.show(this, "当前无数据，暂不可修改，请可尝试刷新");
                 }
                 break;
+            case R.id.content_tv:
+                doubleClickRefresh();
+                break;
+        }
+    }
+
+    /**
+     * 双击刷新
+     */
+    private void doubleClickRefresh() {
+        if (System.currentTimeMillis() - mClickTime < 800) {
+            refresh();
+        } else {
+            mClickTime = System.currentTimeMillis();
+        }
+    }
+
+
+    private void refresh() {
+        if (mReminderEntity != null) {
+            mReminderEntity = ReminderDaoManager.getInstance().getRandomItem(mReminderEntity);
+            business();
+        } else {
+            mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
+            business();
         }
     }
 

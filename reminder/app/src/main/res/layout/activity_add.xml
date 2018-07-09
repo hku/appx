@@ -9,7 +9,6 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/AppTheme.Toolbar"
-        android:layout_alignParentTop="true"
         app:navigationIcon="@drawable/ic_arrow_back_dark_24dp">
 
         <TextView
@@ -30,45 +29,32 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/reminder_et"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/reminder_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_content_et"
-                android:gravity="left|top"
-                android:lineSpacingMultiplier="1.2"
-                android:minHeight="300dp"
-                android:padding="15dp"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_content_et"
+            android:gravity="left|top"
+            android:lineSpacingMultiplier="1.2"
+            android:minHeight="200dp"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/white"
-                    android:padding="10dp" />
+    </LinearLayout>
 
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" />
 </LinearLayout>

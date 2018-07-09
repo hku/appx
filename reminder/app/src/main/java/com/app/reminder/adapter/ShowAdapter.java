@@ -1,6 +1,5 @@
 package com.app.reminder.adapter;
 
-import android.widget.Button;
 
 import com.app.reminder.R;
 import com.app.reminder.entity.ReminderEntity;

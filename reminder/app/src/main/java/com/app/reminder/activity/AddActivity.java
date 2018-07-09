@@ -1,8 +1,7 @@
 package com.app.reminder.activity;
 
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -69,14 +68,15 @@ public class AddActivity extends BaseActivity {
      * init recyclerView
      */
     private void initRecycleView() {
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
-        tagRecycleView.setLayoutManager(layoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        tagRecycleView.setLayoutManager(linearLayoutManager);
         mTagAdapter = new TagAdapter(R.layout.item_tag);
         tagRecycleView.setAdapter(mTagAdapter);
         mTagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mTagAdapter.refesh(position);
+                mTagAdapter.refresh(position);
                 mTagS = mTagAdapter.getItem(position);
             }
         });
@@ -94,7 +94,7 @@ public class AddActivity extends BaseActivity {
             contentEt.setText(content);
             int tagPosition = getAdapterPosition(tagS);
             if (tagPosition != -1) {
-                mTagAdapter.refesh(tagPosition);
+                mTagAdapter.refresh(tagPosition);
                 mTagS = mTagAdapter.getItem(tagPosition);
             }
         }

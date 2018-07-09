@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:id="@+id/item_rlayout"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
 
 
     <TextView
@@ -10,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="5dp"
         android:background="@drawable/bg_tag_tv_normal"
         android:text="英语"
         android:textColor="@color/gray"

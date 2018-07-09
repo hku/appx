@@ -2,9 +2,12 @@ package com.app.reminder.adapter;
 
 
 import android.content.IntentFilter;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.reminder.R;
+import com.app.reminder.utils.ScreenUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -24,7 +27,7 @@ public class TagAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         super(layoutResId);
     }
 
-    public void refesh(int position) {
+    public void refresh(int position) {
         this.mPosition = position;
         notifyDataSetChanged();
     }
@@ -34,6 +37,11 @@ public class TagAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, String item) {
         helper.setText(R.id.tag_tv, item);
         TextView tagTv = helper.getView(R.id.tag_tv);
+        RelativeLayout itemLayout = helper.getView(R.id.item_rlayout);
+        int screenWidth = ScreenUtils.getScreenWidth(mContext);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(screenWidth / 4,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        itemLayout.setLayoutParams(params);
         int position = helper.getAdapterPosition();
         if (position == mPosition) {
             tagTv.setBackgroundResource(R.drawable.bg_tag_tv_pressed);
