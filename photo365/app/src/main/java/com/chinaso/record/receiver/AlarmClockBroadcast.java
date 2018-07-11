@@ -18,28 +18,29 @@ package com.chinaso.record.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Entity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.SystemClock;
 
 import com.chinaso.record.activity.ClockAlarmActivity;
 import com.chinaso.record.entity.AlarmEntity;
-import com.chinaso.record.entity.AlarmEntity2;
+import com.chinaso.record.entity.AlarmEntityCopy;
+import com.chinaso.record.entity.MessageEvent;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
-import com.chinaso.record.utils.AlarmManagerUtil2;
 import com.chinaso.record.utils.Constant;
 import com.chinaso.record.utils.GsonUtils;
+import com.chinaso.record.utils.LogUtils;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 
 /**
- * 闹钟响起广播
- *
- * @author 咖枯
- * @version 1.0 2015/06
+ * author: zhanghe
+ * created on: 2018/6/27 9:42
+ * description: 闹钟响起广播
  */
 public class AlarmClockBroadcast extends BroadcastReceiver {
 
@@ -47,10 +48,10 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         String alarmClockS = bundle.getString(Constant.ALARM_CLOCK);
-        Logger.d("alarmClocks = " + alarmClockS);
-        //序列化AlarmEntity 出错，暂不知道原因，目前用AlarmEntity2代替
-        AlarmEntity2 alarmEntity2 = GsonUtils.fromJsonString(alarmClockS, AlarmEntity2.class);
-        AlarmEntity alarmClock = copy(alarmEntity2);
+        //序列化AlarmEntity 出错，暂不知道原因，暂时用AlarmEntityCopy代替
+        AlarmEntityCopy alarmEntityCopy = GsonUtils.fromJsonString(alarmClockS, AlarmEntityCopy.class);
+        LogUtils.d("zhanghe   " + "alarm will ring" + alarmEntityCopy.getId());
+        AlarmEntity alarmClock = copy(alarmEntityCopy);
         if (alarmClock == null) {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -65,20 +66,24 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
                 AlarmEntity alarmEntity = AlarmDaoManager.getInstance().query(id);
                 alarmEntity.setIsOpen(false);
                 AlarmDaoManager.getInstance().update(alarmEntity);
+
+                MessageEvent event = new MessageEvent();
+                event.setId(MessageEvent.IdPool.ALARM_ID);
+                event.setObject(alarmEntity);
+                EventBus.getDefault().post(event);
             } else {
                 // 重复周期闹钟
-                AlarmManagerUtil2.setAlarm(context, alarmClock);
+                AlarmManagerUtil.setAlarm(context, alarmClock);
             }
         }
         Intent clockIntent = new Intent(context, ClockAlarmActivity.class);
         clockIntent.putExtra(Constant.ALARM_CLOCK, alarmClock);
-//         清除栈顶的Activity
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(clockIntent);
     }
 
-    private AlarmEntity copy(AlarmEntity2 alarmEntity2) {
+    private AlarmEntity copy(AlarmEntityCopy alarmEntity2) {
         AlarmEntity alarmEntity = new AlarmEntity();
         alarmEntity.setId(alarmEntity2.getId());
         alarmEntity.setIsOpen(alarmEntity2.getIsOpen());

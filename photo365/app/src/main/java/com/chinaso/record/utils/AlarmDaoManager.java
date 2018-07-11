@@ -1,9 +1,7 @@
 package com.chinaso.record.utils;
 
 import com.chinaso.record.entity.AlarmEntity;
-import com.chinaso.record.entity.PhotoEntity;
 import com.chinaso.record.greendao.gen.AlarmEntityDao;
-import com.chinaso.record.greendao.gen.PhotoEntityDao;
 
 import java.util.List;
 

@@ -23,6 +23,7 @@ import com.chinaso.record.adapter.PhotoItemAdapter;
 import com.chinaso.record.base.BaseActivity;
 import com.chinaso.record.base.RecordApplication;
 import com.chinaso.record.entity.PhotoEntity;
+import com.chinaso.record.service.DaemonService;
 import com.chinaso.record.utils.PhotoDaoManager;
 import com.chinaso.record.utils.ToastUtils;
 import com.chinaso.record.widget.SpacesItemDecoration;
@@ -134,6 +135,7 @@ public class PhotoListActivity extends BaseActivity {
 
     @Override
     protected void business() {
+        startService(new Intent(PhotoListActivity.this, DaemonService.class));
         refreshLayout.autoRefresh();
     }
 

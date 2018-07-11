@@ -2,12 +2,9 @@ package com.chinaso.record.base;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.chinaso.record.BuildConfig;
-import com.chinaso.record.receiver.AlarmClockBroadcast;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -28,23 +25,16 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 public class RecordApplication extends Application {
 
-    private static Context mContext;
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this;
+        sContext = this;
         initRefreshLayout();
         initDebugBridge();
         Logger.addLogAdapter(new AndroidLogAdapter());
-//        registerReceiver();
     }
-
-//    private void registerReceiver() {
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction("com.record.alarm.clock");
-//        registerReceiver(new AlarmClockBroadcast(), filter);
-//    }
 
     private void initDebugBridge() {
         if (BuildConfig.DEBUG) {
@@ -57,19 +47,19 @@ public class RecordApplication extends Application {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @Override
             public RefreshHeader createRefreshHeader(@NonNull Context context, @NonNull RefreshLayout layout) {
-                return new ClassicsHeader(mContext);
+                return new ClassicsHeader(sContext);
             }
         });
         SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
             @NonNull
             @Override
             public RefreshFooter createRefreshFooter(@NonNull Context context, @NonNull RefreshLayout layout) {
-                return new BallPulseFooter(mContext);
+                return new BallPulseFooter(sContext);
             }
         });
     }
 
     public static Context getContext() {
-        return mContext;
+        return sContext;
     }
 }

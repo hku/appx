@@ -13,7 +13,7 @@ import com.chinaso.record.adapter.DateArrayAdapter;
 import com.chinaso.record.base.BaseActivity;
 import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.utils.AlarmDaoManager;
-import com.chinaso.record.utils.AlarmManagerUtil2;
+import com.chinaso.record.utils.AlarmManagerUtil;
 import com.chinaso.record.utils.ToastUtils;
 import com.chinaso.record.widget.wheelview.WheelView;
 
@@ -49,7 +49,7 @@ public class AlarmAddActivity extends BaseActivity {
     EditText remarkEt;
 
     private static final String[] hours = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
-    private static final String[] mimutes = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
+    private static final String[] minutes = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
 
 
     //当前小时
@@ -87,7 +87,7 @@ public class AlarmAddActivity extends BaseActivity {
      */
     private void initTimeView() {
         this.hourWheelView.setViewAdapter(new DateArrayAdapter(this, this.hours, this.mHour));
-        this.minuteWheelView.setViewAdapter(new DateArrayAdapter(this, this.mimutes, this.mMinute));
+        this.minuteWheelView.setViewAdapter(new DateArrayAdapter(this, this.minutes, this.mMinute));
         this.hourWheelView.setCurrentItem(this.mHour);
         this.minuteWheelView.setCurrentItem(this.mMinute);
         this.hourWheelView.setCyclic(true);
@@ -234,7 +234,7 @@ public class AlarmAddActivity extends BaseActivity {
         long clockId = AlarmDaoManager.getInstance().insert(alarmEntity);
         alarmEntity.setId(clockId);
         //设置闹钟
-        AlarmManagerUtil2.setAlarm(this, alarmEntity);
+        AlarmManagerUtil.setAlarm(this, alarmEntity);
         setResult(RESULT_OK);
         finish();
     }

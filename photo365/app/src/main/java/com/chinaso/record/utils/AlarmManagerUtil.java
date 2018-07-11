@@ -1,174 +1,141 @@
 package com.chinaso.record.utils;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.chinaso.record.entity.AlarmEntity;
+import com.chinaso.record.receiver.AlarmClockBroadcast;
 
 import java.util.Calendar;
 
 /**
- * Created by loonggg on 2016/3/21.
+ * author: zhanghe
+ * created on: 2018/6/27 9:42
+ * description:
  */
+
 public class AlarmManagerUtil {
-    public static final String ALARM_ACTION = "com.loonggg.alarm.clock";
 
-    public static void setAlarmTime(Context context, long timeInMillis, Intent intent) {
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent sender = PendingIntent.getBroadcast(context, intent.getIntExtra("id", 0),
-                intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        int interval = (int) intent.getLongExtra("intervalMillis", 0);
+    public static final String ALARM_ACTION = "com.record.alarm.clock";
+
+    /**
+     * 开启闹钟
+     *
+     * @param context    context
+     * @param alarmClock 闹钟实例
+     */
+    public static void setAlarm(Context context, AlarmEntity alarmClock) {
+        Intent intent = new Intent(context, AlarmClockBroadcast.class);
+        intent.setAction(ALARM_ACTION);
+        Bundle bundle = new Bundle();
+        String alarmClockS = GsonUtils.toJsonString(alarmClock);
+        bundle.putString(Constant.ALARM_CLOCK, alarmClockS);
+        intent.putExtras(bundle);
+        PendingIntent pi = PendingIntent.getBroadcast(context,
+                alarmClock.getId().intValue(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+
+        // 取得下次响铃时间
+        long nextTime = calculateNextTime(alarmClock.getHour(),
+                alarmClock.getMinute(), alarmClock.getCycleWeeks());
+        // 设置闹钟
+        // 当前版本为19（4.4）或以上使用精准闹钟
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            am.setWindow(AlarmManager.RTC_WAKEUP, timeInMillis, interval, sender);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextTime, pi);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pi);
         }
     }
 
-    public static void cancelAlarm(Context context, String action, int id) {
-        Intent intent = new Intent(action);
-        PendingIntent pi = PendingIntent.getBroadcast(context, id, intent, PendingIntent
-                .FLAG_CANCEL_CURRENT);
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.cancel(pi);
-    }
-
-    //    /**
-//     * @param flag            周期性时间间隔的标志,flag = 0 表示一次性的闹钟, flag = 1 表示每天提醒的闹钟(1天的时间间隔),flag = 2
-//     *                        表示按周每周提醒的闹钟（一周的周期性时间间隔）
-//     * @param hour            时
-//     * @param minute          分
-//     * @param id              闹钟的id
-//     * @param week            week=0表示一次性闹钟或者按天的周期性闹钟，非0 的情况下是几就代表以周为周期性的周几的闹钟
-//     * @param tips            闹钟提示信息
-//     * @param soundOrVibrator 2表示声音和震动都执行，1表示只有铃声提醒，0表示只有震动提醒
-//     */
-    public static void setAlarm(Context context, AlarmEntity alarmEntity) {
-        int soundOrVibrator = alarmEntity.getBellMode();
-        int hour = alarmEntity.getHour();
-        int minute = alarmEntity.getMinute();
-        Long id = alarmEntity.getId();
-        String tips = alarmEntity.getTitle() + "\n" + alarmEntity.getRemark();
-        int cycleTag = alarmEntity.getCycleTag();
-        int flag = -1;
-        if (cycleTag == 0) {//每天
-            flag = 1;
-            setAlarmReal(context, flag, hour, minute, id.intValue(), 0, tips, soundOrVibrator);
-        } else if (cycleTag == -1) {//只响一次的闹钟
-            flag = 0;
-            setAlarmReal(context, flag, hour, minute, id.intValue(), 0, tips, soundOrVibrator);
-        } else {//星期重复的闹钟
-            flag = 2;
-            String weekS = alarmEntity.getCycleWeeks();
-            String[] weeksArray = weekS.split(",");
-            for (int i = 0; i < weeksArray.length; i++) {
-                int weeksInt = -1;
-                try {
-                    weeksInt = Integer.parseInt(weeksArray[i]);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-                if (weeksInt != -1) {
-                    setAlarmReal(context, flag, hour, minute, id.intValue(), weeksInt, tips, soundOrVibrator);
-                }
-            }
+    /**
+     * 取消闹钟
+     *
+     * @param context        context
+     * @param alarmClockCode 闹钟启动code
+     */
+    public static void cancelAlarmClock(Context context, int alarmClockCode) {
+        LogUtils.d("zhanghe  " + " alarm is canceling " + "  " + alarmClockCode);
+        AlarmManager am = (AlarmManager) context
+                .getSystemService(Activity.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmClockBroadcast.class);
+        intent.setAction(ALARM_ACTION);
+        PendingIntent pi = PendingIntent.getBroadcast(context, alarmClockCode,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (pi != null) {
+            LogUtils.d("zhanghe  " + " PendingIntent not null " + "  " + alarmClockCode);
+            am.cancel(pi);
+        } else {
+            LogUtils.d("zhanghe  " + " PendingIntent is null " + "  " + alarmClockCode);
         }
     }
 
 
     /**
-     * @param flag            周期性时间间隔的标志,flag = 0 表示一次性的闹钟, flag = 1 表示每天提醒的闹钟(1天的时间间隔),flag = 2
-     *                        表示按周每周提醒的闹钟（一周的周期性时间间隔）
-     * @param hour            时
-     * @param minute          分
-     * @param id              闹钟的id
-     * @param week            week=0表示一次性闹钟或者按天的周期性闹钟，非0 的情况下是几就代表以周为周期性的周几的闹钟
-     * @param tips            闹钟提示信息
-     * @param soundOrVibrator 2表示声音和震动都执行，1表示只有铃声提醒，0表示只有震动提醒
+     * 取得下次响铃时间
+     *
+     * @param hour   小时
+     * @param minute 分钟
+     * @param weeks  周
+     * @return 下次响铃时间
      */
-    public static void setAlarmReal(Context context, int flag, int hour, int minute, int id, int
-            week, String tips, int soundOrVibrator) {
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    public static long calculateNextTime(int hour, int minute, String weeks) {
+        // 当前系统时间
+        long now = System.currentTimeMillis();
         Calendar calendar = Calendar.getInstance();
-        long intervalMillis = 0;
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get
-                (Calendar.DAY_OF_MONTH), hour, minute, 10);
-        if (flag == 0) {
-            intervalMillis = 0;
-        } else if (flag == 1) {
-            intervalMillis = 24 * 3600 * 1000;
-        } else if (flag == 2) {
-            intervalMillis = 24 * 3600 * 1000 * 7;
-        }
-        Intent intent = new Intent(ALARM_ACTION);
-        intent.putExtra("intervalMillis", intervalMillis);
-        intent.putExtra("msg", tips);
-        intent.putExtra("id", id);
-        intent.putExtra("soundOrVibrator", soundOrVibrator);
-        PendingIntent sender = PendingIntent.getBroadcast(context, id, intent, PendingIntent
-                .FLAG_CANCEL_CURRENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            am.setWindow(AlarmManager.RTC_WAKEUP, calMethod(week, calendar.getTimeInMillis()),
-                    intervalMillis, sender);
-        } else {
-            if (flag == 0) {
-                am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+        calendar.setTimeInMillis(now);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        // 下次响铃时间
+        long nextTime = calendar.getTimeInMillis();
+        // 当单次响铃时
+        if (TextUtils.isEmpty(weeks)) {
+            // 当设置时间大于系统时间时
+            if (nextTime > now) {
+                return nextTime;
             } else {
-                am.setRepeating(AlarmManager.RTC_WAKEUP, calMethod(week, calendar.getTimeInMillis
-                        ()), intervalMillis, sender);
+                // 设置的时间加一天
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                nextTime = calendar.getTimeInMillis();
+                return nextTime;
             }
-        }
-    }
-
-
-    /**
-     * @param weekflag 传入的是周几
-     * @param dateTime 传入的是时间戳（设置当天的年月日+从选择框拿来的时分秒）
-     * @return 返回起始闹钟时间的时间戳
-     */
-    private static long calMethod(int weekflag, long dateTime) {
-        long time = 0;
-        //weekflag == 0表示是按天为周期性的时间间隔或者是一次行的，weekfalg非0时表示每周几的闹钟并以周为时间间隔
-        if (weekflag != 0) {
-            Calendar c = Calendar.getInstance();
-            int week = c.get(Calendar.DAY_OF_WEEK);
-            if (1 == week) {
-                week = 7;
-            } else if (2 == week) {
-                week = 1;
-            } else if (3 == week) {
-                week = 2;
-            } else if (4 == week) {
-                week = 3;
-            } else if (5 == week) {
-                week = 4;
-            } else if (6 == week) {
-                week = 5;
-            } else if (7 == week) {
-                week = 6;
-            }
-
-            if (weekflag == week) {
-                if (dateTime > System.currentTimeMillis()) {
-                    time = dateTime;
-                } else {
-                    time = dateTime + 7 * 24 * 3600 * 1000;
+        } else {
+            nextTime = 0;
+            // 临时比较用响铃时间
+            long tempTime;
+            // 取得响铃重复周期
+            final String[] weeksValue = weeks.split(",");
+            for (String aWeeksValue : weeksValue) {
+                int week = Integer.parseInt(aWeeksValue);
+                // 设置重复的周
+                calendar.set(Calendar.DAY_OF_WEEK, week);
+                tempTime = calendar.getTimeInMillis();
+                // 当设置时间小于等于当前系统时间时
+                if (tempTime <= now) {
+                    // 设置时间加7天
+                    tempTime += AlarmManager.INTERVAL_DAY * 7;
                 }
-            } else if (weekflag > week) {
-                time = dateTime + (weekflag - week) * 24 * 3600 * 1000;
-            } else if (weekflag < week) {
-                time = dateTime + (weekflag - week + 7) * 24 * 3600 * 1000;
-            }
-        } else {
-            if (dateTime > System.currentTimeMillis()) {
-                time = dateTime;
-            } else {
-                time = dateTime + 24 * 3600 * 1000;
-            }
-        }
-        return time;
-    }
 
+                if (nextTime == 0) {
+                    nextTime = tempTime;
+                } else {
+                    // 比较取得最小时间为下次响铃时间
+                    nextTime = Math.min(tempTime, nextTime);
+                }
+            }
+            return nextTime;
+        }
+    }
 
 }
+
+

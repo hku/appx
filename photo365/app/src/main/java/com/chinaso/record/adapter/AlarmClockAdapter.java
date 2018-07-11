@@ -2,8 +2,6 @@ package com.chinaso.record.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.CompoundButton;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -12,7 +10,7 @@ import com.chinaso.record.R;
 import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
-import com.chinaso.record.utils.AlarmManagerUtil2;
+import com.chinaso.record.utils.CommonUtils;
 
 import java.util.ArrayList;
 
@@ -29,6 +27,19 @@ public class AlarmClockAdapter extends BaseQuickAdapter<AlarmEntity, BaseViewHol
     public AlarmClockAdapter(int layoutResId, Context context) {
         super(layoutResId);
         this.mContext = context;
+    }
+
+    public void refreshItem(AlarmEntity entity) {
+        if (mData != null) {
+            for (int i = 0; i < mData.size(); i++) {
+                AlarmEntity alarmEntity = mData.get(i);
+                if (alarmEntity.getId() == entity.getId()) {
+                    mData.set(i, entity);
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
     }
 
     public void clear() {
@@ -58,7 +69,8 @@ public class AlarmClockAdapter extends BaseQuickAdapter<AlarmEntity, BaseViewHol
         }
         int hour = item.getHour();
         int minute = item.getMinute();
-        helper.setText(R.id.cycle, cycleS + " " + hour + ":" + minute);
+        String time = CommonUtils.formatTime(hour, minute);
+        helper.setText(R.id.cycle, cycleS + " " + time);
         //是否打开
         boolean isOpen = item.getIsOpen();
         SwitchCompat switchCompat = helper.getView(R.id.switch_sv);
@@ -68,17 +80,5 @@ public class AlarmClockAdapter extends BaseQuickAdapter<AlarmEntity, BaseViewHol
             switchCompat.setChecked(false);
         }
         helper.addOnClickListener(R.id.switch_sv);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                item.setIsOpen(isChecked);
-                AlarmDaoManager.getInstance().update(item);
-                if (isChecked) {//打开闹钟
-                    AlarmManagerUtil2.setAlarm(mContext, item);
-                } else {//关闭闹钟
-                    AlarmManagerUtil2.cancelAlarmClock(mContext, item.getId().intValue());
-                }
-            }
-        });
     }
 }

@@ -11,7 +11,7 @@ import org.greenrobot.greendao.annotation.Id;
  * created on: 2018/6/25 10:42
  * description:闹钟数据库表结构
  */
-public class AlarmEntity2 extends BaseEntity {
+public class AlarmEntityCopy extends BaseEntity {
 
     private Long id;
     //hour
@@ -31,8 +31,8 @@ public class AlarmEntity2 extends BaseEntity {
     //是否打开
     private boolean isOpen;
 
-    public AlarmEntity2(Long id, int hour, int minute, String title, int cycleTag,
-                        String cycleWeeks, int bellMode, String remark, boolean isOpen) {
+    public AlarmEntityCopy(Long id, int hour, int minute, String title, int cycleTag,
+                           String cycleWeeks, int bellMode, String remark, boolean isOpen) {
         this.id = id;
         this.hour = hour;
         this.minute = minute;
@@ -44,7 +44,7 @@ public class AlarmEntity2 extends BaseEntity {
         this.isOpen = isOpen;
     }
 
-    public AlarmEntity2() {
+    public AlarmEntityCopy() {
     }
 
     public Long getId() {

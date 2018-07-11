@@ -11,7 +11,11 @@ import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.utils.Constant;
 import com.chinaso.record.widget.SimpleDialog;
 
-
+/**
+ * author: zhanghe
+ * created on: 2018/6/27 9:42
+ * description: 闹钟响起界面
+ */
 public class ClockAlarmActivity extends BaseActivity {
 
     private MediaPlayer mediaPlayer;
