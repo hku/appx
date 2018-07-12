@@ -111,6 +111,10 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service
+            android:name=".service.AliveJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
     </application>
 
 </manifest>

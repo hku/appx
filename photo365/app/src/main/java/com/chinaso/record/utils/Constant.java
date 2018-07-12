@@ -16,4 +16,6 @@ public final class Constant {
     }
 
     public static final String ALARM_CLOCK = "alarm_clock";
+
+    public static final String PACKAGE_NAME = "com.chinaso.record";
 }

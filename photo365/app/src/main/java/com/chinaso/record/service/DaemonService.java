@@ -1,22 +1,20 @@
 package com.chinaso.record.service;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.util.Log;
 
+import com.chinaso.record.activity.PhotoListActivity;
 import com.chinaso.record.entity.AlarmEntity;
 import com.chinaso.record.receiver.WakeReceiver;
 import com.chinaso.record.utils.AlarmDaoManager;
 import com.chinaso.record.utils.AlarmManagerUtil;
+import com.chinaso.record.utils.JobSchedulerManager;
 import com.chinaso.record.utils.LogUtils;
 import com.coolerfall.daemon.Daemon;
 
@@ -43,6 +41,7 @@ public class DaemonService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.d("zhanghe " + "DaemonService onCreate");
         Daemon.run(DaemonService.this, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
         grayGuard();
         test();
@@ -81,6 +80,7 @@ public class DaemonService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        LogUtils.d("zhanghe " + "DaemonService onStartCommand");
         flags = START_STICKY;
         return super.onStartCommand(intent, flags, startId);
     }
@@ -134,6 +134,7 @@ public class DaemonService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LogUtils.d("zhanghe " + "onDestroy");
         startService(new Intent(this, DaemonService.class));
     }
 }
