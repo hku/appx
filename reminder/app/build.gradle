@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // apply plugin
+apply plugin: 'org.greenrobot.greendao'
 
 greendao {
     schemaVersion 1
-    daoPackage 'com.app.reminder.greendao.gen'
+    daoPackage 'com.app.assistant.greendao.gen'
     targetGenDir 'src/main/java'
 }
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "com.app.reminder"
+        applicationId "com.app.assistant"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
@@ -51,4 +51,6 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.google.code.gson:gson:2.5'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

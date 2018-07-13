@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/option_memo"
+        android:title="memo" />
+
+    <item
+        android:id="@+id/option_clock"
+        android:title="clock" />
+
+    <item
+        android:id="@+id/option_task"
+        android:title="task" />
+</menu>

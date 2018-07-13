@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.app.reminder">
+    package="com.app.assistant">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".base.ReminderApplication"
@@ -25,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
@@ -32,14 +35,70 @@
 
 
         <activity
-            android:name=".activity.ShowActivity"
+            android:name=".activity.MemoListActivity"
             android:screenOrientation="portrait" />
 
 
         <activity
-            android:name=".activity.AddActivity"
+            android:name=".activity.MemoAddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name=".activity.ClockListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ClockAddActivity"
+            android:screenOrientation="portrait" />
+
+
+        <receiver android:name=".receiver.AlarmClockBroadcast">
+            <intent-filter>
+                <action android:name="com.record.alarm.clock" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receiver.WakeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.chinaso.record.wake.gray" />
+            </intent-filter>
+        </receiver>
+
+
+        <service
+            android:name=".service.DaemonService"
+            android:exported="true"
+            android:process=":daemon" />
+
+        <service
+            android:name=".service.DaemonService$DaemonInnerService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":daemon" />
+
+        <service
+            android:name=".receiver.WakeReceiver$WakeNotifyService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".receiver.WakeReceiver$WakeGrayInnerService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".service.AliveJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

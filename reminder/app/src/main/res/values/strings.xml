@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Reminder</string>
+    <string name="app_name">Assistant</string>
 
     <string name="permission_tip">您未允许应用获取手机状态权限,我们不会收集您的信息,您可以在系统设置中开启</string>
 
@@ -11,5 +11,47 @@
     明新时代党的组织路线，对党的组织工作作出新部署、提出新要求，为不断
     提高组织工作质量和水平、把党建设得更加坚强有力提供了根本遵循、指明了实践路径习近平总书记在全国组织工作会议上发表重要讲话，立足党和国家事业发展全局，深刻阐
     明新时代党的组织路线，对党的组织工作作出新部署、提出新要求，为不断。</string>
+
+    <string name="home_tab1">Home</string>
+    <string name="home_tab2">Other</string>
+
+    <string-array name="tab">
+        <item>Home</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="alarmLongClicks">
+        <item>删除</item>
+    </string-array>
+
+    <string name="exit_app">再按一次退出Assistant</string>
+
+    <string-array name="cycle">
+        <item>每天一次</item>
+        <item>周一至周五</item>
+        <item>周末</item>
+        <item>响铃一次</item>
+    </string-array>
+
+    <string-array name="bell">
+        <item>响铃</item>
+        <item>振动</item>
+        <item>响铃并振动</item>
+    </string-array>
+
+    <string name="warm_tips_title">温馨提示</string>
+    <string name="warm_tips_detail">亲，由于Android系统限制，如不响铃，可能是如下原因：\n
+    1.闹钟未被加入安全软件的应用保护名单\n
+    2.闹钟后台已被安全类软件误清理\n
+    3.软件安装在SD卡\n
+    4.关机</string>
+
+    <string name="activity_alarm_clock_title_hint">起床闹钟</string>
+    <string name="activity_alarm_clock_cycle">响铃周期</string>
+    <string name="activity_alarm_clock_title">闹钟标题</string>
+    <string name="activity_alarm_clock_how_warn">响铃方式</string>
+    <string name="activity_alarm_clock_remark">闹钟备注</string>
+    <string name="activity_alarm_clock_remark_hint">无备注</string>
+    <string name="ok">确定</string>
 
 </resources>
