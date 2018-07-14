@@ -14,10 +14,10 @@ import java.util.ArrayList;
  * description:显示全部reminer 数据源
  */
 
-public class ShowAdapter extends BaseQuickAdapter<ReminderEntity, BaseViewHolder> {
+public class MemoAdapter extends BaseQuickAdapter<ReminderEntity, BaseViewHolder> {
 
 
-    public ShowAdapter(int layoutResId) {
+    public MemoAdapter(int layoutResId) {
         super(layoutResId);
     }
 

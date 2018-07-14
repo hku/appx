@@ -54,4 +54,9 @@
     <string name="activity_alarm_clock_remark_hint">无备注</string>
     <string name="ok">确定</string>
 
+    <string name="activity_task_add_title">任务标题</string>
+    <string name="activity_task_add_date">任务日期</string>
+
+    <string name="activity_task_date_pre">( 提前3天提醒 )</string>
+
 </resources>

@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.app.assistant.R;
-import com.app.assistant.adapter.ShowAdapter;
+import com.app.assistant.adapter.MemoAdapter;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.utils.Constant;
@@ -36,12 +36,12 @@ public class MemoListActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.add_btn)
+    @BindView(R.id.memo_add_btn)
     FloatingActionButton addBtn;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
 
-    private ShowAdapter mAdapter;
+    private MemoAdapter mAdapter;
 
     private int mClickPosition = -1;
 
@@ -68,7 +68,7 @@ public class MemoListActivity extends BaseActivity {
     private void initRecycleView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ShowAdapter(R.layout.item_show);
+        mAdapter = new MemoAdapter(R.layout.item_memo);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -97,10 +97,10 @@ public class MemoListActivity extends BaseActivity {
         mAdapter.addData(data);
     }
 
-    @OnClick(R.id.add_btn)
+    @OnClick(R.id.memo_add_btn)
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.add_btn:
+            case R.id.memo_add_btn:
                 Intent intent = new Intent(MemoListActivity.this, MemoAddActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD);
                 break;

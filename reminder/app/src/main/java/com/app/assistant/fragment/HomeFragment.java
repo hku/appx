@@ -11,6 +11,7 @@ import com.app.assistant.R;
 import com.app.assistant.activity.ClockListActivity;
 import com.app.assistant.activity.MemoAddActivity;
 import com.app.assistant.activity.MemoListActivity;
+import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.base.BaseFragment;
 import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.utils.Constant;
@@ -62,6 +63,14 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void business() {
+        initMemo();
+        initClock();
+    }
+
+    /**
+     * init memo
+     */
+    private void initMemo() {
         String content = "";
         String tagS = "";
         if (mReminderEntity != null) {
@@ -75,7 +84,14 @@ public class HomeFragment extends BaseFragment {
         tagTv.setText(tagS);
     }
 
-    @OnClick({R.id.level_iv, R.id.refresh_iv, R.id.edit_iv, R.id.content_tv, R.id.memo_list_iv})
+    /**
+     * init clock
+     */
+    private void initClock() {
+
+    }
+
+    @OnClick({R.id.level_iv, R.id.refresh_iv, R.id.edit_iv, R.id.content_tv, R.id.memo_list_iv, R.id.clock_list_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
@@ -100,6 +116,10 @@ public class HomeFragment extends BaseFragment {
                 Intent memoIntent = new Intent(mContext, MemoListActivity.class);
                 startActivity(memoIntent);
                 break;
+            case R.id.clock_list_iv:
+                Intent clockIntent = new Intent(mContext, ClockListActivity.class);
+                startActivity(clockIntent);
+                break;
         }
     }
 
@@ -122,6 +142,8 @@ public class HomeFragment extends BaseFragment {
                         startActivity(clockIntent);
                         break;
                     case R.id.option_task:
+                        Intent taskIntent = new Intent(mContext, TaskListActivity.class);
+                        startActivity(taskIntent);
                         break;
                 }
                 return false;

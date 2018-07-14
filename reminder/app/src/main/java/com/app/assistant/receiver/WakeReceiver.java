@@ -36,7 +36,7 @@ public class WakeReceiver extends BroadcastReceiver {
     private final static int WAKE_SERVICE_ID = -1111;
 
     //灰色保活手段唤醒广播的action
-    public final static String GRAY_WAKE_ACTION = "com.chinaso.record.wake.gray";
+    public final static String GRAY_WAKE_ACTION = "com.app.assistant.wake.gray";
 
     @Override
     public void onReceive(Context context, Intent intent) {

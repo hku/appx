@@ -2,13 +2,13 @@ package com.app.assistant.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,8 +41,8 @@ public class ClockListActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.alarm_list)
     RecyclerView recyclerView;
-    @BindView(R.id.alarm_add_iv)
-    ImageView alarmAddIv;
+    @BindView(R.id.clock_add_btn)
+    FloatingActionButton clockAddBtn;
 
     private AlarmClockAdapter mAdapter;
 
@@ -115,10 +115,10 @@ public class ClockListActivity extends BaseActivity {
         mAdapter.addData(list);
     }
 
-    @OnClick({R.id.alarm_add_iv})
+    @OnClick({R.id.clock_add_btn})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.alarm_add_iv:
+            case R.id.clock_add_btn:
                 Intent intent = new Intent(ClockListActivity.this, ClockAddActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
                 break;

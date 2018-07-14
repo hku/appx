@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.util.SimpleArrayMap;
 
-import com.app.assistant.base.ReminderApplication;
+import com.app.assistant.base.AssistantApplication;
 
 import java.util.Collections;
 import java.util.Map;
@@ -70,11 +70,11 @@ public final class SPUtils {
     }
 
     private SPUtils(final String spName) {
-        sp = ReminderApplication.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        sp = AssistantApplication.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
     }
 
     private SPUtils(final String spName, final int mode) {
-        sp = ReminderApplication.getContext().getSharedPreferences(spName, mode);
+        sp = AssistantApplication.getContext().getSharedPreferences(spName, mode);
     }
 
     /**

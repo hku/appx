@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".base.ReminderApplication"
+        android:name=".base.AssistantApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -52,10 +52,18 @@
             android:name=".activity.ClockAddActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.TaskListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.TaskAddActivity"
+            android:screenOrientation="portrait" />
+
 
         <receiver android:name=".receiver.AlarmClockBroadcast">
             <intent-filter>
-                <action android:name="com.record.alarm.clock" />
+                <action android:name="com.app.assistant.clock" />
             </intent-filter>
         </receiver>
 
@@ -70,7 +78,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.chinaso.record.wake.gray" />
+                <action android:name="com.app.assistant.wake.gray" />
             </intent-filter>
         </receiver>
 

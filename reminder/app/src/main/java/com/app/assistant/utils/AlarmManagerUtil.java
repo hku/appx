@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class AlarmManagerUtil {
 
-    public static final String ALARM_ACTION = "com.record.alarm.clock";
+    public static final String ALARM_ACTION = "com.app.assistant.clock";
 
     /**
      * 开启闹钟

@@ -1,7 +1,7 @@
 package com.app.assistant.utils;
 
 
-import com.app.assistant.base.ReminderApplication;
+import com.app.assistant.base.AssistantApplication;
 import com.app.assistant.greendao.gen.DaoMaster;
 import com.app.assistant.greendao.gen.DaoSession;
 
@@ -21,7 +21,7 @@ public final class GreenDaoManager {
 
     private GreenDaoManager() {
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper
-                (ReminderApplication.getContext(), DB_NAME, null);
+                (AssistantApplication.getContext(), DB_NAME, null);
         DaoMaster mDaoMaster = new DaoMaster(devOpenHelper.getWritableDatabase());
         mDaoSession = mDaoMaster.newSession();
     }

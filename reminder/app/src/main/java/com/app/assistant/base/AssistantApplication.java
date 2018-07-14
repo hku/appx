@@ -23,7 +23,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
  * description:application
  */
 
-public class ReminderApplication extends Application {
+public class AssistantApplication extends Application {
 
     private static Context sContext;
 
