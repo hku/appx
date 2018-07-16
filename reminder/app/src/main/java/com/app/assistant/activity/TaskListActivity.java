@@ -6,10 +6,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.app.assistant.R;
 import com.app.assistant.adapter.TaskAdapter;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.utils.Constant;
+import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.TaskDaoManager;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -21,6 +31,8 @@ import butterknife.OnClick;
  */
 
 public class TaskListActivity extends BaseActivity {
+
+    private static final int REQUEST_CODE = 10000;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,6 +59,19 @@ public class TaskListActivity extends BaseActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mAdapter = new TaskAdapter(R.layout.item_task);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view instanceof Button) {
+                    List<TaskEntity> data = mAdapter.getData();
+                    if (data != null) {
+                        TaskEntity entity = data.get(position);
+                        TaskDaoManager.getInstance().del(entity);
+                        mAdapter.remove(position);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -56,7 +81,8 @@ public class TaskListActivity extends BaseActivity {
 
     @Override
     protected void business() {
-
+        List<TaskEntity> data = TaskDaoManager.getInstance().queryAllData();
+        mAdapter.addData(data);
     }
 
     @OnClick({R.id.task_add_btn})
@@ -64,8 +90,21 @@ public class TaskListActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.task_add_btn:
                 Intent intent = new Intent(TaskListActivity.this, TaskAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE:
+                    mAdapter.clear();
+                    business();
+                    break;
+            }
         }
     }
 }

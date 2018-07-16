@@ -66,7 +66,7 @@ public class ClockAddActivity extends BaseActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_alarm_add;
+        return R.layout.activity_clock_add;
     }
 
     @Override

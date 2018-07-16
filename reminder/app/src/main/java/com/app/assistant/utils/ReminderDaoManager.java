@@ -12,7 +12,7 @@ import java.util.Random;
  * description: 数据库管理类
  */
 
-public class ReminderDaoManager {
+public final class ReminderDaoManager {
 
     private ReminderDaoManager() {
     }

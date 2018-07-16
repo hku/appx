@@ -12,7 +12,7 @@ import java.util.List;
  * description:闹钟数据库操作类
  */
 
-public class AlarmDaoManager {
+public final class AlarmDaoManager {
 
     private AlarmDaoManager() {
     }

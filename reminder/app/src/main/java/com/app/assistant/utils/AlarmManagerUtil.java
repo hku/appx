@@ -21,7 +21,7 @@ import java.util.Calendar;
  * description:
  */
 
-public class AlarmManagerUtil {
+public final class AlarmManagerUtil {
 
     public static final String ALARM_ACTION = "com.app.assistant.clock";
 
