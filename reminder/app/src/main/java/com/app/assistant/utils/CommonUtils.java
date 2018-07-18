@@ -8,6 +8,7 @@ import android.content.res.AssetManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -177,5 +178,31 @@ public final class CommonUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 功能描述：返回小
+     *
+     * @param date 日期
+     * @return 返回小时
+     */
+    public static int getHour(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        date.getTime();
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+
+    /**
+     * 功能描述：返回分
+     *
+     * @param date 日期
+     * @return 返回分钟
+     */
+    public static int getMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MINUTE);
     }
 }

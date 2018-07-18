@@ -54,14 +54,14 @@
                         android:id="@+id/content_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_toLeftOf="@+id/memo_list_iv"
                         android:lineSpacingMultiplier="1.2"
                         android:minHeight="120dp"
                         android:padding="15dp"
                         android:paddingTop="15dp"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_toLeftOf="@+id/memo_list_iv" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/memo_list_iv"
@@ -120,6 +120,7 @@
                 android:background="@color/white">
 
                 <TextView
+                    android:id="@+id/clock_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/clock_list_iv"
@@ -150,14 +151,29 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/task_list_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_list_black_24dp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/task_tip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/task_list_iv"
+                        android:paddingLeft="15dp"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/task_list_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="5dp"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_list_black_24dp" />
+                </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/task_list"

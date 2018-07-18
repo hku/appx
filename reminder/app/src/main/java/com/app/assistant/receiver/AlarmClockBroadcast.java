@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.app.assistant.activity.ClockAlarmActivity;
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.AlarmEntityCopy;
 import com.app.assistant.entity.MessageEvent;
@@ -73,11 +74,11 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
                 AlarmManagerUtil.setAlarm(context, alarmClock);
             }
         }
-//        Intent clockIntent = new Intent(context, ClockAlarmActivity.class);
-//        clockIntent.putExtra(Constant.ALARM_CLOCK, alarmClock);
-//        clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-//                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        context.startActivity(clockIntent);
+        Intent clockIntent = new Intent(context, ClockAlarmActivity.class);
+        clockIntent.putExtra(Constant.ALARM_CLOCK, alarmClock);
+        clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(clockIntent);
     }
 
     private AlarmEntity copy(AlarmEntityCopy alarmEntity2) {

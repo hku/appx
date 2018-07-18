@@ -60,6 +60,11 @@
             android:name=".activity.TaskAddActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.ClockAlarmActivity"
+            android:screenOrientation="portrait" />
+
+
 
         <receiver android:name=".receiver.AlarmClockBroadcast">
             <intent-filter>

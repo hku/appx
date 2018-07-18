@@ -18,8 +18,11 @@ import com.app.assistant.activity.MemoListActivity;
 import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.base.BaseFragment;
+import com.app.assistant.entity.AlarmEntity;
+import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.ReminderDaoManager;
 import com.app.assistant.utils.TaskDaoManager;
@@ -57,6 +60,10 @@ public class HomeFragment extends BaseFragment {
     ImageView memoListIv;
     @BindView(R.id.task_list)
     RecyclerView taskList;
+    @BindView(R.id.task_tip)
+    TextView taskTipTv;
+    @BindView(R.id.clock_tv)
+    TextView clockTv;
 
     private ReminderEntity mReminderEntity;
 
@@ -131,7 +138,12 @@ public class HomeFragment extends BaseFragment {
      * init clock
      */
     private void initClock() {
-
+        AlarmEntity closestEntity = AlarmDaoManager.getInstance().getClosestClock();
+        if (closestEntity != null) {
+            clockTv.setText(closestEntity.getTitle());
+        } else {
+            clockTv.setText("dasdadsdadsadad");
+        }
     }
 
     /**
@@ -139,6 +151,9 @@ public class HomeFragment extends BaseFragment {
      */
     private void initTask() {
         List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
+        if (todayTaskList.size() <= 0) {
+            taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
+        }
         mHomeTaskAdapter.addData(todayTaskList);
     }
 
@@ -229,6 +244,22 @@ public class HomeFragment extends BaseFragment {
         } else {
             mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
             business();
+        }
+    }
+
+    @Override
+    protected void messageEvent(MessageEvent event) {
+        super.messageEvent(event);
+        int id = event.getId();
+        if (id == MessageEvent.IdPool.HOME_TASK_UPDATE_ID) {
+            mHomeTaskAdapter.clear();
+            List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
+            if (todayTaskList.size() <= 0) {
+                taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
+            } else {
+                taskTipTv.setVisibility(View.GONE);
+            }
+            mHomeTaskAdapter.addData(todayTaskList);
         }
     }
 

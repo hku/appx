@@ -1,5 +1,7 @@
 package com.app.assistant.adapter;
 
+import android.support.v7.widget.AppCompatCheckBox;
+
 import com.app.assistant.R;
 import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
@@ -43,6 +45,9 @@ public class HomeTaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder
     protected void convert(BaseViewHolder helper, TaskEntity item) {
         String title = item.getTitle();
         helper.setText(R.id.content_tv, title);
+        AppCompatCheckBox checkBox = helper.getView(R.id.done_cb);
+        boolean doneStatus = item.getStatus();
+        checkBox.setChecked(doneStatus);
         helper.addOnClickListener(R.id.done_cb);
     }
 }

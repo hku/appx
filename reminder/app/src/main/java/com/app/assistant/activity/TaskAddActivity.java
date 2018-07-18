@@ -10,14 +10,19 @@ import android.widget.TextView;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.TimeUtils;
 import com.app.assistant.utils.ToastUtils;
 import com.app.assistant.widget.TaskCalendarDialog;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -77,6 +82,7 @@ public class TaskAddActivity extends BaseActivity {
                 preTv.setVisibility(View.GONE);
             }
             titleEt.setText(title);
+            titleEt.setSelection(titleEt.getText().length());
             dateTv.setText(date);
         } else {
             String formatNowDate = TimeUtils.getNowString(DEFAULT_FORMAT);
@@ -125,30 +131,65 @@ public class TaskAddActivity extends BaseActivity {
             ToastUtils.show(this, getResources().getString(R.string.activity_task_save_date_tip));
             return;
         }
-        String preDate = "";
+        String preDateS = "";
         if (mIsPreCheck) {
             //目前是默认向前提前三天
             Date selectedDate = TimeUtils.StringToDate(dateS);
             Date beforeDate = TimeUtils.getDateBefore(selectedDate, 3);
-            preDate = DEFAULT_FORMAT.format(beforeDate);
+            preDateS = DEFAULT_FORMAT.format(beforeDate);
         }
+        boolean isEffective = false;
         if (mTaskEntity != null) {
             mTaskEntity.setTitle(titleS);
-            mTaskEntity.setPreDate(preDate);
+            mTaskEntity.setPreDate(preDateS);
             mTaskEntity.setDate(dateS);
             mTaskEntity.setStatus(false);
             TaskDaoManager.getInstance().update(mTaskEntity);
             Intent intent = new Intent();
             intent.putExtra("back", mTaskEntity);
             setResult(RESULT_OK, intent);
+            isEffective = isEffectiveDate(preDateS, dateS);
         } else {
             TaskEntity taskEntity = new TaskEntity();
             taskEntity.setTitle(titleS);
             taskEntity.setDate(dateS);
             taskEntity.setStatus(false);
+            taskEntity.setPreDate("");
             TaskDaoManager.getInstance().insert(taskEntity);
             setResult(RESULT_OK);
+            isEffective = isEffectiveDate(preDateS, dateS);
+        }
+        if (isEffective) {
+            MessageEvent event = new MessageEvent();
+            event.setId(MessageEvent.IdPool.HOME_TASK_UPDATE_ID);
+            EventBus.getDefault().post(event);
         }
         finish();
+    }
+
+    private boolean isEffectiveDate(String preDateS, String dateS) {
+        Date preDate = null;
+        Date date = null;
+        Date today = null;
+        boolean isEffective = false;
+        try {
+            date = DEFAULT_FORMAT.parse(dateS);
+            String todayS = DEFAULT_FORMAT.format(new Date());
+            today = DEFAULT_FORMAT.parse(todayS);
+        } catch (ParseException px) {
+            px.printStackTrace();
+        }
+        //该条数据是提前3天提醒
+        if (!TextUtils.isEmpty(preDateS)) {
+            try {
+                preDate = DEFAULT_FORMAT.parse(preDateS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            isEffective = CommonUtils.isEffectiveDate(today, preDate, date);
+        } else {
+            isEffective = CommonUtils.isEffectiveDate(today, date);
+        }
+        return isEffective;
     }
 }

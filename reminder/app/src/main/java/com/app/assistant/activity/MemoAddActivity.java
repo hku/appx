@@ -109,6 +109,7 @@ public class MemoAddActivity extends BaseActivity {
             String content = mReminderEntity.getContent();
             String tagS = mReminderEntity.getTagS();
             contentEt.setText(content);
+            contentEt.setSelection(contentEt.getText().length());
             int tagPosition = getAdapterPosition(tagS);
             if (tagPosition != -1) {
                 mTagAdapter.refresh(tagPosition);
