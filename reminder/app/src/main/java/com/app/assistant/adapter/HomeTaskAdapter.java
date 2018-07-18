@@ -1,6 +1,7 @@
 package com.app.assistant.adapter;
 
 import com.app.assistant.R;
+import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -9,14 +10,13 @@ import java.util.ArrayList;
 
 /**
  * author: zhanghe
- * created on: 2018/7/13 17:02
+ * created on: 2018/7/18 11:53
  * description:
  */
 
-public class TaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder> {
+public class HomeTaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder> {
 
-
-    public TaskAdapter(int layoutResId) {
+    public HomeTaskAdapter(int layoutResId) {
         super(layoutResId);
     }
 
@@ -41,9 +41,8 @@ public class TaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, TaskEntity item) {
-        String titleS = item.getTitle();
-        helper.setText(R.id.content_tv, titleS);
-        helper.addOnClickListener(R.id.btnDelete);
-        helper.addOnClickListener(R.id.contentLayout);
+        String title = item.getTitle();
+        helper.setText(R.id.content_tv, title);
+        helper.addOnClickListener(R.id.done_cb);
     }
 }

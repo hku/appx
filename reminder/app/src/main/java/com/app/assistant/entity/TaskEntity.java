@@ -22,19 +22,19 @@ public class TaskEntity extends BaseEntity {
     private String title;
     //日期
     private String date;
-    //提前几天
-    private int early;
+    //提前的日期
+    private String preDate;
 
     //当前任务是否已完成
     private boolean status;
 
-    @Generated(hash = 253246754)
-    public TaskEntity(Long id, String title, String date, int early,
+    @Generated(hash = 2132485517)
+    public TaskEntity(Long id, String title, String date, String preDate,
                       boolean status) {
         this.id = id;
         this.title = title;
         this.date = date;
-        this.early = early;
+        this.preDate = preDate;
         this.status = status;
     }
 
@@ -66,12 +66,12 @@ public class TaskEntity extends BaseEntity {
         this.date = date;
     }
 
-    public int getEarly() {
-        return this.early;
+    public String getPreDate() {
+        return this.preDate;
     }
 
-    public void setEarly(int early) {
-        this.early = early;
+    public void setPreDate(String preDate) {
+        this.preDate = preDate;
     }
 
     public boolean getStatus() {

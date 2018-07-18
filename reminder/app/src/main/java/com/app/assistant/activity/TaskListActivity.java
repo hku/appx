@@ -32,7 +32,8 @@ import butterknife.OnClick;
 
 public class TaskListActivity extends BaseActivity {
 
-    private static final int REQUEST_CODE = 10000;
+    private static final int REQUEST_CODE_ADD = 10010;
+    private static final int REQUEST_CODE_UPDATE = 10011;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,6 +41,8 @@ public class TaskListActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     private TaskAdapter mAdapter;
+
+    private int mClickPosition = -1;
 
 
     @Override
@@ -54,9 +57,11 @@ public class TaskListActivity extends BaseActivity {
         initRecyclerView();
     }
 
+    /**
+     * init recyclerView
+     */
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mAdapter = new TaskAdapter(R.layout.item_task);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -69,6 +74,12 @@ public class TaskListActivity extends BaseActivity {
                         TaskDaoManager.getInstance().del(entity);
                         mAdapter.remove(position);
                     }
+                } else if (view instanceof RelativeLayout) {
+                    mClickPosition = position;
+                    TaskEntity entity = mAdapter.getItem(position);
+                    Intent intent = new Intent(TaskListActivity.this, TaskAddActivity.class);
+                    intent.putExtra(Constant.DELIVER_TAG, entity);
+                    startActivityForResult(intent, REQUEST_CODE_UPDATE);
                 }
             }
         });
@@ -90,7 +101,7 @@ public class TaskListActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.task_add_btn:
                 Intent intent = new Intent(TaskListActivity.this, TaskAddActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE_ADD);
                 break;
         }
     }
@@ -100,9 +111,15 @@ public class TaskListActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_CODE:
+                case REQUEST_CODE_ADD:
                     mAdapter.clear();
                     business();
+                    break;
+                case REQUEST_CODE_UPDATE:
+                    if (mClickPosition != -1) {
+                        TaskEntity taskEntity = (TaskEntity) data.getSerializableExtra("back");
+                        mAdapter.set(mClickPosition, taskEntity);
+                    }
                     break;
             }
         }

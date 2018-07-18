@@ -1,7 +1,11 @@
 package com.app.assistant.fragment;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,11 +16,17 @@ import com.app.assistant.activity.ClockListActivity;
 import com.app.assistant.activity.MemoAddActivity;
 import com.app.assistant.activity.MemoListActivity;
 import com.app.assistant.activity.TaskListActivity;
+import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.base.BaseFragment;
 import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -45,15 +55,47 @@ public class HomeFragment extends BaseFragment {
     ImageView editIv;
     @BindView(R.id.memo_list_iv)
     ImageView memoListIv;
+    @BindView(R.id.task_list)
+    RecyclerView taskList;
 
     private ReminderEntity mReminderEntity;
 
     private long mClickTime = -1L;
 
+    private HomeTaskAdapter mHomeTaskAdapter;
+
     @Override
     protected void initData() {
         super.initData();
         mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        taskList.setLayoutManager(new LinearLayoutManager(mContext));
+        mHomeTaskAdapter = new HomeTaskAdapter(R.layout.item_home_task);
+        taskList.setAdapter(mHomeTaskAdapter);
+        mHomeTaskAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
+                if (view instanceof AppCompatCheckBox) {
+                    AppCompatCheckBox checkBox = (AppCompatCheckBox) view;
+                    boolean isCheck = checkBox.isChecked();
+                    if (isCheck) {
+                        TaskEntity clickEntity = mHomeTaskAdapter.getItem(position);
+                        clickEntity.setStatus(true);
+                        TaskDaoManager.getInstance().update(clickEntity);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mHomeTaskAdapter.remove(position);
+                            }
+                        }, 500);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -65,6 +107,7 @@ public class HomeFragment extends BaseFragment {
     protected void business() {
         initMemo();
         initClock();
+        initTask();
     }
 
     /**
@@ -91,7 +134,16 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.level_iv, R.id.refresh_iv, R.id.edit_iv, R.id.content_tv, R.id.memo_list_iv, R.id.clock_list_iv})
+    /**
+     * init task
+     */
+    private void initTask() {
+        List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
+        mHomeTaskAdapter.addData(todayTaskList);
+    }
+
+    @OnClick({R.id.level_iv, R.id.refresh_iv, R.id.edit_iv, R.id.content_tv,
+            R.id.memo_list_iv, R.id.clock_list_iv, R.id.task_list_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
@@ -119,6 +171,10 @@ public class HomeFragment extends BaseFragment {
             case R.id.clock_list_iv:
                 Intent clockIntent = new Intent(mContext, ClockListActivity.class);
                 startActivity(clockIntent);
+                break;
+            case R.id.task_list_iv:
+                Intent taskIntent = new Intent(mContext, TaskListActivity.class);
+                startActivity(taskIntent);
                 break;
         }
     }

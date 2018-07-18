@@ -11,6 +11,9 @@ import android.support.v7.app.AlertDialog;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.service.DaemonService;
+import com.app.assistant.utils.PreferenceKeyConstant;
+import com.app.assistant.utils.SPUtils;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -38,6 +41,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void business() {
+        startService(new Intent(SplashActivity.this, DaemonService.class));
         checkPermission();
     }
 
@@ -93,6 +97,7 @@ public class SplashActivity extends BaseActivity {
                                 public void run() {
                                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                                     startActivity(intent);
+                                    SPUtils.getInstance().put(PreferenceKeyConstant.FIRST_IN, false);
                                     finish();
                                 }
                             }, 2000);

@@ -54,13 +54,14 @@
                         android:id="@+id/content_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/memo_list_iv"
                         android:lineSpacingMultiplier="1.2"
                         android:minHeight="120dp"
                         android:padding="15dp"
                         android:paddingTop="15dp"
                         android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_toLeftOf="@+id/memo_list_iv" />
 
                     <ImageView
                         android:id="@+id/memo_list_iv"
@@ -134,8 +135,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="5dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:src="@drawable/ic_list_black_24dp" />
 
@@ -159,6 +160,7 @@
                     android:src="@drawable/ic_list_black_24dp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/task_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

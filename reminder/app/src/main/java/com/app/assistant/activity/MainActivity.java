@@ -3,17 +3,22 @@ package com.app.assistant.activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RadioGroup;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.PoetEntity;
 import com.app.assistant.fragment.HomeFragment;
 import com.app.assistant.fragment.OtherFragment;
+import com.app.assistant.utils.CommonUtils;
+import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.TimeUtils;
 import com.app.assistant.utils.ToastUtils;
@@ -18,6 +19,7 @@ import com.app.assistant.widget.TaskCalendarDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,7 +43,8 @@ public class TaskAddActivity extends BaseActivity {
     @BindView(R.id.title_et)
     EditText titleEt;
 
-    private boolean mIsPreCheck = false;
+    private boolean mIsPreCheck;
+    private TaskEntity mTaskEntity;
 
 
     @Override
@@ -62,8 +65,23 @@ public class TaskAddActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        String formatNowDate = TimeUtils.getNowString(DEFAULT_FORMAT);
-        dateTv.setText(formatNowDate);
+        mTaskEntity = (TaskEntity) getIntent().getSerializableExtra(Constant.DELIVER_TAG);
+        if (mTaskEntity != null) {
+            String title = mTaskEntity.getTitle();
+            String date = mTaskEntity.getDate();
+            String preDate = mTaskEntity.getPreDate();
+            if (!TextUtils.isEmpty(preDate)) {
+                preTv.setVisibility(View.VISIBLE);
+                mIsPreCheck = true;
+            } else {
+                preTv.setVisibility(View.GONE);
+            }
+            titleEt.setText(title);
+            dateTv.setText(date);
+        } else {
+            String formatNowDate = TimeUtils.getNowString(DEFAULT_FORMAT);
+            dateTv.setText(formatNowDate);
+        }
     }
 
     @OnClick({R.id.date_layout, R.id.clock_add_tv, R.id.task_add_iv})
@@ -107,17 +125,30 @@ public class TaskAddActivity extends BaseActivity {
             ToastUtils.show(this, getResources().getString(R.string.activity_task_save_date_tip));
             return;
         }
-        TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setTitle(titleS);
-        taskEntity.setDate(dateS);
+        String preDate = "";
         if (mIsPreCheck) {
-            taskEntity.setEarly(3);
-        } else {
-            taskEntity.setEarly(0);
+            //目前是默认向前提前三天
+            Date selectedDate = TimeUtils.StringToDate(dateS);
+            Date beforeDate = TimeUtils.getDateBefore(selectedDate, 3);
+            preDate = DEFAULT_FORMAT.format(beforeDate);
         }
-        taskEntity.setStatus(false);
-        TaskDaoManager.getInstance().insert(taskEntity);
-        setResult(RESULT_OK);
+        if (mTaskEntity != null) {
+            mTaskEntity.setTitle(titleS);
+            mTaskEntity.setPreDate(preDate);
+            mTaskEntity.setDate(dateS);
+            mTaskEntity.setStatus(false);
+            TaskDaoManager.getInstance().update(mTaskEntity);
+            Intent intent = new Intent();
+            intent.putExtra("back", mTaskEntity);
+            setResult(RESULT_OK, intent);
+        } else {
+            TaskEntity taskEntity = new TaskEntity();
+            taskEntity.setTitle(titleS);
+            taskEntity.setDate(dateS);
+            taskEntity.setStatus(false);
+            TaskDaoManager.getInstance().insert(taskEntity);
+            setResult(RESULT_OK);
+        }
         finish();
     }
 }

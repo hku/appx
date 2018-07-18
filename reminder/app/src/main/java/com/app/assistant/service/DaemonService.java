@@ -10,15 +10,25 @@ import android.os.Build;
 import android.os.IBinder;
 
 import com.app.assistant.entity.AlarmEntity;
+import com.app.assistant.entity.PoetEntity;
+import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.receiver.WakeReceiver;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
+import com.app.assistant.utils.CommonUtils;
+import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.LogUtils;
+import com.app.assistant.utils.PreferenceKeyConstant;
+import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.SPUtils;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * author: zhanghe
@@ -35,13 +45,17 @@ public class DaemonService extends Service {
 
     private final static int WAKE_REQUEST_CODE = 6666;
 
+    private ExecutorService executorService;
+
     @Override
     public void onCreate() {
         super.onCreate();
         LogUtils.d("zhanghe " + "DaemonService onCreate");
         grayGuard();
         test();
-        startTimeTask();
+        executorService = Executors.newFixedThreadPool(2);
+        asynSetClock();
+        startTimeTask2();
     }
 
     private void test() {
@@ -53,9 +67,11 @@ public class DaemonService extends Service {
         }, new Date(), 5000);
     }
 
-
-    private void startTimeTask() {
-        new Thread(new Runnable() {
+    /**
+     * 异步设置闹钟
+     */
+    private void asynSetClock() {
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 List<AlarmEntity> list = AlarmDaoManager.getInstance().queryDesc();
@@ -65,7 +81,35 @@ public class DaemonService extends Service {
                     }
                 }
             }
-        }).start();
+        });
+    }
+
+    private void startTimeTask2() {
+        boolean isFirstIn = SPUtils.getInstance().getBoolean(PreferenceKeyConstant.FIRST_IN, true);
+        if (!isFirstIn) {
+            LogUtils.d("zhanghe " + "isFirstIn = " + isFirstIn);
+            return;
+        }
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                String poetS = CommonUtils.getJson("poet.song.1000.json", DaemonService.this);
+                List<PoetEntity> list = GsonUtils.fromJsonString(poetS, new TypeToken<List<PoetEntity>>() {
+                }.getType());
+                for (PoetEntity entity : list) {
+                    List<String> paragraphsList = entity.getParagraphs();
+                    StringBuilder sb = new StringBuilder();
+                    for (String paragraph : paragraphsList) {
+                        sb.append(paragraph);
+                    }
+                    String content = sb.toString();
+                    ReminderEntity reminderEntity = new ReminderEntity();
+                    reminderEntity.setContent(content);
+                    reminderEntity.setTagS("诗词");
+                    ReminderDaoManager.getInstance().insert(reminderEntity);
+                }
+            }
+        });
     }
 
     @Override

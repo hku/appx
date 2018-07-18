@@ -2,8 +2,15 @@ package com.app.assistant.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Entity;
+import android.content.res.AssetManager;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,4 +112,70 @@ public final class CommonUtils {
         return isWork;
     }
 
+
+    public static String getJson(String fileName, Context context) {
+        //将json数据变成字符串
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            //获取assets资源管理器
+            AssetManager assetManager = context.getAssets();
+            //通过管理器打开文件并读取
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 判断当前时间是否在[startTime, endTime]区间，注意时间格式要一致
+     *
+     * @param nowTime   当前时间
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     * @author jqlin
+     */
+    public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.before(begin) || date.after(end)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 判断当前时间是否在[startTime, endTime]区间，注意时间格式要一致
+     *
+     * @param nowTime 当前时间
+     * @param endTime 结束时间
+     * @return
+     * @author jqlin
+     */
+    public static boolean isEffectiveDate(Date nowTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+        if (!date.before(end) && !date.after(end)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
