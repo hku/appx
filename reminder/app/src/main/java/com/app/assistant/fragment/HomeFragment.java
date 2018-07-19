@@ -140,9 +140,12 @@ public class HomeFragment extends BaseFragment {
     private void initClock() {
         AlarmEntity closestEntity = AlarmDaoManager.getInstance().getClosestClock();
         if (closestEntity != null) {
-            clockTv.setText(closestEntity.getTitle());
+            int hour = closestEntity.getHour();
+            int minute = closestEntity.getMinute();
+            String tip = "您" + hour + "时" + minute + "分" + "的闹钟即将响铃";
+            clockTv.setText(tip);
         } else {
-            clockTv.setText("dasdadsdadsadad");
+            clockTv.setText(getResources().getString(R.string.fragment_home_clock_none_tip));
         }
     }
 
@@ -260,6 +263,16 @@ public class HomeFragment extends BaseFragment {
                 taskTipTv.setVisibility(View.GONE);
             }
             mHomeTaskAdapter.addData(todayTaskList);
+        } else if (id == MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID) {
+            AlarmEntity closestEntity = AlarmDaoManager.getInstance().getClosestClock();
+            if (closestEntity != null) {
+                int hour = closestEntity.getHour();
+                int minute = closestEntity.getMinute();
+                String tip = "您" + hour + "时" + minute + "分" + "的闹钟即将响铃";
+                clockTv.setText(tip);
+            } else {
+                clockTv.setText(getResources().getString(R.string.fragment_home_clock_none_tip));
+            }
         }
     }
 

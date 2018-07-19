@@ -39,5 +39,6 @@ public class MessageEvent {
     public static class IdPool {
         public static int ALARM_ID = 1;
         public static int HOME_TASK_UPDATE_ID = 2;
+        public static int HOME_CLOCK_UPDATE_ID = 3;
     }
 }

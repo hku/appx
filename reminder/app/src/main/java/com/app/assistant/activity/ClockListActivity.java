@@ -22,6 +22,8 @@ import com.app.assistant.utils.AlarmManagerUtil;
 import com.app.assistant.utils.SPUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -80,6 +82,7 @@ public class ClockListActivity extends BaseActivity {
                                         //修改数据源数据
                                         adapter.remove(position);
                                         AlarmManagerUtil.cancelAlarmClock(ClockListActivity.this, item.getId().intValue());
+                                        refreshHomeClock();
                                         break;
                                 }
                             }
@@ -103,6 +106,7 @@ public class ClockListActivity extends BaseActivity {
                     } else {//关闭闹钟
                         AlarmManagerUtil.cancelAlarmClock(ClockListActivity.this, alarmEntity.getId().intValue());
                     }
+                    refreshHomeClock();
                 }
             }
         });
@@ -144,6 +148,12 @@ public class ClockListActivity extends BaseActivity {
                     })
                     .show();
         }
+    }
+
+    private void refreshHomeClock() {
+        MessageEvent event = new MessageEvent();
+        event.setId(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
+        EventBus.getDefault().post(event);
     }
 
     @Override

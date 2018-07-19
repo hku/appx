@@ -65,5 +65,6 @@
     <string name="activity_task_save_date_tip">请您选择任务日期</string>
 
     <string name="fragment_home_task_none_tip">您今天暂无要做的任务事项</string>
+    <string name="fragment_home_clock_none_tip">暂无要响铃的闹钟</string>
 
 </resources>

@@ -42,6 +42,9 @@ import java.util.Calendar;
  */
 public class AlarmClockBroadcast extends BroadcastReceiver {
 
+
+    private boolean mIsHomeFresh;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -57,6 +60,16 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
             alarmClock = AlarmDaoManager.getInstance().queryByTime(hour, minute);
         }
         if (alarmClock != null) {
+            //如果响铃的闹钟是最近即将要想的闹钟，此时通知首页刷新
+            AlarmEntity closetAlarm = AlarmDaoManager.getInstance().getClosestClock();
+            if (closetAlarm != null) {
+                long closetId = closetAlarm.getId();
+                long ringId = alarmClock.getId();
+                if (closetId == ringId) {
+                    mIsHomeFresh = true;
+                }
+            }
+
             int cycleTag = alarmClock.getCycleTag();
             // 单次响铃
             if (cycleTag == -1) {
@@ -72,6 +85,11 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
             } else {
                 // 重复周期闹钟
                 AlarmManagerUtil.setAlarm(context, alarmClock);
+            }
+            if (mIsHomeFresh) {
+                MessageEvent event = new MessageEvent();
+                event.setId(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
+                EventBus.getDefault().post(event);
             }
         }
         Intent clockIntent = new Intent(context, ClockAlarmActivity.class);

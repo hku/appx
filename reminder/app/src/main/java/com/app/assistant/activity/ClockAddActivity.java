@@ -12,10 +12,13 @@ import com.app.assistant.R;
 import com.app.assistant.adapter.DateArrayAdapter;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.entity.AlarmEntity;
+import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
 import com.app.assistant.utils.ToastUtils;
 import com.app.assistant.widget.wheelview.WheelView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -78,7 +81,7 @@ public class ClockAddActivity extends BaseActivity {
                 finish();
             }
         });
-        getNowdate();
+        getNowDate();
         initTimeView();
     }
 
@@ -102,7 +105,7 @@ public class ClockAddActivity extends BaseActivity {
     /**
      * 获取当前的日期
      */
-    public void getNowdate() {
+    public void getNowDate() {
         Calendar ca = Calendar.getInstance(Locale.CHINA);
         this.mHour = ca.get(Calendar.HOUR_OF_DAY);
         this.mMinute = ca.get(Calendar.MINUTE);
@@ -236,6 +239,9 @@ public class ClockAddActivity extends BaseActivity {
         //设置闹钟
         AlarmManagerUtil.setAlarm(this, alarmEntity);
         setResult(RESULT_OK);
+        MessageEvent event = new MessageEvent();
+        event.setId(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
+        EventBus.getDefault().post(event);
         finish();
     }
 }
