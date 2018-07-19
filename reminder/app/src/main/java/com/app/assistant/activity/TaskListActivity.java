@@ -12,12 +12,15 @@ import android.widget.RelativeLayout;
 import com.app.assistant.R;
 import com.app.assistant.adapter.TaskAdapter;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.ReminderDaoManager;
 import com.app.assistant.utils.TaskDaoManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -74,6 +77,7 @@ public class TaskListActivity extends BaseActivity {
                         TaskDaoManager.getInstance().del(entity);
                         mAdapter.remove(position);
                     }
+                    refreshHomeTask();
                 } else if (view instanceof RelativeLayout) {
                     mClickPosition = position;
                     TaskEntity entity = mAdapter.getItem(position);
@@ -106,6 +110,12 @@ public class TaskListActivity extends BaseActivity {
         }
     }
 
+    private void refreshHomeTask() {
+        MessageEvent event = new MessageEvent();
+        event.setId(MessageEvent.IdPool.HOME_TASK_UPDATE_ID);
+        EventBus.getDefault().post(event);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -120,6 +130,7 @@ public class TaskListActivity extends BaseActivity {
                         TaskEntity taskEntity = (TaskEntity) data.getSerializableExtra("back");
                         mAdapter.set(mClickPosition, taskEntity);
                     }
+                    refreshHomeTask();
                     break;
             }
         }
