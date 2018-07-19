@@ -97,6 +97,9 @@ public class HomeFragment extends BaseFragment {
                             @Override
                             public void run() {
                                 mHomeTaskAdapter.remove(position);
+                                if (mHomeTaskAdapter.getData().size() <= 0) {
+                                    taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
+                                }
                             }
                         }, 500);
                     }
@@ -243,10 +246,10 @@ public class HomeFragment extends BaseFragment {
     private void refresh() {
         if (mReminderEntity != null) {
             mReminderEntity = ReminderDaoManager.getInstance().getRandomItem(mReminderEntity);
-            business();
+            initMemo();
         } else {
             mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
-            business();
+            initMemo();
         }
     }
 
