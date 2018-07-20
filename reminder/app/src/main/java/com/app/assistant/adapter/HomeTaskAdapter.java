@@ -3,7 +3,6 @@ package com.app.assistant.adapter;
 import android.support.v7.widget.AppCompatCheckBox;
 
 import com.app.assistant.R;
-import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

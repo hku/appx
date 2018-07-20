@@ -1,7 +1,6 @@
 package com.app.assistant.activity;
 
 import android.content.Intent;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,10 +12,8 @@ import com.app.assistant.R;
 import com.app.assistant.adapter.TaskAdapter;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.entity.MessageEvent;
-import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.Constant;
-import com.app.assistant.utils.ReminderDaoManager;
 import com.app.assistant.utils.TaskDaoManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 

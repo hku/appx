@@ -17,14 +17,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/home_tab1" />
+            android:text="@string/tab_home" />
 
         <RadioButton
             android:id="@+id/rb_other"
             style="@style/BottomMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/home_tab2" />
+            android:text="@string/tab_setting" />
 
     </RadioGroup>
 

@@ -40,5 +40,9 @@ public class MessageEvent {
         public static int ALARM_ID = 1;
         public static int HOME_TASK_UPDATE_ID = 2;
         public static int HOME_CLOCK_UPDATE_ID = 3;
+
+        public static int HOME_MEMO_SHOW = 5;
+        public static int HOME_CLOCK_SHOW = 6;
+        public static int HOME_TASK_SHOW = 7;
     }
 }

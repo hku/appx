@@ -11,7 +11,7 @@ import android.os.IBinder;
 
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.PoetEntity;
-import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.receiver.WakeReceiver;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
@@ -19,7 +19,7 @@ import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
-import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.MemoDaoManager;
 import com.app.assistant.utils.SPUtils;
 import com.google.gson.reflect.TypeToken;
 
@@ -55,7 +55,7 @@ public class DaemonService extends Service {
         test();
         executorService = Executors.newFixedThreadPool(2);
         asynSetClock();
-        startTimeTask2();
+        asynLoadMemo();
     }
 
     private void test() {
@@ -84,7 +84,7 @@ public class DaemonService extends Service {
         });
     }
 
-    private void startTimeTask2() {
+    private void asynLoadMemo() {
         boolean isFirstIn = SPUtils.getInstance().getBoolean(PreferenceKeyConstant.FIRST_IN, true);
         if (!isFirstIn) {
             LogUtils.d("zhanghe " + "isFirstIn = " + isFirstIn);
@@ -103,10 +103,11 @@ public class DaemonService extends Service {
                         sb.append(paragraph);
                     }
                     String content = sb.toString();
-                    ReminderEntity reminderEntity = new ReminderEntity();
-                    reminderEntity.setContent(content);
-                    reminderEntity.setTagS("诗词");
-                    ReminderDaoManager.getInstance().insert(reminderEntity);
+                    MemoEntity memoEntity = new MemoEntity();
+                    memoEntity.setContent(content);
+                    memoEntity.setIsBuiltIn(true);
+                    memoEntity.setTagS("诗词");
+                    MemoDaoManager.getInstance().insert(memoEntity);
                 }
             }
         });

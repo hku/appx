@@ -2,12 +2,9 @@ package com.app.assistant.utils;
 
 import android.text.TextUtils;
 
-import com.app.assistant.entity.ReminderEntity;
 import com.app.assistant.entity.TaskEntity;
-import com.app.assistant.greendao.gen.ReminderEntityDao;
 import com.app.assistant.greendao.gen.TaskEntityDao;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

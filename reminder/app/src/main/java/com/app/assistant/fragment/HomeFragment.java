@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.assistant.R;
@@ -23,11 +25,13 @@ import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.base.BaseFragment;
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.MessageEvent;
-import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.Constant;
-import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.PreferenceKeyConstant;
+import com.app.assistant.utils.MemoDaoManager;
+import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -68,7 +72,15 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.clock_tv)
     TextView clockTv;
 
-    private ReminderEntity mReminderEntity;
+
+    @BindView(R.id.memo_layout)
+    LinearLayout memoLLayout;
+    @BindView(R.id.clock_layout)
+    RelativeLayout clockRLayout;
+    @BindView(R.id.task_layout)
+    LinearLayout taskLLayout;
+
+    private MemoEntity mMemoEntity;
 
     private long mClickTime = -1L;
 
@@ -77,7 +89,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
+        mMemoEntity = MemoDaoManager.getInstance().getRandomItem();
     }
 
     @Override
@@ -118,9 +130,37 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void business() {
+        initHomeShow();
         initMemo();
         initClock();
         initTask();
+    }
+
+    /**
+     * init 首页要显示的模块
+     */
+    private void initHomeShow() {
+        boolean memoChecked = SPUtils.getInstance().getBoolean(
+                PreferenceKeyConstant.HOME_MEMO_SHOW_KEY, true);
+        if (memoChecked) {
+            memoLLayout.setVisibility(View.VISIBLE);
+        } else {
+            memoLLayout.setVisibility(View.GONE);
+        }
+        boolean clockChecked = SPUtils.getInstance().getBoolean(
+                PreferenceKeyConstant.HOME_CLOCK_SHOW_KEY, true);
+        if (clockChecked) {
+            clockRLayout.setVisibility(View.VISIBLE);
+        } else {
+            clockRLayout.setVisibility(View.GONE);
+        }
+        boolean taskChecked = SPUtils.getInstance().getBoolean(
+                PreferenceKeyConstant.HOME_TASK_SHOW_KEY, true);
+        if (taskChecked) {
+            taskLLayout.setVisibility(View.VISIBLE);
+        } else {
+            taskLLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -129,9 +169,9 @@ public class HomeFragment extends BaseFragment {
     private void initMemo() {
         String content = "";
         String tagS = "";
-        if (mReminderEntity != null) {
-            content = mReminderEntity.getContent();
-            tagS = mReminderEntity.getTagS();
+        if (mMemoEntity != null) {
+            content = mMemoEntity.getContent();
+            tagS = mMemoEntity.getTagS();
         } else {
             content = "暂无更多内容";
             tagS = "暂无标签";
@@ -177,9 +217,9 @@ public class HomeFragment extends BaseFragment {
                 refresh();
                 break;
             case R.id.edit_iv:
-                if (mReminderEntity != null) {
+                if (mMemoEntity != null) {
                     Intent intentAdd = new Intent(mContext, MemoAddActivity.class);
-                    intentAdd.putExtra(Constant.DELIVER_TAG, mReminderEntity);
+                    intentAdd.putExtra(Constant.DELIVER_TAG, mMemoEntity);
                     this.startActivityForResult(intentAdd, REQUEST);
                 } else {
                     ToastUtils.show(mContext, "当前无数据，暂不可修改，请可尝试刷新");
@@ -251,11 +291,11 @@ public class HomeFragment extends BaseFragment {
      * refresh
      */
     private void refresh() {
-        if (mReminderEntity != null) {
-            mReminderEntity = ReminderDaoManager.getInstance().getRandomItem(mReminderEntity);
+        if (mMemoEntity != null) {
+            mMemoEntity = MemoDaoManager.getInstance().getRandomItem(mMemoEntity);
             initMemo();
         } else {
-            mReminderEntity = ReminderDaoManager.getInstance().getRandomItem();
+            mMemoEntity = MemoDaoManager.getInstance().getRandomItem();
             initMemo();
         }
     }
@@ -283,6 +323,27 @@ public class HomeFragment extends BaseFragment {
             } else {
                 clockTv.setText(getResources().getString(R.string.fragment_home_clock_none_tip));
             }
+        } else if (id == MessageEvent.IdPool.HOME_MEMO_SHOW) {
+            boolean isMemoChecked = (boolean) event.getObject();
+            if (isMemoChecked) {
+                memoLLayout.setVisibility(View.VISIBLE);
+            } else {
+                memoLLayout.setVisibility(View.GONE);
+            }
+        } else if (id == MessageEvent.IdPool.HOME_CLOCK_SHOW) {
+            boolean isClockChecked = (boolean) event.getObject();
+            if (isClockChecked) {
+                clockRLayout.setVisibility(View.VISIBLE);
+            } else {
+                clockRLayout.setVisibility(View.GONE);
+            }
+        } else if (id == MessageEvent.IdPool.HOME_TASK_SHOW) {
+            boolean isTaskChecked = (boolean) event.getObject();
+            if (isTaskChecked) {
+                taskLLayout.setVisibility(View.VISIBLE);
+            } else {
+                taskLLayout.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -292,9 +353,9 @@ public class HomeFragment extends BaseFragment {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST:
-                    if (mReminderEntity != null) {
-                        Long id = mReminderEntity.getId();
-                        mReminderEntity = ReminderDaoManager.getInstance().queryById(id);
+                    if (mMemoEntity != null) {
+                        Long id = mMemoEntity.getId();
+                        mMemoEntity = MemoDaoManager.getInstance().queryById(id);
                         business();
                     }
                     break;

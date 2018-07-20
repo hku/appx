@@ -1,8 +1,6 @@
 package com.app.assistant.activity;
 
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,16 +8,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.app.assistant.R;
-import com.app.assistant.adapter.TagAdapter;
 import com.app.assistant.base.BaseActivity;
-import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.utils.Constant;
-import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.MemoDaoManager;
 import com.app.assistant.utils.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,18 +27,14 @@ public class MemoAddActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerview)
-    RecyclerView tagRecycleView;
     @BindView(R.id.reminder_et)
     EditText contentEt;
     @BindView(R.id.reminder_add_iv)
     ImageView addIv;
 
-    private TagAdapter mTagAdapter;
+    private static final String MEMO_TAG = "memo";
 
-    private String mTagS = "";
-
-    private ReminderEntity mReminderEntity;
+    private MemoEntity mMemoEntity;
 
     @Override
     protected int getLayoutResId() {
@@ -55,7 +44,7 @@ public class MemoAddActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        mReminderEntity = (ReminderEntity) getIntent().getSerializableExtra(Constant.DELIVER_TAG);
+        mMemoEntity = (MemoEntity) getIntent().getSerializableExtra(Constant.DELIVER_TAG);
     }
 
     @Override
@@ -67,54 +56,14 @@ public class MemoAddActivity extends BaseActivity {
                 finish();
             }
         });
-        initRecycleView();
-    }
-
-    /**
-     * init recyclerView
-     */
-    private void initRecycleView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        tagRecycleView.setLayoutManager(linearLayoutManager);
-        mTagAdapter = new TagAdapter(R.layout.item_tag);
-        String[] tagArray = Constant.TAG_ARRAY;
-        mTagAdapter.addData(Arrays.asList(tagArray));
-        tagRecycleView.setAdapter(mTagAdapter);
-        mTagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mTagAdapter.refresh(position);
-                mTagS = mTagAdapter.getItem(position);
-            }
-        });
-    }
-
-    private int getAdapterPosition(String tagS) {
-        List<String> tagList = mTagAdapter.getData();
-        int result = -1;
-        for (int i = 0; i < tagList.size(); i++) {
-            String tag = tagList.get(i);
-            if (tag.equals(tagS)) {
-                result = i;
-                break;
-            }
-        }
-        return result;
     }
 
     @Override
     protected void business() {
-        if (mReminderEntity != null) {
-            String content = mReminderEntity.getContent();
-            String tagS = mReminderEntity.getTagS();
+        if (mMemoEntity != null) {
+            String content = mMemoEntity.getContent();
             contentEt.setText(content);
             contentEt.setSelection(contentEt.getText().length());
-            int tagPosition = getAdapterPosition(tagS);
-            if (tagPosition != -1) {
-                mTagAdapter.refresh(tagPosition);
-                mTagS = mTagAdapter.getItem(tagPosition);
-            }
         }
     }
 
@@ -137,23 +86,21 @@ public class MemoAddActivity extends BaseActivity {
             ToastUtils.show(MemoAddActivity.this, "请输入内容");
             return;
         }
-        if (TextUtils.isEmpty(mTagS)) {
-            ToastUtils.show(MemoAddActivity.this, "请点击分类标签");
-            return;
-        }
         //修改
-        if (mReminderEntity != null) {
-            mReminderEntity.setTagS(mTagS);
-            mReminderEntity.setContent(content);
-            ReminderDaoManager.getInstance().update(mReminderEntity);
+        if (mMemoEntity != null) {
+            mMemoEntity.setTagS(MEMO_TAG);
+            mMemoEntity.setContent(content);
+            mMemoEntity.setIsBuiltIn(false);
+            MemoDaoManager.getInstance().update(mMemoEntity);
             Intent intent = new Intent();
-            intent.putExtra("back", mReminderEntity);
+            intent.putExtra("back", mMemoEntity);
             setResult(RESULT_OK, intent);
         } else {//添加
-            ReminderEntity entity = new ReminderEntity();
+            MemoEntity entity = new MemoEntity();
             entity.setContent(content);
-            entity.setTagS(mTagS);
-            ReminderDaoManager.getInstance().insert(entity);
+            entity.setTagS(MEMO_TAG);
+            entity.setIsBuiltIn(false);
+            MemoDaoManager.getInstance().insert(entity);
             setResult(RESULT_OK);
         }
         finish();

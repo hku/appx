@@ -1,5 +1,8 @@
 package com.app.assistant.adapter;
 
+import android.graphics.Paint;
+import android.widget.TextView;
+
 import com.app.assistant.R;
 import com.app.assistant.entity.TaskEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -44,6 +47,14 @@ public class TaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder> {
         String titleS = item.getTitle();
         helper.setText(R.id.content_tv, titleS);
         helper.addOnClickListener(R.id.btnDelete);
-        helper.addOnClickListener(R.id.contentLayout);
+        boolean status = item.getStatus();
+        TextView contentTv = helper.getView(R.id.content_tv);
+        //task finished
+        if (status) {
+            contentTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        } else {
+            contentTv.getPaint().setFlags(0);
+            helper.addOnClickListener(R.id.contentLayout);
+        }
     }
 }

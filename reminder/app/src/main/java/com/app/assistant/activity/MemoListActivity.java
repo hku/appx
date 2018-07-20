@@ -12,9 +12,9 @@ import android.widget.RelativeLayout;
 import com.app.assistant.R;
 import com.app.assistant.adapter.MemoAdapter;
 import com.app.assistant.base.BaseActivity;
-import com.app.assistant.entity.ReminderEntity;
+import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.utils.Constant;
-import com.app.assistant.utils.ReminderDaoManager;
+import com.app.assistant.utils.MemoDaoManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
@@ -74,15 +74,15 @@ public class MemoListActivity extends BaseActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view instanceof Button) {
-                    List<ReminderEntity> data = mAdapter.getData();
+                    List<MemoEntity> data = mAdapter.getData();
                     if (data != null) {
-                        ReminderEntity entity = data.get(position);
-                        ReminderDaoManager.getInstance().del(entity);
+                        MemoEntity entity = data.get(position);
+                        MemoDaoManager.getInstance().del(entity);
                         mAdapter.remove(position);
                     }
                 } else if (view instanceof RelativeLayout) {
                     mClickPosition = position;
-                    ReminderEntity entity = mAdapter.getItem(position);
+                    MemoEntity entity = mAdapter.getItem(position);
                     Intent intent = new Intent(MemoListActivity.this, MemoAddActivity.class);
                     intent.putExtra(Constant.DELIVER_TAG, entity);
                     startActivityForResult(intent, REQUEST_CODE_UPDATE);
@@ -93,7 +93,7 @@ public class MemoListActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        List<ReminderEntity> data = ReminderDaoManager.getInstance().queryAllData();
+        List<MemoEntity> data = MemoDaoManager.getInstance().queryAllData();
         mAdapter.addData(data);
     }
 
@@ -118,8 +118,8 @@ public class MemoListActivity extends BaseActivity {
                     break;
                 case REQUEST_CODE_UPDATE:
                     if (mClickPosition != -1) {
-                        ReminderEntity reminderEntity = (ReminderEntity) data.getSerializableExtra("back");
-                        mAdapter.set(mClickPosition, reminderEntity);
+                        MemoEntity memoEntity = (MemoEntity) data.getSerializableExtra("back");
+                        mAdapter.set(mClickPosition, memoEntity);
                     }
                     break;
             }

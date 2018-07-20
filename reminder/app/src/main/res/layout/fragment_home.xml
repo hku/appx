@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/app_name"
+            android:text="@string/tab_home"
             android:textColor="@color/black"
             android:textSize="19dp" />
 
@@ -41,6 +41,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/memo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -52,18 +53,30 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/memo_list_iv"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/memo_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="15dp"
+                            android:text="memo"
+                            android:textColor="@color/dimgrey"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/content_tv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:lineSpacingMultiplier="1.2"
                             android:minHeight="120dp"
-                            android:padding="15dp"
-                            android:paddingTop="15dp"
+                            android:paddingBottom="15dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingTop="5dp"
                             android:textColor="@color/black"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -119,29 +132,47 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/clock_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white">
 
-                <TextView
-                    android:id="@+id/clock_tv"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/clock_list_iv"
-                    android:lineSpacingMultiplier="1.2"
-                    android:minHeight="20dp"
-                    android:padding="15dp"
-                    android:paddingTop="15dp"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/clock_title_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="15dp"
+                        android:text="clock"
+                        android:textColor="@color/dimgrey"
+                        android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/clock_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/clock_list_iv"
+                        android:lineSpacingMultiplier="1.2"
+                        android:minHeight="20dp"
+                        android:padding="15dp"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/clock_list_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:src="@drawable/ic_list_black_24dp" />
@@ -150,11 +181,22 @@
 
 
             <LinearLayout
+                android:id="@+id/task_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/task_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="15dp"
+                    android:text="task"
+                    android:textColor="@color/dimgrey"
+                    android:textSize="14sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

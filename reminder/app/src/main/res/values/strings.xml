@@ -12,8 +12,8 @@
     提高组织工作质量和水平、把党建设得更加坚强有力提供了根本遵循、指明了实践路径习近平总书记在全国组织工作会议上发表重要讲话，立足党和国家事业发展全局，深刻阐
     明新时代党的组织路线，对党的组织工作作出新部署、提出新要求，为不断。</string>
 
-    <string name="home_tab1">首页</string>
-    <string name="home_tab2">设置</string>
+    <string name="tab_home">首页</string>
+    <string name="tab_setting">设置</string>
 
     <string-array name="tab">
         <item>Home</item>

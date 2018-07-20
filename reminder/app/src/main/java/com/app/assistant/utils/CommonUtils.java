@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Entity;
 import android.content.res.AssetManager;
 
+import com.app.assistant.entity.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -204,5 +208,18 @@ public final class CommonUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.MINUTE);
+    }
+
+    public static void sendSignal(int id, Object object) {
+        MessageEvent messageEvent = new MessageEvent();
+        messageEvent.setId(id);
+        messageEvent.setObject(object);
+        EventBus.getDefault().post(messageEvent);
+    }
+
+    public static void sendSignal(int id) {
+        MessageEvent messageEvent = new MessageEvent();
+        messageEvent.setId(id);
+        EventBus.getDefault().post(messageEvent);
     }
 }
