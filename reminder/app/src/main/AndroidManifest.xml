@@ -64,6 +64,9 @@
             android:name=".activity.ClockAlarmActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.HelpActivity"
+            android:screenOrientation="portrait" />
 
 
         <receiver android:name=".receiver.AlarmClockBroadcast">

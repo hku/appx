@@ -12,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.assistant.R;
+import com.app.assistant.activity.ClockAddActivity;
 import com.app.assistant.activity.ClockListActivity;
+import com.app.assistant.activity.HelpActivity;
 import com.app.assistant.activity.MemoAddActivity;
 import com.app.assistant.activity.MemoListActivity;
+import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.base.BaseFragment;
@@ -211,16 +214,20 @@ public class HomeFragment extends BaseFragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.option_memo:
-                        Intent memoIntent = new Intent(mContext, MemoListActivity.class);
+                        Intent memoIntent = new Intent(mContext, MemoAddActivity.class);
                         startActivity(memoIntent);
                         break;
                     case R.id.option_clock:
-                        Intent clockIntent = new Intent(mContext, ClockListActivity.class);
+                        Intent clockIntent = new Intent(mContext, ClockAddActivity.class);
                         startActivity(clockIntent);
                         break;
                     case R.id.option_task:
-                        Intent taskIntent = new Intent(mContext, TaskListActivity.class);
+                        Intent taskIntent = new Intent(mContext, TaskAddActivity.class);
                         startActivity(taskIntent);
+                        break;
+                    case R.id.option_help:
+                        Intent helpIntent = new Intent(mContext, HelpActivity.class);
+                        startActivity(helpIntent);
                         break;
                 }
                 return false;

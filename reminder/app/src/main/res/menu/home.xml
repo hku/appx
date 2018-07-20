@@ -13,4 +13,8 @@
     <item
         android:id="@+id/option_task"
         android:title="task" />
+
+    <item
+        android:id="@+id/option_help"
+        android:title="help" />
 </menu>
