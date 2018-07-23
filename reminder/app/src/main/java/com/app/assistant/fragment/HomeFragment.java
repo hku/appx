@@ -2,6 +2,7 @@ package com.app.assistant.fragment;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -29,6 +30,7 @@ import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.Constant;
+import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.MemoDaoManager;
 import com.app.assistant.utils.SPUtils;
@@ -37,6 +39,9 @@ import com.app.assistant.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -86,6 +91,8 @@ public class HomeFragment extends BaseFragment {
 
     private HomeTaskAdapter mHomeTaskAdapter;
 
+    private ScheduledExecutorService mExecService;
+
     @Override
     protected void initData() {
         super.initData();
@@ -134,6 +141,32 @@ public class HomeFragment extends BaseFragment {
         initMemo();
         initClock();
         initTask();
+        scheduledMemoRefresh();
+    }
+
+    /**
+     * 在memo显示的情况下，memo10s自动刷新一次
+     */
+    private void scheduledMemoRefresh() {
+        int isShow = memoLLayout.getVisibility();
+        if (isShow == View.VISIBLE) {
+            mExecService = Executors.newScheduledThreadPool(3);
+            mExecService.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                refresh();
+                            }
+                        });
+                    } catch (Throwable throwable) {
+                        LogUtils.d("zhanghe " + "scheduledMemoRefresh error" + throwable.toString());
+                    }
+                }
+            }, 10, 10, TimeUnit.SECONDS);
+        }
     }
 
     /**
