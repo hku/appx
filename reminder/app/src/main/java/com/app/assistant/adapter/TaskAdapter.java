@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.app.assistant.R;
 import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.widget.SwipeMenuLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -49,12 +50,17 @@ public class TaskAdapter extends BaseQuickAdapter<TaskEntity, BaseViewHolder> {
         helper.addOnClickListener(R.id.btnDelete);
         boolean status = item.getStatus();
         TextView contentTv = helper.getView(R.id.content_tv);
+        SwipeMenuLayout swipeMenuLayout = helper.getView(R.id.swipe_layout);
         //task finished
         if (status) {
+            swipeMenuLayout.setSwipeEnable(false);
+            swipeMenuLayout.setLeftSwipe(false);
             contentTv.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         } else {
             contentTv.getPaint().setFlags(0);
-            helper.addOnClickListener(R.id.contentLayout);
+            swipeMenuLayout.setSwipeEnable(true);
+            swipeMenuLayout.setLeftSwipe(true);
         }
+        helper.addOnClickListener(R.id.contentLayout);
     }
 }

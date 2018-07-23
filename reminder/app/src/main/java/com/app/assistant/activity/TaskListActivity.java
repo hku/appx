@@ -78,9 +78,17 @@ public class TaskListActivity extends BaseActivity {
                 } else if (view instanceof RelativeLayout) {
                     mClickPosition = position;
                     TaskEntity entity = mAdapter.getItem(position);
-                    Intent intent = new Intent(TaskListActivity.this, TaskAddActivity.class);
-                    intent.putExtra(Constant.DELIVER_TAG, entity);
-                    startActivityForResult(intent, REQUEST_CODE_UPDATE);
+                    boolean isFinished = entity.getStatus();
+                    if (isFinished) {
+                        entity.setStatus(!isFinished);
+                        TaskDaoManager.getInstance().update(entity);
+                        mAdapter.set(position, entity);
+                        refreshHomeTask();
+                    } else {
+                        Intent intent = new Intent(TaskListActivity.this, TaskAddActivity.class);
+                        intent.putExtra(Constant.DELIVER_TAG, entity);
+                        startActivityForResult(intent, REQUEST_CODE_UPDATE);
+                    }
                 }
             }
         });

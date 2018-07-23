@@ -21,6 +21,7 @@ public class MemoEntity extends BaseEntity {
     private String tagS;
     //是否是内置的
     private boolean isBuiltIn;
+
     @Generated(hash = 1979647587)
     public MemoEntity(Long id, String content, String tagS, boolean isBuiltIn) {
         this.id = id;
@@ -28,30 +29,39 @@ public class MemoEntity extends BaseEntity {
         this.tagS = tagS;
         this.isBuiltIn = isBuiltIn;
     }
+
     @Generated(hash = 776636888)
     public MemoEntity() {
     }
+
     public Long getId() {
         return this.id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getContent() {
         return this.content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
+
     public String getTagS() {
         return this.tagS;
     }
+
     public void setTagS(String tagS) {
         this.tagS = tagS;
     }
+
     public boolean getIsBuiltIn() {
         return this.isBuiltIn;
     }
+
     public void setIsBuiltIn(boolean isBuiltIn) {
         this.isBuiltIn = isBuiltIn;
     }

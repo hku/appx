@@ -58,11 +58,11 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.content_tv)
     TextView contentTv;
     @BindView(R.id.tag_tv)
-    TextView tagTv;
+    TextView memoTagTv;
     @BindView(R.id.refresh_iv)
     ImageView refreshIv;
     @BindView(R.id.edit_iv)
-    ImageView editIv;
+    ImageView memoEditIv;
     @BindView(R.id.memo_list_iv)
     ImageView memoListIv;
     @BindView(R.id.task_list)
@@ -172,12 +172,18 @@ public class HomeFragment extends BaseFragment {
         if (mMemoEntity != null) {
             content = mMemoEntity.getContent();
             tagS = mMemoEntity.getTagS();
+            boolean isBuiltIn = mMemoEntity.getIsBuiltIn();
+            if (isBuiltIn) {
+                memoEditIv.setVisibility(View.GONE);
+            } else {
+                memoEditIv.setVisibility(View.VISIBLE);
+            }
         } else {
             content = "暂无更多内容";
             tagS = "暂无标签";
         }
         contentTv.setText(content);
-        tagTv.setText(tagS);
+        memoTagTv.setText(tagS);
     }
 
     /**
