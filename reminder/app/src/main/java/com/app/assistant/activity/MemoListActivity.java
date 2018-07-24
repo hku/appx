@@ -45,9 +45,18 @@ public class MemoListActivity extends BaseActivity {
 
     private int mClickPosition = -1;
 
+    private String mTagS = "";
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_memo_list;
+    }
+
+
+    @Override
+    protected void initData() {
+        super.initData();
+        mTagS = getIntent().getStringExtra("memo_tag");
     }
 
     @Override
@@ -93,7 +102,7 @@ public class MemoListActivity extends BaseActivity {
 
     @Override
     protected void business() {
-        List<MemoEntity> data = MemoDaoManager.getInstance().queryAllData();
+        List<MemoEntity> data = MemoDaoManager.getInstance().queryAllData(mTagS);
         mAdapter.addData(data);
     }
 

@@ -44,5 +44,8 @@ public class MessageEvent {
         public static int HOME_MEMO_SHOW = 5;
         public static int HOME_CLOCK_SHOW = 6;
         public static int HOME_TASK_SHOW = 7;
+        public static int HOME_MEMO_FLIP_LEFT = 8;
+        public static int HOME_MEMO_FLIP_RIGHT = 9;
+        public static int HOME_SETTING = 10;
     }
 }

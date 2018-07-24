@@ -66,9 +66,9 @@ public final class MemoDaoManager {
      *
      * @return
      */
-    public List<MemoEntity> queryAllData() {
+    public List<MemoEntity> queryAllData(String tagS) {
         MemoEntityDao dao = GreenDaoManager.getInstance().getSession().getMemoEntityDao();
-        List<MemoEntity> list = dao.queryBuilder().orderDesc(MemoEntityDao.Properties.Id).list();
+        List<MemoEntity> list = dao.queryBuilder().where(MemoEntityDao.Properties.TagS.eq(tagS)).orderDesc(MemoEntityDao.Properties.Id).list();
         return list;
     }
 
@@ -87,11 +87,12 @@ public final class MemoDaoManager {
      *
      * @param entity
      */
-    public MemoEntity getRandomItem(MemoEntity entity) {
+    public MemoEntity getRandomItem(MemoEntity entity, String tagS) {
         Long id = entity.getId();
         MemoEntity randomEntity = null;
         MemoEntityDao dao = GreenDaoManager.getInstance().getSession().getMemoEntityDao();
-        List<MemoEntity> list = dao.queryBuilder().where(MemoEntityDao.Properties.Id.notEq(id)).list();
+        List<MemoEntity> list = dao.queryBuilder().where(MemoEntityDao.Properties.Id.notEq(id),
+                MemoEntityDao.Properties.TagS.eq(tagS)).list();
         if (list != null && list.size() > 0) {
             int length = list.size();
             Random random = new Random();
@@ -104,10 +105,10 @@ public final class MemoDaoManager {
     /**
      * 获取数据库中随机某条数据
      */
-    public MemoEntity getRandomItem() {
+    public MemoEntity getRandomItem(String tagS) {
         MemoEntity randomEntity = null;
         MemoEntityDao dao = GreenDaoManager.getInstance().getSession().getMemoEntityDao();
-        List<MemoEntity> list = dao.queryBuilder().list();
+        List<MemoEntity> list = dao.queryBuilder().where(MemoEntityDao.Properties.TagS.eq(tagS)).list();
         if (list != null && list.size() > 0) {
             int length = list.size();
             Random random = new Random();

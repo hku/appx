@@ -4,10 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.fragment.HomeFragment;
 import com.app.assistant.fragment.SettingFragment;
 import com.app.assistant.utils.ToastUtils;
@@ -27,6 +29,10 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.bottomMenu)
     RadioGroup bottomMenu;
+    @BindView(R.id.rb_home)
+    RadioButton homeRB;
+    @BindView(R.id.rb_other)
+    RadioButton settingRB;
 
     private long mExitTime = 0L;
     private int mCurrIndex = 0;
@@ -106,6 +112,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onMessageEvent(MessageEvent event) {
+        super.onMessageEvent(event);
+        int id = event.getId();
+        if (id == MessageEvent.IdPool.HOME_SETTING) {
+            settingRB.setChecked(true);
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

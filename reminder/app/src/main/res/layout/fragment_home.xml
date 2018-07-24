@@ -44,91 +44,9 @@
                 android:id="@+id/memo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@android:color/transparent"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/memo_list_iv"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/memo_title_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:paddingLeft="15dp"
-                            android:text="memo"
-                            android:textColor="@color/dimgrey"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/content_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:lineSpacingMultiplier="1.2"
-                            android:minHeight="120dp"
-                            android:paddingBottom="15dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:paddingTop="5dp"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/memo_list_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_list_black_24dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:gravity="bottom"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/tag_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/bg_tag_tv_normal"
-                        android:padding="5dp"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/refresh_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_refresh_black_24dp" />
-
-                    <ImageView
-                        android:id="@+id/edit_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_toLeftOf="@+id/refresh_iv"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_edit_black_24dp" />
-                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout

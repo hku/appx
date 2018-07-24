@@ -2,7 +2,8 @@ package com.app.assistant.fragment;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -19,34 +20,24 @@ import com.app.assistant.activity.ClockAddActivity;
 import com.app.assistant.activity.ClockListActivity;
 import com.app.assistant.activity.HelpActivity;
 import com.app.assistant.activity.MemoAddActivity;
-import com.app.assistant.activity.MemoListActivity;
 import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.base.BaseFragment;
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.MessageEvent;
-import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.AlarmDaoManager;
-import com.app.assistant.utils.Constant;
-import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
-import com.app.assistant.utils.MemoDaoManager;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
-import com.app.assistant.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.app.Activity.RESULT_OK;
 
 /**
  * author: zhanghe
@@ -56,47 +47,30 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends BaseFragment {
 
-    private static final int REQUEST = 10010;
 
     @BindView(R.id.level_iv)
     ImageView levelIv;
-    @BindView(R.id.content_tv)
-    TextView contentTv;
-    @BindView(R.id.tag_tv)
-    TextView memoTagTv;
-    @BindView(R.id.refresh_iv)
-    ImageView refreshIv;
-    @BindView(R.id.edit_iv)
-    ImageView memoEditIv;
-    @BindView(R.id.memo_list_iv)
-    ImageView memoListIv;
     @BindView(R.id.task_list)
     RecyclerView taskList;
     @BindView(R.id.task_tip)
     TextView taskTipTv;
     @BindView(R.id.clock_tv)
     TextView clockTv;
-
-
-    @BindView(R.id.memo_layout)
-    LinearLayout memoLLayout;
     @BindView(R.id.clock_layout)
     RelativeLayout clockRLayout;
     @BindView(R.id.task_layout)
     LinearLayout taskLLayout;
+    @BindView(R.id.memo_layout)
+    LinearLayout memoLLayout;
 
-    private MemoEntity mMemoEntity;
-
-    private long mClickTime = -1L;
 
     private HomeTaskAdapter mHomeTaskAdapter;
-
-    private ScheduledExecutorService mExecService;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void initData() {
         super.initData();
-        mMemoEntity = MemoDaoManager.getInstance().getRandomItem();
+        mFragmentManager = getChildFragmentManager();
     }
 
     @Override
@@ -137,36 +111,11 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void business() {
+        HomeMemoFragment memoFragment = HomeMemoFragment.newInstance("memo");
+        mFragmentManager.beginTransaction().replace(R.id.memo_layout, memoFragment).commit();
         initHomeShow();
-        initMemo();
         initClock();
         initTask();
-        scheduledMemoRefresh();
-    }
-
-    /**
-     * 在memo显示的情况下，memo10s自动刷新一次
-     */
-    private void scheduledMemoRefresh() {
-        int isShow = memoLLayout.getVisibility();
-        if (isShow == View.VISIBLE) {
-            mExecService = Executors.newScheduledThreadPool(3);
-            mExecService.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                refresh();
-                            }
-                        });
-                    } catch (Throwable throwable) {
-                        LogUtils.d("zhanghe " + "scheduledMemoRefresh error" + throwable.toString());
-                    }
-                }
-            }, 10, 10, TimeUnit.SECONDS);
-        }
     }
 
     /**
@@ -197,29 +146,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     /**
-     * init memo
-     */
-    private void initMemo() {
-        String content = "";
-        String tagS = "";
-        if (mMemoEntity != null) {
-            content = mMemoEntity.getContent();
-            tagS = mMemoEntity.getTagS();
-            boolean isBuiltIn = mMemoEntity.getIsBuiltIn();
-            if (isBuiltIn) {
-                memoEditIv.setVisibility(View.GONE);
-            } else {
-                memoEditIv.setVisibility(View.VISIBLE);
-            }
-        } else {
-            content = "暂无更多内容";
-            tagS = "暂无标签";
-        }
-        contentTv.setText(content);
-        memoTagTv.setText(tagS);
-    }
-
-    /**
      * init clock
      */
     private void initClock() {
@@ -245,31 +171,11 @@ public class HomeFragment extends BaseFragment {
         mHomeTaskAdapter.addData(todayTaskList);
     }
 
-    @OnClick({R.id.level_iv, R.id.refresh_iv, R.id.edit_iv, R.id.content_tv,
-            R.id.memo_list_iv, R.id.clock_list_iv, R.id.task_list_iv})
+    @OnClick({R.id.level_iv, R.id.clock_list_iv, R.id.task_list_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
                 showMenu();
-                break;
-            case R.id.refresh_iv:
-                refresh();
-                break;
-            case R.id.edit_iv:
-                if (mMemoEntity != null) {
-                    Intent intentAdd = new Intent(mContext, MemoAddActivity.class);
-                    intentAdd.putExtra(Constant.DELIVER_TAG, mMemoEntity);
-                    this.startActivityForResult(intentAdd, REQUEST);
-                } else {
-                    ToastUtils.show(mContext, "当前无数据，暂不可修改，请可尝试刷新");
-                }
-                break;
-            case R.id.content_tv:
-                doubleClickRefresh();
-                break;
-            case R.id.memo_list_iv:
-                Intent memoIntent = new Intent(mContext, MemoListActivity.class);
-                startActivity(memoIntent);
                 break;
             case R.id.clock_list_iv:
                 Intent clockIntent = new Intent(mContext, ClockListActivity.class);
@@ -315,29 +221,6 @@ public class HomeFragment extends BaseFragment {
         popupMenu.show();
     }
 
-    /**
-     * double click to refresh
-     */
-    private void doubleClickRefresh() {
-        if (System.currentTimeMillis() - mClickTime < 800) {
-            refresh();
-        } else {
-            mClickTime = System.currentTimeMillis();
-        }
-    }
-
-    /**
-     * refresh
-     */
-    private void refresh() {
-        if (mMemoEntity != null) {
-            mMemoEntity = MemoDaoManager.getInstance().getRandomItem(mMemoEntity);
-            initMemo();
-        } else {
-            mMemoEntity = MemoDaoManager.getInstance().getRandomItem();
-            initMemo();
-        }
-    }
 
     @Override
     protected void messageEvent(MessageEvent event) {
@@ -362,13 +245,6 @@ public class HomeFragment extends BaseFragment {
             } else {
                 clockTv.setText(getResources().getString(R.string.fragment_home_clock_none_tip));
             }
-        } else if (id == MessageEvent.IdPool.HOME_MEMO_SHOW) {
-            boolean isMemoChecked = (boolean) event.getObject();
-            if (isMemoChecked) {
-                memoLLayout.setVisibility(View.VISIBLE);
-            } else {
-                memoLLayout.setVisibility(View.GONE);
-            }
         } else if (id == MessageEvent.IdPool.HOME_CLOCK_SHOW) {
             boolean isClockChecked = (boolean) event.getObject();
             if (isClockChecked) {
@@ -383,22 +259,18 @@ public class HomeFragment extends BaseFragment {
             } else {
                 taskLLayout.setVisibility(View.GONE);
             }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST:
-                    if (mMemoEntity != null) {
-                        Long id = mMemoEntity.getId();
-                        mMemoEntity = MemoDaoManager.getInstance().queryById(id);
-                        business();
-                    }
-                    break;
+        } else if (id == MessageEvent.IdPool.HOME_MEMO_SHOW) {
+            boolean isMemoChecked = (boolean) event.getObject();
+            if (isMemoChecked) {
+                memoLLayout.setVisibility(View.VISIBLE);
+            } else {
+                memoLLayout.setVisibility(View.GONE);
             }
+        } else if (id == MessageEvent.IdPool.HOME_MEMO_FLIP_LEFT) {
+            mFragmentManager.beginTransaction().replace(R.id.memo_layout, MemoTagFragment.newInstance()).commit();
+        } else if (id == MessageEvent.IdPool.HOME_MEMO_FLIP_RIGHT) {
+            String tags = (String) event.getObject();
+            mFragmentManager.beginTransaction().replace(R.id.memo_layout, HomeMemoFragment.newInstance(tags)).commit();
         }
     }
 }
