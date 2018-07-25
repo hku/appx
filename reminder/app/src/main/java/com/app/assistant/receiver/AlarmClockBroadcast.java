@@ -27,6 +27,7 @@ import com.app.assistant.entity.AlarmEntityCopy;
 import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
+import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.LogUtils;
@@ -78,18 +79,13 @@ public class AlarmClockBroadcast extends BroadcastReceiver {
                 alarmEntity.setIsOpen(false);
                 AlarmDaoManager.getInstance().update(alarmEntity);
 
-                MessageEvent event = new MessageEvent();
-                event.setId(MessageEvent.IdPool.ALARM_ID);
-                event.setObject(alarmEntity);
-                EventBus.getDefault().post(event);
+                CommonUtils.sendSignal(MessageEvent.IdPool.ALARM_ID, alarmEntity);
             } else {
                 // 重复周期闹钟
                 AlarmManagerUtil.setAlarm(context, alarmClock);
             }
             if (mIsHomeFresh) {
-                MessageEvent event = new MessageEvent();
-                event.setId(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
-                EventBus.getDefault().post(event);
+                CommonUtils.sendSignal(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
             }
         }
         Intent clockIntent = new Intent(context, ClockAlarmActivity.class);

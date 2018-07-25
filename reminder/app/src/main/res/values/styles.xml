@@ -39,4 +39,10 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="SwitchTheme">
+        <item name="colorControlActivated">#6699ff</item>
+        <item name="colorSwitchThumbNormal">#FFF1F1F1</item>
+        <item name="android:colorForeground">#FF2F2F2F</item>
+    </style>
+
 </resources>

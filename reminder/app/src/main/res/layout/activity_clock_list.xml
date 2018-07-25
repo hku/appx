@@ -38,6 +38,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
-        android:src="@drawable/ic_add_black_24dp" />
+        android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="#6699ff" />
 
 </RelativeLayout>

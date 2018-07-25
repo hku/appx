@@ -60,7 +60,7 @@ public class MemoTagFragment extends BaseFragment {
      * * init recyclerView
      */
     private void initRecycleView() {
-        GridLayoutManager manager = new GridLayoutManager(mContext, 4);
+        GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         tagRecycleView.setLayoutManager(manager);
         mTagAdapter = new TagAdapter(R.layout.item_tag);
         String[] tagArray = Constant.TAG_ARRAY;

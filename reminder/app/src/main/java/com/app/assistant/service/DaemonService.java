@@ -10,12 +10,12 @@ import android.os.Build;
 import android.os.IBinder;
 
 import com.app.assistant.entity.AlarmEntity;
-import com.app.assistant.entity.PoetEntity;
 import com.app.assistant.entity.MemoEntity;
 import com.app.assistant.receiver.WakeReceiver;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
 import com.app.assistant.utils.CommonUtils;
+import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
@@ -93,20 +93,58 @@ public class DaemonService extends Service {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                String poetS = CommonUtils.getJson("poet.song.1000.json", DaemonService.this);
-                List<PoetEntity> list = GsonUtils.fromJsonString(poetS, new TypeToken<List<PoetEntity>>() {
+                String caigentanS = CommonUtils.getJson("caigentan.json", DaemonService.this);
+                List<String> list = GsonUtils.fromJsonString(caigentanS, new TypeToken<List<String>>() {
                 }.getType());
-                for (PoetEntity entity : list) {
-                    List<String> paragraphsList = entity.getParagraphs();
-                    StringBuilder sb = new StringBuilder();
-                    for (String paragraph : paragraphsList) {
-                        sb.append(paragraph);
-                    }
-                    String content = sb.toString();
+                for (String s : list) {
                     MemoEntity memoEntity = new MemoEntity();
-                    memoEntity.setContent(content);
+                    memoEntity.setContent(s);
                     memoEntity.setIsBuiltIn(true);
-                    memoEntity.setTagS("诗词");
+                    memoEntity.setTagS(Constant.TAG_ARRAY[0]);
+                    MemoDaoManager.getInstance().insert(memoEntity);
+                }
+
+                String changshiS = CommonUtils.getJson("changshi.json", DaemonService.this);
+                List<String> senseList = GsonUtils.fromJsonString(changshiS, new TypeToken<List<String>>() {
+                }.getType());
+                for (String s : senseList) {
+                    MemoEntity memoEntity = new MemoEntity();
+                    memoEntity.setContent(s);
+                    memoEntity.setIsBuiltIn(true);
+                    memoEntity.setTagS(Constant.TAG_ARRAY[1]);
+                    MemoDaoManager.getInstance().insert(memoEntity);
+                }
+
+                String englishS = CommonUtils.getJson("english.json", DaemonService.this);
+                List<String> englishList = GsonUtils.fromJsonString(englishS, new TypeToken<List<String>>() {
+                }.getType());
+                for (String s : englishList) {
+                    MemoEntity memoEntity = new MemoEntity();
+                    memoEntity.setContent(s);
+                    memoEntity.setIsBuiltIn(true);
+                    memoEntity.setTagS(Constant.TAG_ARRAY[2]);
+                    MemoDaoManager.getInstance().insert(memoEntity);
+                }
+
+                String jokeS = CommonUtils.getJson("joke.json", DaemonService.this);
+                List<String> jokeList = GsonUtils.fromJsonString(jokeS, new TypeToken<List<String>>() {
+                }.getType());
+                for (String s : jokeList) {
+                    MemoEntity memoEntity = new MemoEntity();
+                    memoEntity.setContent(s);
+                    memoEntity.setIsBuiltIn(true);
+                    memoEntity.setTagS(Constant.TAG_ARRAY[3]);
+                    MemoDaoManager.getInstance().insert(memoEntity);
+                }
+
+                String mottoS = CommonUtils.getJson("motto.json", DaemonService.this);
+                List<String> mottoList = GsonUtils.fromJsonString(mottoS, new TypeToken<List<String>>() {
+                }.getType());
+                for (String s : mottoList) {
+                    MemoEntity memoEntity = new MemoEntity();
+                    memoEntity.setContent(s);
+                    memoEntity.setIsBuiltIn(true);
+                    memoEntity.setTagS(Constant.TAG_ARRAY[4]);
                     MemoDaoManager.getInstance().insert(memoEntity);
                 }
             }

@@ -70,6 +70,10 @@ public class SearchActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mSearchUrl = mSearchWayList.get(position);
                 LogUtils.d("zhanghe " + "mSearchUrl" + mSearchUrl);
+                String searchS = searchEt.getText().toString();
+                if (!TextUtils.isEmpty(searchS)) {
+                    onSearch();
+                }
             }
         });
 

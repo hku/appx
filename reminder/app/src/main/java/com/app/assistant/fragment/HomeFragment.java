@@ -103,6 +103,7 @@ public class HomeFragment extends BaseFragment {
                             public void run() {
                                 mHomeTaskAdapter.remove(position);
                                 if (mHomeTaskAdapter.getData().size() <= 0) {
+                                    taskTipTv.setVisibility(View.VISIBLE);
                                     taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
                                 }
                             }
@@ -199,6 +200,7 @@ public class HomeFragment extends BaseFragment {
         List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
         if (todayTaskList.size() <= 0) {
             taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
+            taskTipTv.setVisibility(View.VISIBLE);
         }
         mHomeTaskAdapter.addData(todayTaskList);
     }
@@ -266,6 +268,7 @@ public class HomeFragment extends BaseFragment {
             mHomeTaskAdapter.clear();
             List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
             if (todayTaskList.size() <= 0) {
+                taskTipTv.setVisibility(View.VISIBLE);
                 taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
             } else {
                 taskTipTv.setVisibility(View.GONE);

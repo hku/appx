@@ -15,6 +15,7 @@ import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.utils.AlarmDaoManager;
 import com.app.assistant.utils.AlarmManagerUtil;
+import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.ToastUtils;
 import com.app.assistant.widget.wheelview.WheelView;
 
@@ -239,9 +240,7 @@ public class ClockAddActivity extends BaseActivity {
         //设置闹钟
         AlarmManagerUtil.setAlarm(this, alarmEntity);
         setResult(RESULT_OK);
-        MessageEvent event = new MessageEvent();
-        event.setId(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
-        EventBus.getDefault().post(event);
+        CommonUtils.sendSignal(MessageEvent.IdPool.HOME_CLOCK_UPDATE_ID);
         finish();
     }
 }
