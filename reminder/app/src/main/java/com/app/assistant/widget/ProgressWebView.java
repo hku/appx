@@ -126,7 +126,6 @@ public class ProgressWebView extends LinearLayout {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError
                     error) {
                 super.onReceivedError(view, request, error);
-                mWebView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
             }
 

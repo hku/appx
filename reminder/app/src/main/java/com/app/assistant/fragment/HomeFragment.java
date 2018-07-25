@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -20,19 +21,23 @@ import com.app.assistant.activity.ClockAddActivity;
 import com.app.assistant.activity.ClockListActivity;
 import com.app.assistant.activity.HelpActivity;
 import com.app.assistant.activity.MemoAddActivity;
+import com.app.assistant.activity.SearchActivity;
 import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
+import com.app.assistant.adapter.HotWordAdapter;
 import com.app.assistant.base.BaseFragment;
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.entity.TaskEntity;
 import com.app.assistant.utils.AlarmDaoManager;
+import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,10 +67,13 @@ public class HomeFragment extends BaseFragment {
     LinearLayout taskLLayout;
     @BindView(R.id.memo_layout)
     LinearLayout memoLLayout;
+    @BindView(R.id.hot_word_recycleview)
+    RecyclerView hotWordList;
 
 
     private HomeTaskAdapter mHomeTaskAdapter;
     private FragmentManager mFragmentManager;
+    private HotWordAdapter mHotWordAdapter;
 
     @Override
     protected void initData() {
@@ -100,6 +108,22 @@ public class HomeFragment extends BaseFragment {
                         }, 500);
                     }
                 }
+            }
+        });
+
+        //init 搜索热词列表
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
+        hotWordList.setLayoutManager(gridLayoutManager);
+        mHotWordAdapter = new HotWordAdapter(R.layout.item_hot_word);
+        mHotWordAdapter.addData(Arrays.asList(Constant.SEARCH_HOT_ARRAY));
+        hotWordList.setAdapter(mHotWordAdapter);
+        mHotWordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String word = mHotWordAdapter.getItem(position);
+                Intent intent = new Intent(mContext, SearchActivity.class);
+                intent.putExtra("search_word", word);
+                startActivity(intent);
             }
         });
     }
@@ -171,7 +195,7 @@ public class HomeFragment extends BaseFragment {
         mHomeTaskAdapter.addData(todayTaskList);
     }
 
-    @OnClick({R.id.level_iv, R.id.clock_list_iv, R.id.task_list_iv})
+    @OnClick({R.id.level_iv, R.id.clock_list_iv, R.id.task_list_iv, R.id.search_rlayout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
@@ -184,6 +208,10 @@ public class HomeFragment extends BaseFragment {
             case R.id.task_list_iv:
                 Intent taskIntent = new Intent(mContext, TaskListActivity.class);
                 startActivity(taskIntent);
+                break;
+            case R.id.search_rlayout:
+                Intent searchIntent = new Intent(mContext, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
         }
     }
