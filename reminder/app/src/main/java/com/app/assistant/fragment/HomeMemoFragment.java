@@ -90,7 +90,7 @@ public class HomeMemoFragment extends BaseFragment {
     @Override
     protected void business() {
         initMemo();
-//        scheduledMemoRefresh();
+        scheduledMemoRefresh();
     }
 
 
@@ -103,13 +103,13 @@ public class HomeMemoFragment extends BaseFragment {
             content = mMemoEntity.getContent();
             boolean isBuiltIn = mMemoEntity.getIsBuiltIn();
             if (isBuiltIn) {
-                memoEditIv.setVisibility(View.GONE);
+                memoEditIv.setVisibility(View.INVISIBLE);
             } else {
                 memoEditIv.setVisibility(View.VISIBLE);
             }
         } else {
             content = "暂无更多内容";
-            memoEditIv.setVisibility(View.GONE);
+            memoEditIv.setVisibility(View.INVISIBLE);
         }
         contentTv.setText(content);
         memoTagTv.setText(mTagS);
@@ -121,7 +121,7 @@ public class HomeMemoFragment extends BaseFragment {
     private void scheduledMemoRefresh() {
         int isShow = memoLLayout.getVisibility();
         if (isShow == View.VISIBLE) {
-            mExecService = Executors.newScheduledThreadPool(3);
+            mExecService = Executors.newScheduledThreadPool(1);
             mExecService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -214,5 +214,14 @@ public class HomeMemoFragment extends BaseFragment {
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         return FlipAnimation.create(FlipAnimation.LEFT, enter, DURATION);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mExecService != null) {
+            mExecService.shutdownNow();
+            mExecService = null;
+        }
     }
 }

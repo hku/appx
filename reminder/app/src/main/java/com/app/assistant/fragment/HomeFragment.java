@@ -3,7 +3,6 @@ package com.app.assistant.fragment;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -139,7 +138,7 @@ public class HomeFragment extends BaseFragment {
     protected void business() {
         HomeMemoFragment memoFragment = HomeMemoFragment.newInstance("memo");
         mFragmentManager.beginTransaction().replace(R.id.memo_layout, memoFragment).commit();
-        initHomeShow();
+        initShowModule();
         initClock();
         initTask();
     }
@@ -147,7 +146,7 @@ public class HomeFragment extends BaseFragment {
     /**
      * init 首页要显示的模块
      */
-    private void initHomeShow() {
+    private void initShowModule() {
         boolean memoChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_MEMO_SHOW_KEY, true);
         if (memoChecked) {
