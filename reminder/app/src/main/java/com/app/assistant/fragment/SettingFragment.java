@@ -33,6 +33,8 @@ public class SettingFragment extends BaseFragment {
     SwitchCompat clockSC;
     @BindView(R.id.task_sc)
     SwitchCompat taskSC;
+    @BindView(R.id.search_sc)
+    SwitchCompat searchSC;
 
     @Override
     protected int getViewLayout() {
@@ -62,6 +64,13 @@ public class SettingFragment extends BaseFragment {
                 SPUtils.getInstance().put(PreferenceKeyConstant.HOME_TASK_SHOW_KEY, isChecked);
             }
         });
+        searchSC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                CommonUtils.sendSignal(MessageEvent.IdPool.HOME_SEARCH_SHOW, isChecked);
+                SPUtils.getInstance().put(PreferenceKeyConstant.HOME_SEARCH_SHOW_KEY, isChecked);
+            }
+        });
         boolean memoChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_MEMO_SHOW_KEY, true);
         memoSC.setChecked(memoChecked);
@@ -71,6 +80,9 @@ public class SettingFragment extends BaseFragment {
         boolean taskChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_TASK_SHOW_KEY, true);
         taskSC.setChecked(taskChecked);
+        boolean searchChecked = SPUtils.getInstance().getBoolean(
+                PreferenceKeyConstant.HOME_SEARCH_SHOW_KEY, true);
+        searchSC.setChecked(searchChecked);
     }
 
     @OnClick({R.id.help_rlayout})

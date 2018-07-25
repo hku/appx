@@ -69,6 +69,8 @@ public class HomeFragment extends BaseFragment {
     LinearLayout memoLLayout;
     @BindView(R.id.hot_word_recycleview)
     RecyclerView hotWordList;
+    @BindView(R.id.search_llayout)
+    LinearLayout searchLLayout;
 
 
     private HomeTaskAdapter mHomeTaskAdapter;
@@ -166,6 +168,13 @@ public class HomeFragment extends BaseFragment {
             taskLLayout.setVisibility(View.VISIBLE);
         } else {
             taskLLayout.setVisibility(View.GONE);
+        }
+        boolean searchChecked = SPUtils.getInstance().getBoolean(
+                PreferenceKeyConstant.HOME_SEARCH_SHOW_KEY, true);
+        if (searchChecked) {
+            searchLLayout.setVisibility(View.VISIBLE);
+        } else {
+            searchLLayout.setVisibility(View.GONE);
         }
     }
 
@@ -293,6 +302,13 @@ public class HomeFragment extends BaseFragment {
                 memoLLayout.setVisibility(View.VISIBLE);
             } else {
                 memoLLayout.setVisibility(View.GONE);
+            }
+        } else if (id == MessageEvent.IdPool.HOME_SEARCH_SHOW) {
+            boolean isSearchChecked = (boolean) event.getObject();
+            if (isSearchChecked) {
+                searchLLayout.setVisibility(View.VISIBLE);
+            } else {
+                searchLLayout.setVisibility(View.GONE);
             }
         } else if (id == MessageEvent.IdPool.HOME_MEMO_FLIP_LEFT) {
             mFragmentManager.beginTransaction().replace(R.id.memo_layout, MemoTagFragment.newInstance()).commit();
