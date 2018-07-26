@@ -20,6 +20,7 @@ import com.app.assistant.activity.ClockAddActivity;
 import com.app.assistant.activity.ClockListActivity;
 import com.app.assistant.activity.HelpActivity;
 import com.app.assistant.activity.MemoAddActivity;
+import com.app.assistant.activity.ScanActivity;
 import com.app.assistant.activity.SearchActivity;
 import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
@@ -35,10 +36,10 @@ import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.TimeUtils;
+import com.app.assistant.utils.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -223,7 +224,8 @@ public class HomeFragment extends BaseFragment {
         mHomeTaskAdapter.addData(todayTaskList);
     }
 
-    @OnClick({R.id.level_iv, R.id.clock_list_iv, R.id.task_list_iv, R.id.search_rlayout})
+    @OnClick({R.id.level_iv, R.id.clock_list_iv, R.id.task_list_iv,
+            R.id.search_tv, R.id.voice_iv, R.id.code_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
@@ -237,9 +239,16 @@ public class HomeFragment extends BaseFragment {
                 Intent taskIntent = new Intent(mContext, TaskListActivity.class);
                 startActivity(taskIntent);
                 break;
-            case R.id.search_rlayout:
+            case R.id.search_tv:
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);
                 startActivity(searchIntent);
+                break;
+            case R.id.voice_iv:
+                ToastUtils.show(mContext, "正在开发中，请稍等");
+                break;
+            case R.id.code_iv:
+                Intent scanIntent = new Intent(mContext, ScanActivity.class);
+                startActivity(scanIntent);
                 break;
         }
     }

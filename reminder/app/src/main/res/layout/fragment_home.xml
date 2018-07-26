@@ -159,19 +159,20 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/search_rlayout"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@color/white">
 
                     <TextView
+                        android:id="@+id/search_tv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="15dp"
                         android:layout_toLeftOf="@+id/voice_iv"
                         android:drawableLeft="@drawable/ic_search_black_24dp"
                         android:drawablePadding="3dp"
+                        android:gravity="center_vertical"
                         android:text="请输入关键词"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
@@ -180,12 +181,21 @@
                         android:id="@+id/voice_iv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_toLeftOf="@+id/code_iv"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_voice_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/code_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="15dp"
                         android:padding="5dp"
-                        android:src="@drawable/ic_voice_black_24dp"
-                        android:visibility="gone" />
+                        android:src="@drawable/ic_code_black_24dp" />
                 </RelativeLayout>
 
                 <View

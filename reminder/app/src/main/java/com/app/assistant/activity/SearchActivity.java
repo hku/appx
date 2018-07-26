@@ -88,6 +88,7 @@ public class SearchActivity extends BaseActivity {
     protected void business() {
         if (!TextUtils.isEmpty(mDeliverWord)) {
             searchEt.setText(mDeliverWord);
+            searchEt.setSelection(mDeliverWord.length());
             onSearch();
         }
     }
