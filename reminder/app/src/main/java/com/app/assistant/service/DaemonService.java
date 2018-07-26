@@ -75,6 +75,19 @@ public class DaemonService extends Service {
             @Override
             public void run() {
                 List<AlarmEntity> list = AlarmDaoManager.getInstance().queryDesc();
+                //当前无闹钟时默认设置一个工作日闹钟
+                if (list.size() <= 0) {
+                    AlarmEntity alarmEntity = new AlarmEntity();
+                    alarmEntity.setHour(16);
+                    alarmEntity.setMinute(30);
+                    alarmEntity.setTitle("开会");
+                    alarmEntity.setIsOpen(true);
+                    alarmEntity.setBellMode(2);
+                    alarmEntity.setCycleTag(1);
+                    alarmEntity.setCycleWeeks("1,2,3,4,5");
+                    alarmEntity.setRemark("");
+                    AlarmDaoManager.getInstance().insert(alarmEntity);
+                }
                 for (AlarmEntity alarmClock : list) {
                     if (alarmClock.getIsOpen()) {
                         AlarmManagerUtil.setAlarm(DaemonService.this, alarmClock);

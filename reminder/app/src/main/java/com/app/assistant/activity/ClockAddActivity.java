@@ -233,7 +233,6 @@ public class ClockAddActivity extends BaseActivity {
         alarmEntity.setBellMode(mBell);
         alarmEntity.setCycleTag(mCycleTag);
         alarmEntity.setCycleWeeks(mCycleWeeks);
-        alarmEntity.setBellMode(mBell);
         alarmEntity.setRemark(remark);
         long clockId = AlarmDaoManager.getInstance().insert(alarmEntity);
         alarmEntity.setId(clockId);

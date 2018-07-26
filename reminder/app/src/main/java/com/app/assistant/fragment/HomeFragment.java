@@ -34,9 +34,11 @@ import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
+import com.app.assistant.utils.TimeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -199,8 +201,24 @@ public class HomeFragment extends BaseFragment {
     private void initTask() {
         List<TaskEntity> todayTaskList = TaskDaoManager.getInstance().getTodayTask();
         if (todayTaskList.size() <= 0) {
-            taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
-            taskTipTv.setVisibility(View.VISIBLE);
+//            taskTipTv.setText(getResources().getString(R.string.fragment_home_task_none_tip));
+//            taskTipTv.setVisibility(View.VISIBLE);
+            //首页初始化，当天默认新创建两条数据
+            TaskEntity taskEntity = new TaskEntity();
+            taskEntity.setTitle("组会");
+            taskEntity.setDate(TimeUtils.getNowString(Constant.DEFAULT_FORMAT));
+            taskEntity.setStatus(false);
+            taskEntity.setPreDate("");
+            TaskDaoManager.getInstance().insert(taskEntity);
+            mHomeTaskAdapter.addData(taskEntity);
+
+            TaskEntity taskEntity2 = new TaskEntity();
+            taskEntity2.setTitle("见客人");
+            taskEntity2.setDate(TimeUtils.getNowString(Constant.DEFAULT_FORMAT));
+            taskEntity2.setStatus(false);
+            taskEntity2.setPreDate("");
+            TaskDaoManager.getInstance().insert(taskEntity2);
+            mHomeTaskAdapter.addData(taskEntity2);
         }
         mHomeTaskAdapter.addData(todayTaskList);
     }

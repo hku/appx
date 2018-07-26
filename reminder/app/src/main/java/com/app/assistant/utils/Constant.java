@@ -2,6 +2,9 @@ package com.app.assistant.utils;
 
 import android.content.Context;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * author: zhanghe
  * created on: 2018/7/5 15:40
@@ -10,6 +13,7 @@ import android.content.Context;
 
 public class Constant {
 
+    public static final DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     public static final String[] TAG_ARRAY = {"菜根谭", "小常识", "学英语", "冷笑话", "格言佳句", "memo"};
     public static final String[] SEARCH_HOT_ARRAY = {"习近平", "长生医药", "世界杯", "北京大雨", "人工智能", "区块链"};
     public static final String[] SEARCH_WAYS_ARRAY = {"国搜", "百度", "搜狗", "bing", "360"};
