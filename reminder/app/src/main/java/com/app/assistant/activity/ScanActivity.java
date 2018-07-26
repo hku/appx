@@ -3,10 +3,12 @@ package com.app.assistant.activity;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.ToastUtils;
 
@@ -79,10 +81,22 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     public void onScanQRCodeSuccess(String result) {
         LogUtils.d("zhanghe " + result);
         vibrate();
-        Intent intent = new Intent(ScanActivity.this, SearchActivity.class);
-        intent.putExtra("search_word", result);
-        startActivity(intent);
-        finish();
+        if (!TextUtils.isEmpty(result)) {
+            boolean isUrl = CommonUtils.isHttpUrl(result);
+            Intent intent = new Intent();
+            if (isUrl) {
+                intent.setClass(ScanActivity.this, WebActivity.class);
+                intent.putExtra("title", result);
+                intent.putExtra("url", result);
+            } else {
+                intent.setClass(ScanActivity.this, SearchActivity.class);
+                intent.putExtra("search_word", result);
+            }
+            startActivity(intent);
+            finish();
+        } else {
+            ToastUtils.show(this, "无效码");
+        }
     }
 
     @Override

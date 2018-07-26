@@ -78,6 +78,9 @@
             android:name=".activity.ScanActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.WebActivity"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".receiver.AlarmClockBroadcast">
             <intent-filter>
