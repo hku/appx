@@ -96,6 +96,7 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
             finish();
         } else {
             ToastUtils.show(this, "无效码");
+            mZXingView.startSpot();
         }
     }
 
