@@ -79,6 +79,9 @@ public class HomeFragment extends BaseFragment {
     private FragmentManager mFragmentManager;
     private HotWordAdapter mHotWordAdapter;
 
+    private PopupMenu mPopupMenu;
+
+
     @Override
     protected void initData() {
         super.initData();
@@ -88,6 +91,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
+        initMenu();
         taskList.setLayoutManager(new LinearLayoutManager(mContext));
         mHomeTaskAdapter = new HomeTaskAdapter(R.layout.item_home_task);
         taskList.setAdapter(mHomeTaskAdapter);
@@ -154,22 +158,28 @@ public class HomeFragment extends BaseFragment {
         boolean memoChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_MEMO_SHOW_KEY, true);
         if (memoChecked) {
+            mPopupMenu.getMenu().getItem(0).setVisible(true);
             memoLLayout.setVisibility(View.VISIBLE);
         } else {
+            mPopupMenu.getMenu().getItem(0).setVisible(false);
             memoLLayout.setVisibility(View.GONE);
         }
         boolean clockChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_CLOCK_SHOW_KEY, true);
         if (clockChecked) {
+            mPopupMenu.getMenu().getItem(1).setVisible(true);
             clockRLayout.setVisibility(View.VISIBLE);
         } else {
+            mPopupMenu.getMenu().getItem(1).setVisible(false);
             clockRLayout.setVisibility(View.GONE);
         }
         boolean taskChecked = SPUtils.getInstance().getBoolean(
                 PreferenceKeyConstant.HOME_TASK_SHOW_KEY, true);
         if (taskChecked) {
+            mPopupMenu.getMenu().getItem(2).setVisible(true);
             taskLLayout.setVisibility(View.VISIBLE);
         } else {
+            mPopupMenu.getMenu().getItem(2).setVisible(false);
             taskLLayout.setVisibility(View.GONE);
         }
         boolean searchChecked = SPUtils.getInstance().getBoolean(
@@ -229,7 +239,7 @@ public class HomeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.level_iv:
-                showMenu();
+                mPopupMenu.show();
                 break;
             case R.id.clock_list_iv:
                 Intent clockIntent = new Intent(mContext, ClockListActivity.class);
@@ -254,12 +264,12 @@ public class HomeFragment extends BaseFragment {
     }
 
     /**
-     * show menu
+     * init menu
      */
-    private void showMenu() {
-        PopupMenu popupMenu = new PopupMenu(mContext, levelIv);
-        popupMenu.getMenuInflater().inflate(R.menu.home, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+    private void initMenu() {
+        mPopupMenu = new PopupMenu(mContext, levelIv);
+        mPopupMenu.getMenuInflater().inflate(R.menu.home, mPopupMenu.getMenu());
+        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -283,7 +293,6 @@ public class HomeFragment extends BaseFragment {
                 return false;
             }
         });
-        popupMenu.show();
     }
 
 
@@ -314,22 +323,28 @@ public class HomeFragment extends BaseFragment {
         } else if (id == MessageEvent.IdPool.HOME_CLOCK_SHOW) {
             boolean isClockChecked = (boolean) event.getObject();
             if (isClockChecked) {
+                mPopupMenu.getMenu().getItem(1).setVisible(true);
                 clockRLayout.setVisibility(View.VISIBLE);
             } else {
+                mPopupMenu.getMenu().getItem(1).setVisible(false);
                 clockRLayout.setVisibility(View.GONE);
             }
         } else if (id == MessageEvent.IdPool.HOME_TASK_SHOW) {
             boolean isTaskChecked = (boolean) event.getObject();
             if (isTaskChecked) {
+                mPopupMenu.getMenu().getItem(2).setVisible(true);
                 taskLLayout.setVisibility(View.VISIBLE);
             } else {
+                mPopupMenu.getMenu().getItem(2).setVisible(false);
                 taskLLayout.setVisibility(View.GONE);
             }
         } else if (id == MessageEvent.IdPool.HOME_MEMO_SHOW) {
             boolean isMemoChecked = (boolean) event.getObject();
             if (isMemoChecked) {
+                mPopupMenu.getMenu().getItem(0).setVisible(true);
                 memoLLayout.setVisibility(View.VISIBLE);
             } else {
+                mPopupMenu.getMenu().getItem(0).setVisible(false);
                 memoLLayout.setVisibility(View.GONE);
             }
         } else if (id == MessageEvent.IdPool.HOME_SEARCH_SHOW) {
