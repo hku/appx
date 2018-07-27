@@ -9,11 +9,19 @@ greendao {
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
+    signingConfigs {
+        assistant {
+            keyPassword 'assistant'
+            storeFile file('assistant.jks')
+            keyAlias 'assistant'
+            storePassword 'assistant123'
+        }
+    }
     defaultConfig {
         applicationId "com.app.assistant"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
+        versionCode 20180726
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -21,7 +29,18 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.assistant
         }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.assistant
+        }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 

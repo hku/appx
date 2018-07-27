@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.app.assistant.BuildConfig;
+import com.app.assistant.utils.FileManagerUtils;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -25,6 +26,8 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 public class AssistantApplication extends Application {
 
+    private static final String FOLDER_NAME = "assistant";
+
     private static Context sContext;
 
     @Override
@@ -34,6 +37,7 @@ public class AssistantApplication extends Application {
         initRefreshLayout();
         initDebugBridge();
         Logger.addLogAdapter(new AndroidLogAdapter());
+        FileManagerUtils.getInstance().setFolderName(FOLDER_NAME);
     }
 
     private void initDebugBridge() {

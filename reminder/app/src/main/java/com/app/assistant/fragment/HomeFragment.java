@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.app.assistant.BuildConfig;
 import com.app.assistant.R;
 import com.app.assistant.activity.ClockAddActivity;
 import com.app.assistant.activity.ClockListActivity;
@@ -27,17 +29,24 @@ import com.app.assistant.activity.TaskListActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.adapter.HotWordAdapter;
 import com.app.assistant.base.BaseFragment;
+import com.app.assistant.controller.HomeController;
 import com.app.assistant.entity.AlarmEntity;
 import com.app.assistant.entity.MessageEvent;
 import com.app.assistant.entity.TaskEntity;
+import com.app.assistant.entity.UpdateEntity;
 import com.app.assistant.utils.AlarmDaoManager;
+import com.app.assistant.utils.AsyncExecutor;
+import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.Constant;
+import com.app.assistant.utils.GsonUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.TaskDaoManager;
 import com.app.assistant.utils.TimeUtils;
 import com.app.assistant.utils.ToastUtils;
+import com.app.assistant.widget.UpdateDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.Arrays;
 import java.util.List;
@@ -81,11 +90,14 @@ public class HomeFragment extends BaseFragment {
 
     private PopupMenu mPopupMenu;
 
+    private HomeController mController;
+
 
     @Override
     protected void initData() {
         super.initData();
         mFragmentManager = getChildFragmentManager();
+        mController = new HomeController(this);
     }
 
     @Override
@@ -149,6 +161,42 @@ public class HomeFragment extends BaseFragment {
         initShowModule();
         initClock();
         initTask();
+        onUpdate();
+    }
+
+    /**
+     * 检测更新
+     */
+    private void onUpdate() {
+        AsyncExecutor ae = new AsyncExecutor();
+        ae.execute(new AsyncExecutor.Worker<String>() {
+            @Override
+            protected String doInBackground() {
+                String result = mController.downloadFileAsString(Constant.UPDATE_URL);
+                return result;
+            }
+
+            protected void onPostExecute(String result) {
+                if (!TextUtils.isEmpty(result)) {
+                    String jsonS = CommonUtils.getJson(result, mContext);
+                    UpdateEntity updateEntity = GsonUtils.fromJsonString(jsonS, new TypeToken<UpdateEntity>() {
+                    }.getType());
+                    int versionCode = updateEntity.getVersionCode();
+                    if (versionCode > BuildConfig.VERSION_CODE) {
+                        String updateUrl = updateEntity.getUpdateUrl();
+                        UpdateDialog updateDialog = new UpdateDialog(mContext, "更新", "当前有新版本",
+                                "test" + System.currentTimeMillis(), updateUrl, false);
+                        updateDialog.show();
+                    }
+                }
+            }
+
+            protected void onCanceled() {
+            }
+
+            protected void abort() {
+            }
+        });
     }
 
     /**

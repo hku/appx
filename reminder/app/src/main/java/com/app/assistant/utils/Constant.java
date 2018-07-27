@@ -34,4 +34,6 @@ public class Constant {
     public static final String SOUGOU_URL = "https://m.sogou.com/web/searchList.jsp?keyword=";
     public static final String BING_URL = "https://cn.bing.com/search?q=";
     public static final String QIHU_URL = "https://m.so.com/s?q=";
+
+    public static final String UPDATE_URL = "";
 }
