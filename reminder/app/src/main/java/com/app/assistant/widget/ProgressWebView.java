@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.app.assistant.R;
 import com.app.assistant.utils.JSEngine;
@@ -39,6 +40,7 @@ public class ProgressWebView extends LinearLayout {
     ProgressBar mProgressBar;
 
     private Context mContext;
+    private TextView mTitleTv;
 
 
     public ProgressWebView(Context context) {
@@ -67,15 +69,34 @@ public class ProgressWebView extends LinearLayout {
      * @param url
      * @param header
      */
-    public void loadUrlWithHeader(String url, String header) {
+    public void loadUrl(String url, String header) {
         load(url, header);
     }
 
+    /**
+     * 不带header
+     *
+     * @param url
+     */
     public void loadUrl(String url) {
         load(url, "");
     }
 
+    /**
+     * 自动加载标题
+     *
+     * @param url
+     * @param title
+     */
+    public void loadUrl(String url, TextView title) {
+        this.mTitleTv = title;
+        load(url, "");
+    }
+
     private void load(String url, String header) {
+        if (!url.startsWith("http")) {
+            url = "https://" + url;
+        }
         if (TextUtils.isEmpty(header) && url != null) {
             mWebView.loadUrl(url);
         } else if (!TextUtils.isEmpty(header) && url != null) {
@@ -133,6 +154,10 @@ public class ProgressWebView extends LinearLayout {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 mProgressBar.setVisibility(View.GONE);
+                if (mTitleTv != null) {
+                    String titleS = view.getTitle();
+                    mTitleTv.setText(titleS);
+                }
             }
         });
 
@@ -153,20 +178,22 @@ public class ProgressWebView extends LinearLayout {
                 super.onProgressChanged(view, newProgress);
             }
         });
+    }
 
 
-        mWebView.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()) {
-                        mWebView.goBack();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+    /**
+     * can back
+     *
+     * @return
+     */
+    public boolean canBack() {
+        return mWebView.canGoBack();
+    }
 
+    /**
+     * back
+     */
+    public void back() {
+        mWebView.goBack();
     }
 }

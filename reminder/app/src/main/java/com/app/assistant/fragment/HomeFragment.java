@@ -24,8 +24,11 @@ import com.app.assistant.activity.HelpActivity;
 import com.app.assistant.activity.MemoAddActivity;
 import com.app.assistant.activity.ScanActivity;
 import com.app.assistant.activity.SearchActivity;
+import com.app.assistant.activity.SearchNewActivity;
 import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
+import com.app.assistant.activity.WebDetailActivity;
+import com.app.assistant.activity.WebUrlActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.adapter.HotWordAdapter;
 import com.app.assistant.base.BaseFragment;
@@ -142,8 +145,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 String word = mHotWordAdapter.getItem(position);
-                Intent intent = new Intent(mContext, SearchActivity.class);
-                intent.putExtra("search_word", word);
+                Intent intent = new Intent(mContext, WebDetailActivity.class);
+                intent.putExtra("search_words", word);
                 startActivity(intent);
             }
         });
@@ -298,7 +301,7 @@ public class HomeFragment extends BaseFragment {
                 startActivity(taskIntent);
                 break;
             case R.id.search_tv:
-                Intent searchIntent = new Intent(mContext, SearchActivity.class);
+                Intent searchIntent = new Intent(mContext, SearchNewActivity.class);
                 startActivity(searchIntent);
                 break;
             case R.id.voice_iv:

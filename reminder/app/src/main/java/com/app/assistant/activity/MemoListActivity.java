@@ -127,7 +127,7 @@ public class MemoListActivity extends BaseActivity {
                     break;
                 case REQUEST_CODE_UPDATE:
                     if (mClickPosition != -1) {
-                        MemoEntity memoEntity = (MemoEntity) data.getSerializableExtra("back");
+                        MemoEntity memoEntity = (MemoEntity) data.getSerializableExtra("cabBack");
                         mAdapter.set(mClickPosition, memoEntity);
                     }
                     break;

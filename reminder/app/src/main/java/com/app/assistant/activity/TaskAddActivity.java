@@ -146,7 +146,7 @@ public class TaskAddActivity extends BaseActivity {
             mTaskEntity.setStatus(false);
             TaskDaoManager.getInstance().update(mTaskEntity);
             Intent intent = new Intent();
-            intent.putExtra("back", mTaskEntity);
+            intent.putExtra("cabBack", mTaskEntity);
             setResult(RESULT_OK, intent);
             isEffective = isEffectiveDate(preDateS, dateS);
         } else {

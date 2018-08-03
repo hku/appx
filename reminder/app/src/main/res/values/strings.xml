@@ -67,4 +67,11 @@
     <string name="fragment_home_task_none_tip">您今天暂无要做的任务事项</string>
     <string name="fragment_home_clock_none_tip">暂无要响铃的闹钟</string>
 
+
+    <string name="cancel">取消</string>
+    <string name="search">搜索</string>
+    <string name="in">进入</string>
+    <string name="page_loading">页面加载中...</string>
+
+
 </resources>

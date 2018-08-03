@@ -39,8 +39,8 @@ public class AliveJobService extends JobService {
             if (isServiceKeepLive) {
                 LogUtils.d("zhanghe " + "the application keeps alive");
             } else {
-                startService(new Intent(AliveJobService.this, DaemonService.class));
                 LogUtils.d("zhanghe " + "the application was killed and we will restart the service");
+                startService(new Intent(AliveJobService.this, DaemonService.class));
             }
             // 通知系统任务执行结束
             jobFinished((JobParameters) msg.obj, false);

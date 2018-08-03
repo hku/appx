@@ -82,6 +82,19 @@
             android:name=".activity.WebActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.SearchNewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".activity.WebDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.WebUrlActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".receiver.AlarmClockBroadcast">
             <intent-filter>
                 <action android:name="com.app.assistant.clock" />

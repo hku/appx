@@ -132,7 +132,7 @@ public class TaskListActivity extends BaseActivity {
                     break;
                 case REQUEST_CODE_UPDATE:
                     if (mClickPosition != -1) {
-                        TaskEntity taskEntity = (TaskEntity) data.getSerializableExtra("back");
+                        TaskEntity taskEntity = (TaskEntity) data.getSerializableExtra("cabBack");
                         mAdapter.set(mClickPosition, taskEntity);
                     }
                     refreshHomeTask();

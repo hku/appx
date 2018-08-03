@@ -78,7 +78,7 @@ public class MemoAddActivity extends BaseActivity {
     }
 
     /**
-     * save and back
+     * save and cabBack
      */
     private void onSave() {
         String content = contentEt.getText().toString();
@@ -93,7 +93,7 @@ public class MemoAddActivity extends BaseActivity {
             mMemoEntity.setIsBuiltIn(false);
             MemoDaoManager.getInstance().update(mMemoEntity);
             Intent intent = new Intent();
-            intent.putExtra("back", mMemoEntity);
+            intent.putExtra("cabBack", mMemoEntity);
             setResult(RESULT_OK, intent);
         } else {//添加
             MemoEntity entity = new MemoEntity();
