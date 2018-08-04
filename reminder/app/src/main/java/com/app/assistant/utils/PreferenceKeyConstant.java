@@ -14,4 +14,6 @@ public final class PreferenceKeyConstant {
     public static final String HOME_CLOCK_SHOW_KEY = "home_clock_show_key";
     public static final String HOME_TASK_SHOW_KEY = "home_task_show_key";
     public static final String HOME_SEARCH_SHOW_KEY = "home_search_show_key";
+
+    public static final String WEB_DETAIL_SPINNER_KET = "web_detail_spinner_key";
 }

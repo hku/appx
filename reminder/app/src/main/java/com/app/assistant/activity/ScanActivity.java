@@ -85,12 +85,11 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
             boolean isUrl = CommonUtils.isHttpUrl(result);
             Intent intent = new Intent();
             if (isUrl) {
-                intent.setClass(ScanActivity.this, WebActivity.class);
-                intent.putExtra("title", result);
-                intent.putExtra("url", result);
+                intent.setClass(ScanActivity.this, WebUrlActivity.class);
+                intent.putExtra("search_words", result);
             } else {
-                intent.setClass(ScanActivity.this, SearchActivity.class);
-                intent.putExtra("search_word", result);
+                intent.setClass(ScanActivity.this, WebDetailActivity.class);
+                intent.putExtra("search_words", result);
             }
             startActivity(intent);
             finish();

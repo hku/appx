@@ -35,6 +35,10 @@ public class SearchNewActivity extends BaseActivity {
     ImageView clearIv;
     @BindView(R.id.search_tv)
     TextView searchTv;
+    @BindView(R.id.search_iv)
+    ImageView searchIv;
+    @BindView(R.id.scan_iv)
+    ImageView scanIv;
 
     //搜索的关键词
     private String mSearchWords = "";
@@ -74,21 +78,26 @@ public class SearchNewActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 String searchS = s.toString();
                 if (!TextUtils.isEmpty(searchS)) {
+                    scanIv.setVisibility(View.GONE);
                     voiceIv.setVisibility(View.GONE);
                     clearIv.setVisibility(View.VISIBLE);
                     boolean isUrl = CommonUtils.isHttpUrl(searchS);
                     if (isUrl) {
                         mSearchFlag = 2;
                         searchTv.setText(getResources().getString(R.string.in));
+                        searchIv.setImageResource(R.drawable.ic_link_black_24dp);
                     } else {
                         mSearchFlag = 1;
                         searchTv.setText(getResources().getString(R.string.search));
+                        searchIv.setImageResource(R.drawable.ic_search_black_24dp);
                     }
                 } else {
                     mSearchFlag = 0;
                     searchTv.setText(getResources().getString(R.string.cancel));
                     voiceIv.setVisibility(View.VISIBLE);
                     clearIv.setVisibility(View.GONE);
+                    scanIv.setVisibility(View.VISIBLE);
+                    searchIv.setImageResource(R.drawable.ic_search_black_24dp);
                 }
             }
         });
@@ -116,7 +125,7 @@ public class SearchNewActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.search_tv, R.id.voice_iv, R.id.clear_iv})
+    @OnClick({R.id.search_tv, R.id.voice_iv, R.id.clear_iv, R.id.scan_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_tv:
@@ -127,6 +136,10 @@ public class SearchNewActivity extends BaseActivity {
                 break;
             case R.id.clear_iv:
                 clearText();
+                break;
+            case R.id.scan_iv:
+                Intent scanIntent = new Intent(this, ScanActivity.class);
+                startActivity(scanIntent);
                 break;
         }
     }

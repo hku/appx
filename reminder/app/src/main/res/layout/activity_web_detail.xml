@@ -17,38 +17,49 @@
         android:background="@color/white"
         android:elevation="2dp">
 
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:maxWidth="100dp"
+            android:minWidth="30dp" />
+
         <TextView
             android:id="@+id/search_words_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/voice_iv"
+            android:layout_toLeftOf="@+id/scan_iv"
+            android:layout_toRightOf="@+id/spinner"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="xuexiao"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
+
+        <ImageView
+            android:id="@+id/scan_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/voice_iv"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/ic_code_black_24dp" />
+
         <ImageView
             android:id="@+id/voice_iv"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/search_iv"
-            android:paddingLeft="6dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/ic_voice_black_24dp" />
-
-        <ImageView
-            android:id="@+id/search_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:src="@drawable/ic_search_black_24dp" />
+            android:paddingLeft="6dp"
+            android:paddingRight="15dp"
+            android:src="@drawable/ic_voice_black_24dp" />
 
     </RelativeLayout>
 
@@ -56,15 +67,15 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/top_rlayout" />
+        android:layout_below="@+id/top_rlayout"
+        android:visibility="gone" />
 
     <com.app.assistant.widget.ProgressWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_layout"
-        android:layout_below="@+id/recyclerview"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@+id/recyclerview" />
 
 
     <View

@@ -43,6 +43,14 @@
                 android:textSize="15sp" />
 
             <ImageView
+                android:id="@+id/scan_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_code_black_24dp" />
+
+            <ImageView
                 android:id="@+id/voice_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

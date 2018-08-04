@@ -29,7 +29,7 @@ public class Constant {
     public static final String PACKAGE_NAME = "com.app.reminder";
 
 
-    public static final String CHINAOSO_URL = "http://m.chinaso.com/page/search.htm?keys=";
+    public static final String CHINAOSO_URL = "http://m.chinaso.com/page_mobile/search.htm?keys={key}&from=client";
     public static final String BAIDU_URL = "https://www.baidu.com/s?wd=";
     public static final String SOUGOU_URL = "https://m.sogou.com/web/searchList.jsp?keyword=";
     public static final String BING_URL = "https://cn.bing.com/search?q=";

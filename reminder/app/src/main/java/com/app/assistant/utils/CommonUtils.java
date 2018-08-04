@@ -12,6 +12,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -230,6 +232,22 @@ public final class CommonUtils {
             isurl = true;
         }
         return isurl;
+    }
+
+    /**
+     * 搜索词encode  utf-8
+     *
+     * @param keyWord
+     * @return
+     */
+    public static String encodeURL(String keyWord) {
+        String encodeUrl = null;
+        try {
+            encodeUrl = URLEncoder.encode(keyWord, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodeUrl;
     }
 
     public static void sendSignal(int id, Object object) {
