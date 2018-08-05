@@ -73,5 +73,12 @@
     <string name="in">进入</string>
     <string name="page_loading">页面加载中...</string>
 
+    <string name="collect">收藏</string>
+    <string name="screenshot">截图</string>
+    <string name="share">分享</string>
+    <string name="advertising_filtering">广告过滤</string>
+    <string name="big_bang">大爆炸</string>
+    <string name="automatic_transcoding">自动转码</string>
+
 
 </resources>

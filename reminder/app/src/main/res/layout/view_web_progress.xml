@@ -8,7 +8,7 @@
         android:id="@+id/progress_bar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:max="100"
         android:progress="0"
         android:progressDrawable="@drawable/drawable_webview_progress"

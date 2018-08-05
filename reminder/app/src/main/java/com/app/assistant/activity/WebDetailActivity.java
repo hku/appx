@@ -18,6 +18,7 @@ import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.ToastUtils;
 import com.app.assistant.widget.ProgressWebView;
+import com.app.assistant.widget.WebMenuPopWindow;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import org.angmarch.views.NiceSpinner;
@@ -39,6 +40,8 @@ import butterknife.OnClick;
 
 public class WebDetailActivity extends BaseActivity {
 
+    @BindView(R.id.web_forward_iv)
+    ImageView webForwardIv;
     @BindView(R.id.voice_iv)
     ImageView voiceIv;
     @BindView(R.id.search_words_tv)
@@ -129,14 +132,12 @@ public class WebDetailActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.voice_iv, R.id.web_back_iv, R.id.search_words_tv, R.id.scan_iv})
+    @OnClick({R.id.voice_iv, R.id.web_back_iv, R.id.search_words_tv,
+            R.id.scan_iv, R.id.web_forward_iv, R.id.web_menu_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.voice_iv:
                 ToastUtils.show(this, "正在开发中，客官请稍等");
-                break;
-            case R.id.web_back_iv:
-                webViewBack();
                 break;
             case R.id.search_words_tv:
                 updateSearch();
@@ -144,6 +145,15 @@ public class WebDetailActivity extends BaseActivity {
             case R.id.scan_iv:
                 Intent scanIntent = new Intent(this, ScanActivity.class);
                 startActivity(scanIntent);
+                break;
+            case R.id.web_back_iv:
+                webViewBack();
+                break;
+            case R.id.web_forward_iv:
+                webViewForward();
+                break;
+            case R.id.web_menu_iv:
+                showMenuPopWindow();
                 break;
         }
     }
@@ -173,6 +183,14 @@ public class WebDetailActivity extends BaseActivity {
     }
 
     /**
+     * show menu popWindow
+     */
+    private void showMenuPopWindow() {
+        WebMenuPopWindow popWindow = new WebMenuPopWindow(this);
+        popWindow.show();
+    }
+
+    /**
      * webView的回退
      */
     private void webViewBack() {
@@ -180,6 +198,15 @@ public class WebDetailActivity extends BaseActivity {
             webView.back();
         } else {
             finish();
+        }
+    }
+
+    /**
+     * webView的forward
+     */
+    private void webViewForward() {
+        if (webView.canForward()) {
+            webView.goForward();
         }
     }
 

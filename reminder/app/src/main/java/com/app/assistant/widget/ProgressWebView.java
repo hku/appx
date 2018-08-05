@@ -191,6 +191,22 @@ public class ProgressWebView extends LinearLayout {
     }
 
     /**
+     * can forward
+     *
+     * @return
+     */
+    public boolean canForward() {
+        return mWebView.canGoForward();
+    }
+
+    /**
+     * forward
+     */
+    public void goForward() {
+        mWebView.goForward();
+    }
+
+    /**
      * back
      */
     public void back() {
