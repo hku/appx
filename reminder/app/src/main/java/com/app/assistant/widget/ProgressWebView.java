@@ -1,6 +1,7 @@
 package com.app.assistant.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -18,6 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.app.assistant.R;
+import com.app.assistant.activity.SearchNewActivity;
+import com.app.assistant.activity.WebDetailActivity;
+import com.app.assistant.activity.WebUrlActivity;
 import com.app.assistant.utils.JSEngine;
 
 import java.util.HashMap;
@@ -41,6 +45,8 @@ public class ProgressWebView extends LinearLayout {
 
     private Context mContext;
     private TextView mTitleTv;
+
+    private boolean isNormalLoad = false;
 
 
     public ProgressWebView(Context context) {
@@ -94,6 +100,7 @@ public class ProgressWebView extends LinearLayout {
     }
 
     private void load(String url, String header) {
+        isNormalLoad = true;
         if (!url.startsWith("http")) {
             url = "https://" + url;
         }
@@ -138,9 +145,21 @@ public class ProgressWebView extends LinearLayout {
         mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+
+            @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                super.onPageStarted(view, url, favicon);
+                if (mContext instanceof WebDetailActivity && !isNormalLoad) {
+                    Intent urlIntent = new Intent(mContext, WebUrlActivity.class);
+                    urlIntent.putExtra("search_words", url);
+                    mContext.startActivity(urlIntent);
+                    view.stopLoading();
+                } else {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    super.onPageStarted(view, url, favicon);
+                }
             }
 
             @Override
@@ -148,6 +167,7 @@ public class ProgressWebView extends LinearLayout {
                     error) {
                 super.onReceivedError(view, request, error);
                 mProgressBar.setVisibility(View.GONE);
+                isNormalLoad = false;
             }
 
             @Override
@@ -158,6 +178,7 @@ public class ProgressWebView extends LinearLayout {
                     String titleS = view.getTitle();
                     mTitleTv.setText(titleS);
                 }
+                isNormalLoad = false;
             }
         });
 

@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.widget.ProgressWebView;
+import com.app.assistant.widget.WebMenuPopWindow;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,7 +43,8 @@ public class WebUrlActivity extends BaseActivity {
         webView.loadUrl(mSearchUrl, titleTv);
     }
 
-    @OnClick({R.id.refresh_iv, R.id.title_tv})
+    @OnClick({R.id.refresh_iv, R.id.title_tv, R.id.web_back_iv, R.id.web_forward_iv,
+            R.id.web_menu_iv, R.id.web_home_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.refresh_iv:
@@ -54,6 +56,54 @@ public class WebUrlActivity extends BaseActivity {
                 intent.putExtra("url_flag", true);
                 startActivity(intent);
                 break;
+            case R.id.web_back_iv:
+                webViewBack();
+                break;
+            case R.id.web_forward_iv:
+                webViewForward();
+                break;
+            case R.id.web_menu_iv:
+                showMenuPopWindow();
+                break;
+            case R.id.web_home_iv:
+                backToMainActivity();
+                break;
         }
+    }
+
+    /**
+     * webView的回退
+     */
+    private void webViewBack() {
+        if (webView.canBack()) {
+            webView.back();
+        } else {
+            finish();
+        }
+    }
+
+    /**
+     * webView的forward
+     */
+    private void webViewForward() {
+        if (webView.canForward()) {
+            webView.goForward();
+        }
+    }
+
+    /**
+     * show menu popWindow
+     */
+    private void showMenuPopWindow() {
+        WebMenuPopWindow popWindow = new WebMenuPopWindow(this);
+        popWindow.show();
+    }
+
+    /**
+     * 返回到首页面
+     */
+    private void backToMainActivity() {
+        Intent intent = new Intent(WebUrlActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
