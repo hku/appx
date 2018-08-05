@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.app.assistant.R;
 import com.app.assistant.adapter.SearchWayAdapter;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.utils.ActivityManager;
 import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.LogUtils;
@@ -132,8 +133,25 @@ public class WebDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 加载网页
+     */
+    private void loadWeb(int spinnerPosition) {
+        String key = mDataSet.get(spinnerPosition);
+        String ways = mWaysMap.get(key);
+        //国搜的搜索要特殊处理
+        if (spinnerPosition == 0) {
+            String encodeWords = CommonUtils.encodeURL(mSearchWords);
+            mSearchUrl = ways.replaceAll("\\{key\\}", encodeWords);
+        } else {
+            mSearchUrl = ways + mSearchWords;
+        }
+        webView.loadUrl(mSearchUrl);
+        LogUtils.d("zhanghe " + "mSearchUrl" + mSearchUrl);
+    }
+
     @OnClick({R.id.voice_iv, R.id.web_back_iv, R.id.search_words_tv,
-            R.id.scan_iv, R.id.web_forward_iv, R.id.web_menu_iv})
+            R.id.scan_iv, R.id.web_forward_iv, R.id.web_menu_iv, R.id.web_home_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.voice_iv:
@@ -155,24 +173,18 @@ public class WebDetailActivity extends BaseActivity {
             case R.id.web_menu_iv:
                 showMenuPopWindow();
                 break;
+            case R.id.web_home_iv:
+                backToMainActivity();
+                break;
         }
     }
 
     /**
-     * 加载网页
+     * 返回到首页面
      */
-    private void loadWeb(int spinnerPosition) {
-        String key = mDataSet.get(spinnerPosition);
-        String ways = mWaysMap.get(key);
-        //国搜的搜索要特殊处理
-        if (spinnerPosition == 0) {
-            String encodeWords = CommonUtils.encodeURL(mSearchWords);
-            mSearchUrl = ways.replaceAll("\\{key\\}", encodeWords);
-        } else {
-            mSearchUrl = ways + mSearchWords;
-        }
-        webView.loadUrl(mSearchUrl);
-        LogUtils.d("zhanghe " + "mSearchUrl" + mSearchUrl);
+    private void backToMainActivity() {
+        Intent intent = new Intent(WebDetailActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void updateSearch() {

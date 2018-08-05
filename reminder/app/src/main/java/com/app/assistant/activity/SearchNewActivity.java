@@ -1,6 +1,8 @@
 package com.app.assistant.activity;
 
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,9 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.assistant.R;
+import com.app.assistant.adapter.SearchSuggestAdapter;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.http.client.CommonClient;
 import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,7 +46,10 @@ public class SearchNewActivity extends BaseActivity {
     ImageView searchIv;
     @BindView(R.id.scan_iv)
     ImageView scanIv;
+    @BindView(R.id.suggestion_list)
+    RecyclerView suggestionList;
 
+    private SearchSuggestAdapter mSuggestAdapter;
     //搜索的关键词
     private String mSearchWords = "";
     //当前是否从WebUrlActivity中跳转而来
@@ -63,6 +73,31 @@ public class SearchNewActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        initSearchEt();
+        initSuggestionList();
+    }
+
+    /**
+     * init 输入建议列表
+     */
+    private void initSuggestionList() {
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        suggestionList.setLayoutManager(manager);
+        mSuggestAdapter = new SearchSuggestAdapter(R.layout.item_search_suggestion);
+        suggestionList.setAdapter(mSuggestAdapter);
+        mSuggestAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String suggestS = mSuggestAdapter.getItem(position);
+                onSearch(suggestS);
+            }
+        });
+    }
+
+    /**
+     * init searchEditText
+     */
+    private void initSearchEt() {
         searchEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -91,6 +126,9 @@ public class SearchNewActivity extends BaseActivity {
                         searchTv.setText(getResources().getString(R.string.search));
                         searchIv.setImageResource(R.drawable.ic_search_black_24dp);
                     }
+
+                    //显示建议列表
+                    CommonClient.getInstance().addComment(searchS, SearchNewActivity.this);
                 } else {
                     mSearchFlag = 0;
                     searchTv.setText(getResources().getString(R.string.cancel));
@@ -98,6 +136,7 @@ public class SearchNewActivity extends BaseActivity {
                     clearIv.setVisibility(View.GONE);
                     scanIv.setVisibility(View.VISIBLE);
                     searchIv.setImageResource(R.drawable.ic_search_black_24dp);
+                    mSuggestAdapter.clear();
                 }
             }
         });
@@ -144,11 +183,29 @@ public class SearchNewActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 获取提示词成功
+     *
+     * @param data
+     */
+    public void getSuggestionListSuc(List<String> data) {
+        mSuggestAdapter.clear();
+        if (data != null && data.size() > 0) {
+            mSuggestAdapter.addData(data);
+        }
+    }
+
+    /**
+     * clear
+     */
     private void clearText() {
         searchEt.setText("");
     }
 
 
+    /**
+     * search
+     */
     private void onSearch() {
         String text = searchEt.getText().toString();
         switch (mSearchFlag) {
@@ -168,5 +225,19 @@ public class SearchNewActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    public void onSearch(String word) {
+        boolean isUrl = CommonUtils.isHttpUrl(word);
+        Intent intent = new Intent(SearchNewActivity.this, WebUrlActivity.class);
+        if (isUrl) {
+            intent.setClass(SearchNewActivity.this, WebUrlActivity.class);
+            intent.putExtra("search_words", word);
+        } else {
+            intent.setClass(SearchNewActivity.this, WebDetailActivity.class);
+            intent.putExtra("search_words", word);
+        }
+        startActivity(intent);
+        finish();
     }
 }

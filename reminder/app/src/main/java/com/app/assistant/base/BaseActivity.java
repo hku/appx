@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.app.assistant.entity.MessageEvent;
+import com.app.assistant.utils.ActivityManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,6 +32,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         initData();
         initView();
         business();
+
+        ActivityManager.getInstance().addActivity(this);
     }
 
 

@@ -28,6 +28,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "String", "ROOT_URL", '"http://mob.chinaso.com"'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.assistant
         }
@@ -35,6 +36,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
+            buildConfigField "String", "ROOT_URL", '"http://mob.chinaso.com"'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.assistant
         }
@@ -70,11 +72,14 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.google.code.gson:gson:2.5'
-
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.github.prolificinteractive:material-calendarview:1.6.0'
     implementation 'com.labo.kaji:fragmentanimations:0.1.1'
     implementation 'com.github.arcadefire:nice-spinner:1.3.4'
-
     implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.5'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.4.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 }

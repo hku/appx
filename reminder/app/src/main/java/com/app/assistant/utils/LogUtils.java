@@ -17,4 +17,10 @@ public final class LogUtils {
             Logger.d(msg);
         }
     }
+
+    public static void e(String msg) {
+        if (BuildConfig.DEBUG) {
+            Logger.e(msg);
+        }
+    }
 }

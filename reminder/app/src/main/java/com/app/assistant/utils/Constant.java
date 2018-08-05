@@ -2,6 +2,8 @@ package com.app.assistant.utils;
 
 import android.content.Context;
 
+import com.app.assistant.BuildConfig;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -12,6 +14,9 @@ import java.text.SimpleDateFormat;
  */
 
 public class Constant {
+
+
+    public static final String BASE_URL = BuildConfig.ROOT_URL;
 
     public static final DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     public static final String[] TAG_ARRAY = {"菜根谭", "小常识", "学英语", "冷笑话", "格言佳句", "memo"};
