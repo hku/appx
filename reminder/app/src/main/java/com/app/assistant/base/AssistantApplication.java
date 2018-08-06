@@ -17,6 +17,7 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.umeng.commonsdk.UMConfigure;
 
 /**
  * author: zhanghe
@@ -34,6 +35,8 @@ public class AssistantApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = this;
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.setLogEnabled(true);
         initRefreshLayout();
         initDebugBridge();
         Logger.addLogAdapter(new AndroidLogAdapter());

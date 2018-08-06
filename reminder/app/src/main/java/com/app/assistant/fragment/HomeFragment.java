@@ -26,6 +26,7 @@ import com.app.assistant.activity.ScanActivity;
 import com.app.assistant.activity.SearchNewActivity;
 import com.app.assistant.activity.TaskAddActivity;
 import com.app.assistant.activity.TaskListActivity;
+import com.app.assistant.activity.VoiceActivity;
 import com.app.assistant.activity.WebDetailActivity;
 import com.app.assistant.adapter.HomeTaskAdapter;
 import com.app.assistant.adapter.HotWordAdapter;
@@ -303,7 +304,8 @@ public class HomeFragment extends BaseFragment {
                 startActivity(searchIntent);
                 break;
             case R.id.voice_iv:
-                ToastUtils.show(mContext, "正在开发中，请稍等");
+                Intent voiceIntent = new Intent(mContext, VoiceActivity.class);
+                startActivity(voiceIntent);
                 break;
             case R.id.code_iv:
                 Intent scanIntent = new Intent(mContext, ScanActivity.class);

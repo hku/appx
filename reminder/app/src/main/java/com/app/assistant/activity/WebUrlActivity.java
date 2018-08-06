@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
 import com.app.assistant.widget.ProgressWebView;
+import com.app.assistant.widget.SharePopWindow;
 import com.app.assistant.widget.WebMenuPopWindow;
 
 import butterknife.BindView;
@@ -44,7 +45,7 @@ public class WebUrlActivity extends BaseActivity {
     }
 
     @OnClick({R.id.refresh_iv, R.id.title_tv, R.id.web_back_iv, R.id.web_forward_iv,
-            R.id.web_menu_iv, R.id.web_home_iv})
+            R.id.web_menu_iv, R.id.web_home_iv, R.id.web_share_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.refresh_iv:
@@ -64,6 +65,9 @@ public class WebUrlActivity extends BaseActivity {
                 break;
             case R.id.web_menu_iv:
                 showMenuPopWindow();
+                break;
+            case R.id.web_share_iv:
+                showSharePopWindow();
                 break;
             case R.id.web_home_iv:
                 backToMainActivity();
@@ -96,6 +100,14 @@ public class WebUrlActivity extends BaseActivity {
      */
     private void showMenuPopWindow() {
         WebMenuPopWindow popWindow = new WebMenuPopWindow(this);
+        popWindow.show();
+    }
+
+    /**
+     * show share popWindow
+     */
+    private void showSharePopWindow() {
+        SharePopWindow popWindow = new SharePopWindow(this);
         popWindow.show();
     }
 

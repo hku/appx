@@ -31,7 +31,7 @@ public class Constant {
 
     public static final String ALARM_CLOCK = "alarm_clock";
 
-    public static final String PACKAGE_NAME = "com.app.reminder";
+    public static final String PACKAGE_NAME = "com.app.assistant";
 
 
     public static final String CHINAOSO_URL = "http://m.chinaso.com/page_mobile/search.htm?keys={key}&from=client";

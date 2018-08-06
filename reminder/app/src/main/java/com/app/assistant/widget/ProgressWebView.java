@@ -2,6 +2,7 @@ package com.app.assistant.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.MutableContextWrapper;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,6 +25,7 @@ import com.app.assistant.activity.SearchNewActivity;
 import com.app.assistant.activity.WebDetailActivity;
 import com.app.assistant.activity.WebUrlActivity;
 import com.app.assistant.utils.JSEngine;
+import com.app.assistant.utils.LogUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,11 +46,10 @@ public class ProgressWebView extends LinearLayout {
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
-    private Context mContext;
-    private TextView mTitleTv;
-
     private boolean isNormalLoad = false;
 
+    private Context mContext;
+    private TextView mTitleTv;
 
     public ProgressWebView(Context context) {
         this(context, null);
@@ -137,6 +139,10 @@ public class ProgressWebView extends LinearLayout {
         webSettings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
         // 设置出现缩放工具
         webSettings.setBuiltInZoomControls(false);
+        //设置 缓存模式
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 开启 DOM storage API 功能
+        webSettings.setDomStorageEnabled(true);
         // 清除缓存
         mWebView.clearCache(true);
         // 清除历史记录
@@ -145,39 +151,51 @@ public class ProgressWebView extends LinearLayout {
         mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return super.shouldOverrideUrlLoading(view, request);
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                LogUtils.d("ProgressWebView2   shouldOverrideUrlLoading" + url);
+                if (mContext instanceof WebDetailActivity && !isNormalLoad) {
+                    Intent intent = new Intent(mContext, WebUrlActivity.class);
+                    intent.putExtra("search_words", url);
+                    mContext.startActivity(intent);
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                if (mContext instanceof WebDetailActivity && !isNormalLoad) {
-                    Intent urlIntent = new Intent(mContext, WebUrlActivity.class);
-                    urlIntent.putExtra("search_words", url);
-                    mContext.startActivity(urlIntent);
-                    view.stopLoading();
-                } else {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    super.onPageStarted(view, url, favicon);
-                }
+                LogUtils.d("ProgressWebView2   onPageStarted" + url);
+                mProgressBar.setVisibility(View.VISIBLE);
+                super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError
                     error) {
+                isNormalLoad = false;
                 super.onReceivedError(view, request, error);
                 mProgressBar.setVisibility(View.GONE);
-                isNormalLoad = false;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                isNormalLoad = false;
+                LogUtils.d("ProgressWebView2   onPageFinished" + url);
                 super.onPageFinished(view, url);
-                mProgressBar.setVisibility(View.GONE);
+                if (mProgressBar.getVisibility() == VISIBLE) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
                 if (mTitleTv != null) {
                     String titleS = view.getTitle();
                     mTitleTv.setText(titleS);
                 }
+            }
+
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+                LogUtils.d("ProgressWebView2   onPageCommitVisible  " + url);
                 isNormalLoad = false;
             }
         });
@@ -233,4 +251,6 @@ public class ProgressWebView extends LinearLayout {
     public void back() {
         mWebView.goBack();
     }
+
+
 }

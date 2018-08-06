@@ -19,6 +19,7 @@ import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.ToastUtils;
 import com.app.assistant.widget.ProgressWebView;
+import com.app.assistant.widget.SharePopWindow;
 import com.app.assistant.widget.WebMenuPopWindow;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -151,7 +152,8 @@ public class WebDetailActivity extends BaseActivity {
     }
 
     @OnClick({R.id.voice_iv, R.id.web_back_iv, R.id.search_words_tv,
-            R.id.scan_iv, R.id.web_forward_iv, R.id.web_menu_iv, R.id.web_home_iv})
+            R.id.scan_iv, R.id.web_forward_iv, R.id.web_menu_iv,
+            R.id.web_home_iv, R.id.web_share_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.voice_iv:
@@ -172,6 +174,9 @@ public class WebDetailActivity extends BaseActivity {
                 break;
             case R.id.web_menu_iv:
                 showMenuPopWindow();
+                break;
+            case R.id.web_share_iv:
+                showSharePopWindow();
                 break;
             case R.id.web_home_iv:
                 backToMainActivity();
@@ -199,6 +204,15 @@ public class WebDetailActivity extends BaseActivity {
      */
     private void showMenuPopWindow() {
         WebMenuPopWindow popWindow = new WebMenuPopWindow(this);
+        popWindow.show();
+    }
+
+
+    /**
+     * show share popWindow
+     */
+    private void showSharePopWindow() {
+        SharePopWindow popWindow = new SharePopWindow(this);
         popWindow.show();
     }
 

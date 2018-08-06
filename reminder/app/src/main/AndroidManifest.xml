@@ -101,6 +101,18 @@
             android:name=".activity.WebUrlActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.VoiceActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- ############ 友盟分享注册 ############ -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5b66d2f68f4a9d6be2000215" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="UMENG_CHANNEL_VALUE" />
+
         <receiver android:name=".receiver.AlarmClockBroadcast">
             <intent-filter>
                 <action android:name="com.app.assistant.clock" />

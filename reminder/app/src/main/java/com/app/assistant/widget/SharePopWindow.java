@@ -1,6 +1,5 @@
 package com.app.assistant.widget;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
@@ -9,8 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
@@ -18,19 +16,20 @@ import com.app.assistant.R;
 
 /**
  * author: zhanghe
- * created on: 2018/8/1 14:21
- * description:网页menu popWindow
+ * created on: 2018/8/5 16:55
+ * description:
  */
-public class WebMenuPopWindow extends PopupWindow {
+
+public class SharePopWindow extends PopupWindow {
 
     private Activity mContext;
     private View mMenuView;
 
-    public WebMenuPopWindow(Activity context) {
+    public SharePopWindow(Activity context) {
         super(context);
         this.mContext = context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.pop_web_menu, null);
+        mMenuView = inflater.inflate(R.layout.pop_share, null);
         RelativeLayout cancelRLayout = mMenuView.findViewById(R.id.cancel_rlayout);
         cancelRLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,9 +41,9 @@ public class WebMenuPopWindow extends PopupWindow {
         // 设置WebMenuPopWindow的View
         this.setContentView(mMenuView);
         // 设置WebMenuPopWindow弹出窗体的宽
-        this.setWidth(LayoutParams.MATCH_PARENT);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         // 设置WebMenuPopWindow弹出窗体的高
-        this.setHeight(LayoutParams.WRAP_CONTENT);
+        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         // 设置WebMenuPopWindow弹出窗体可点击
         this.setFocusable(true);
         //设置WebMenuPopWindow弹出窗体动画效果
@@ -54,7 +53,7 @@ public class WebMenuPopWindow extends PopupWindow {
         // 设置WebMenuPopWindow弹出窗体的背景
         this.setBackgroundDrawable(dw);
         // mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
-        mMenuView.setOnTouchListener(new OnTouchListener() {
+        mMenuView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 int height = mMenuView.findViewById(R.id.menu_llayout).getTop();
                 int y = (int) event.getY();
