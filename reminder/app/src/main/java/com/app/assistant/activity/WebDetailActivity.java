@@ -1,6 +1,8 @@
 package com.app.assistant.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,17 +13,19 @@ import android.widget.TextView;
 import com.app.assistant.R;
 import com.app.assistant.adapter.SearchWayAdapter;
 import com.app.assistant.base.BaseActivity;
-import com.app.assistant.utils.ActivityManager;
 import com.app.assistant.utils.CommonUtils;
 import com.app.assistant.utils.Constant;
 import com.app.assistant.utils.LogUtils;
 import com.app.assistant.utils.PreferenceKeyConstant;
 import com.app.assistant.utils.SPUtils;
 import com.app.assistant.utils.ToastUtils;
+import com.app.assistant.entity.ShareInfoEntity;
+import com.app.assistant.utils.share.ShareManager;
 import com.app.assistant.widget.ProgressWebView;
 import com.app.assistant.widget.SharePopWindow;
 import com.app.assistant.widget.WebMenuPopWindow;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.umeng.socialize.UMShareAPI;
 
 import org.angmarch.views.NiceSpinner;
 
@@ -62,6 +66,7 @@ public class WebDetailActivity extends BaseActivity {
     private SearchWayAdapter mAdapter;
     private String mSearchWords = "";
     private String mSearchUrl = "";
+    private ShareManager mShareManager;
 
     @Override
     protected void initData() {
@@ -73,6 +78,7 @@ public class WebDetailActivity extends BaseActivity {
         mWaysMap.put(Constant.SEARCH_WAYS_ARRAY[4], Constant.QIHU_URL);
         mDataSet.addAll(Arrays.asList(Constant.SEARCH_WAYS_ARRAY));
         mSearchWords = getIntent().getStringExtra("search_words");
+        mShareManager = new ShareManager(this);
     }
 
     @Override
@@ -212,7 +218,13 @@ public class WebDetailActivity extends BaseActivity {
      * show share popWindow
      */
     private void showSharePopWindow() {
-        SharePopWindow popWindow = new SharePopWindow(this);
+        ShareInfoEntity entity = new ShareInfoEntity();
+        entity.setTitle("1212");
+        entity.setContent("22222");
+        entity.setTargetUrl("https://www.baidu.com");
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        entity.setDefaultImg(icon);
+        SharePopWindow popWindow = new SharePopWindow(this, entity);
         popWindow.show();
     }
 
@@ -240,5 +252,12 @@ public class WebDetailActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

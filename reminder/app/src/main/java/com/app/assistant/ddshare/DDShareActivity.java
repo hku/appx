@@ -4,8 +4,9 @@ package com.app.assistant.ddshare;
 import com.umeng.socialize.media.DingCallBack;
 
 /**
- * Created by yanxu on 2018/7/13.
+ * Created by hanhanliu on 15/12/9.
  */
-
 public class DDShareActivity extends DingCallBack {
+
+
 }

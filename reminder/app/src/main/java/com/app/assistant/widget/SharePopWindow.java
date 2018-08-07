@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.app.assistant.R;
+import com.app.assistant.entity.ShareInfoEntity;
+import com.app.assistant.utils.share.ShareManager;
 
 /**
  * author: zhanghe
@@ -24,16 +27,47 @@ public class SharePopWindow extends PopupWindow {
 
     private Activity mContext;
     private View mMenuView;
+    private ShareManager mShareManager;
+    //0：微信 1：微博 2：钉钉
+    private int mSharePlatform = -1;
 
-    public SharePopWindow(Activity context) {
+    public SharePopWindow(Activity context, final ShareInfoEntity shareInfoEntity) {
         super(context);
         this.mContext = context;
+        mShareManager = new ShareManager(mContext);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_share, null);
         RelativeLayout cancelRLayout = mMenuView.findViewById(R.id.cancel_rlayout);
         cancelRLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
+            }
+        });
+        LinearLayout weChatLayout = mMenuView.findViewById(R.id.weChat_llayout);
+        weChatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSharePlatform = 0;
+                weChatShare(shareInfoEntity);
+                dismiss();
+            }
+        });
+        LinearLayout sinaLayout = mMenuView.findViewById(R.id.sina_llayout);
+        sinaLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSharePlatform = 1;
+                sinaShare(shareInfoEntity);
+                dismiss();
+            }
+        });
+        LinearLayout dingLayout = mMenuView.findViewById(R.id.ding_llayout);
+        dingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSharePlatform = 2;
+                dingShare(shareInfoEntity);
                 dismiss();
             }
         });
@@ -67,10 +101,41 @@ public class SharePopWindow extends PopupWindow {
         });
     }
 
+    /**
+     * show
+     */
     public void show() {
         Rect frame = new Rect();
         mContext.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         int winHeight = mContext.getWindow().getDecorView().getHeight();
         showAtLocation(mContext.getWindow().getDecorView(), Gravity.BOTTOM, 0, winHeight - frame.bottom);
+    }
+
+    /**
+     * weChat platform share
+     *
+     * @param shareInfoEntity
+     */
+    private void weChatShare(ShareInfoEntity shareInfoEntity) {
+        mShareManager.startShare(shareInfoEntity, mSharePlatform);
+    }
+
+
+    /**
+     * sina platform share
+     *
+     * @param shareInfoEntity
+     */
+    private void sinaShare(ShareInfoEntity shareInfoEntity) {
+        mShareManager.startShare(shareInfoEntity, mSharePlatform);
+    }
+
+    /**
+     * dingding platform share
+     *
+     * @param shareInfoEntity
+     */
+    private void dingShare(ShareInfoEntity shareInfoEntity) {
+        mShareManager.startShare(shareInfoEntity, mSharePlatform);
     }
 }

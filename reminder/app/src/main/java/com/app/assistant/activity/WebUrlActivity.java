@@ -6,9 +6,11 @@ import android.widget.TextView;
 
 import com.app.assistant.R;
 import com.app.assistant.base.BaseActivity;
+import com.app.assistant.entity.ShareInfoEntity;
 import com.app.assistant.widget.ProgressWebView;
 import com.app.assistant.widget.SharePopWindow;
 import com.app.assistant.widget.WebMenuPopWindow;
+import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -107,7 +109,11 @@ public class WebUrlActivity extends BaseActivity {
      * show share popWindow
      */
     private void showSharePopWindow() {
-        SharePopWindow popWindow = new SharePopWindow(this);
+        ShareInfoEntity entity = new ShareInfoEntity();
+        entity.setTitle("1212");
+        entity.setContent("22222");
+        entity.setTargetUrl("https://www.baidu.com");
+        SharePopWindow popWindow = new SharePopWindow(this, null);
         popWindow.show();
     }
 
@@ -117,5 +123,11 @@ public class WebUrlActivity extends BaseActivity {
     private void backToMainActivity() {
         Intent intent = new Intent(WebUrlActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }
